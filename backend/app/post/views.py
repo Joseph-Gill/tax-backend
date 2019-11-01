@@ -16,13 +16,6 @@ class FilterPostMixin:
                 if item.user and (search in item.content.lower() or search in item.user.username.lower()):
                     posts_including_search.append(item)
             return posts_including_search
-        if "category" in self.request.query_params.keys():
-            posts_including_categories = []
-            category = self.request.query_params["category"]
-            for i in posts:
-                if category in i.category:
-                    posts_including_categories.append(i)
-            return posts_including_categories
         return posts.order_by("-created")
 
 

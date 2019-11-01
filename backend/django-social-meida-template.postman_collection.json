@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "eeaab1ab-d547-4192-b8aa-8771ab9cc3f0",
-		"name": "kenntnis",
+		"_postman_id": "98dbaa0f-cf5a-4f5c-9830-c32517e02856",
+		"name": "django-social-meida-template",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -279,7 +279,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"content\": \"test3\",\n\t\"check_to_save\": true,\n\t\"category\": \"DS\",\n\t\"website\":{\n\t\t\"url\": \"https://medium.com/@hamedbaatour/build-a-real-world-beautiful-web-app-with-angular-8-the-ultimate-guide-2019-part-ii-fe70852b2d6d\"\n\t},\n\t\"shared\": 1,\n\t\"snippet\":{\n\t\t\"code\": \"console.log('Hello Worldd')\",\n\t\t\"prog_language\": \"JS\"\n\t}\n}",
+							"raw": "{\n\t\"content\": \"test3\",\n\t\"shared\": 1\n\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -305,9 +305,6 @@
 				},
 				{
 					"name": "Retrieve Update Destroy Post",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -319,7 +316,7 @@
 								}
 							]
 						},
-						"method": "GET",
+						"method": "DELETE",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -338,7 +335,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/backend/api/posts/4/",
+							"raw": "http://localhost:8000/backend/api/posts/2/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -348,7 +345,7 @@
 								"backend",
 								"api",
 								"posts",
-								"4",
+								"2",
 								""
 							]
 						}
@@ -423,7 +420,7 @@
 					"response": []
 				},
 				{
-					"name": "List Bookmarked Posts",
+					"name": "List Liked Posts",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -438,7 +435,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8000/backend/api/posts/bookmarked/",
+							"raw": "http://localhost:8000/backend/api/posts/likes/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -448,7 +445,7 @@
 								"backend",
 								"api",
 								"posts",
-								"bookmarked",
+								"likes",
 								""
 							]
 						}
@@ -489,7 +486,7 @@
 					"response": []
 				},
 				{
-					"name": "Create Bookmark",
+					"name": "Toggle Like Post",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -504,7 +501,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8000/backend/api/posts/bookmark/99/",
+							"raw": "http://localhost:8000/backend/api/posts/toggle-like/2/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -514,42 +511,8 @@
 								"backend",
 								"api",
 								"posts",
-								"bookmark",
-								"99",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Toggle Post Clap",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8000/backend/api/posts/clap/99/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"backend",
-								"api",
-								"posts",
-								"clap",
-								"99",
+								"toggle-like",
+								"2",
 								""
 							]
 						}
@@ -588,7 +551,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/backend/api/posts/comment/99/",
+							"raw": "http://localhost:8000/backend/api/posts/comment/1/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -599,42 +562,7 @@
 								"api",
 								"posts",
 								"comment",
-								"99",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Clap Comment",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8000/backend/api/posts/comment/clap/11/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"backend",
-								"api",
-								"posts",
-								"comment",
-								"clap",
-								"11",
+								"1",
 								""
 							]
 						}
@@ -700,7 +628,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\t\n\t\"email\": \"SignalFlux@outlook.com\",\n\t\"code\": \"11031\",\n\t\"password\": \"adminadmin\",\n\t\"password_repeat\": \"adminadmin2\",\n\t\"first_name\": \"Signal\",\n\t\"last_name\": \"Flux\"\n}",
+							"raw": "{\t\n\t\"email\": \"SignalFlux@outlook.com\",\n\t\"code\": \"23591\",\n\t\"password\": \"adminadmin\",\n\t\"password_repeat\": \"adminadmin\",\n\t\"first_name\": \"Signal\",\n\t\"last_name\": \"Flux\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -779,7 +707,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"code\":\"95374\",\n\t\"password\": \"adminadmin10\",\n\t\"password_repeat\": \"adminadmin10\"\n}",
+							"raw": "{\n\t\"code\":\"14015\",\n\t\"password\": \"adminadmin10\",\n\t\"password_repeat\": \"adminadmin10\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -833,7 +761,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": \"SignalFlux@outlook.com\",\n\t\"password\": \"adminadmin\"\n}",
+							"raw": "{\n\t\"email\": \"danieler@propulsionacademy.com\",\n\t\"password\": \"adminadmin\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -860,6 +788,28 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "9db1c8c2-4ced-4800-929a-2da793fdaf67",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "e17c2c3f-da3c-417f-8638-0809aacfbef3",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"protocolProfileBehavior": {}
