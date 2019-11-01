@@ -2,9 +2,9 @@ from rest_framework.generics import ListAPIView, GenericAPIView, ListCreateAPIVi
     RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from app.post.models import Post, ClapPost, Comment, ClapComment
+from app.post.models import Post, Comment
 from app.post.permissions import IsOwnerOrReadOnly, IsNotOwner
-from app.post.serializers import PostSerializer, CommentSerializer
+from app.post.serializers import PostSerializer
 
 
 class FilterPostMixin:
@@ -94,7 +94,7 @@ class ListPostsLoggedInUser(ListAPIView, FilterPostMixin):
         return self.filter_posts(posts)
 
 
-class ListBookmarks(ListAPIView, FilterPostMixin):
+class ListLikes(ListAPIView, FilterPostMixin):
     """
     get:
     List all Posts bookmarked by logged-in User.
@@ -102,43 +102,27 @@ class ListBookmarks(ListAPIView, FilterPostMixin):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        posts = Post.objects.filter(bookmarked_by=self.request.user)
+        posts = Post.objects.filter(liked_by=self.request.user)
         return self.filter_posts(posts)
 
 
-class CreateBookmark(GenericAPIView):
+class CreateLike(GenericAPIView):
     """
     post:
-    Bookmark Post for logged-in User.
+    Like Post for logged-in User.
     """
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+    permission_classes = [IsNotOwner]
 
-    def post(self, request, **kwargs):
+    def post(self, request, pk):
         post_to_save = self.get_object()
-        user = self.request.user
-        if post_to_save in user.bookmarked_posts.all():
-            user.bookmarked_posts.remove(post_to_save)
+        user = request.user
+        if post_to_save in user.liked_posts.all():
+            user.liked_posts.remove(post_to_save)
             return Response(self.get_serializer(instance=post_to_save).data)
-        user.bookmarked_posts.add(post_to_save)
+        user.liked_posts.add(post_to_save)
         return Response(self.get_serializer(instance=post_to_save).data)
-
-
-class CreateDestroyClapPost(GenericAPIView):
-    """
-    post:
-    Toggle clap Post.
-    """
-    serializer_class = PostSerializer
-    queryset = Post.objects.all()
-    permission_classes = [IsAuthenticated, IsNotOwner]
-
-    def post(self, request, pk, **kwargs):
-        post = self.get_object()
-        clap_post, created = ClapPost.objects.get_or_create(post=post, user=request.user)
-        if not created:
-            clap_post.delete()
-        return Response(self.get_serializer(instance=post).data, status=200)
 
 
 class CreateComment(GenericAPIView):
@@ -149,26 +133,8 @@ class CreateComment(GenericAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
 
-    def post(self, request, pk, **kwargs):
+    def post(self, request, pk):
         post = self.get_object()
         comment = Comment(user=request.user, post=post, comment=request.data['comment'])
         comment.save()
         return Response(self.get_serializer(instance=post).data)
-
-
-class CreateDestroyCommentClap(GenericAPIView):
-    """
-    post:
-    Toggle clap Comment.
-    """
-    serializer_class = PostSerializer
-    queryset = Comment.objects.all()
-    lookup_url_kwarg = 'comment_id'
-    permission_classes = [IsAuthenticated, IsNotOwner]
-
-    def post(self, request, comment_id, **kwargs):
-        comment = self.get_object()
-        clap, created = ClapComment.objects.get_or_create(user=request.user, comment=comment)
-        if not created:
-            clap.delete()
-        return Response(self.get_serializer(comment.post).data)

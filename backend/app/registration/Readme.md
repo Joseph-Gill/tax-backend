@@ -1,5 +1,6 @@
 # Registration
 This django app groups all endpoints needed to register, log in and reset password.
+If you just want it for email functionality rename it to email and remove serializers.py, views.py and urls.py.
 ## Usage
 Add this app to your project.
 Migrate to create the Email model shipped with this app.

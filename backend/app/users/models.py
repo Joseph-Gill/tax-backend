@@ -99,7 +99,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     avatar = models.ImageField(
         upload_to='',
         blank=True,
-        default='avatar.jpg'
     )
 
     location = models.CharField(
@@ -127,10 +126,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
     )
 
-    bookmarked_posts = models.ManyToManyField(
-        verbose_name='bookmarked posts',
+    liked_posts = models.ManyToManyField(
+        verbose_name='liked posts',
         to=Post,
-        related_name='bookmarked_by',
+        related_name='liked_by',
         blank=True,
 
     )
