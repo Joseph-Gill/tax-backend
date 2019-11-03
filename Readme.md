@@ -10,4 +10,5 @@ You can easily extract it from there if you only need email sending for other pr
 
 Missing:
 Friends,
-Liking Comments
+Liking Comments,
+Think about pro/cons still having a user profile in the social app.
