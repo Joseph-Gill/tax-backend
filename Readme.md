@@ -12,8 +12,15 @@ Missing:
 Friends,
 Liking Comments,
 Think about pro/cons still having a user profile in the social app:
-Current thoughts:
-To decouple user from social app you need the user profile.
-But this reintroduces the operational complexity I wanted to get rid of in the first place.
--> Probably better to have one template really just for social media app where we sacrifice modular 
-independence and have the tight coupling and then just have another template without the social compoenntn.
+
+Option1: Social Profile
+Pro: Makes the social app more modular. Can be Used with any User model.
+Con: Makes the code more complicated + nested Serializer
+
+Option2: No Profile
+Pro: Simpler and clearer code.
+Con: Coupling between User and the Social app
+
+Option3: Profile + change user in request object
+Pro: Social app decoupled from User and simple code
+
