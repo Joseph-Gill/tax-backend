@@ -28,6 +28,9 @@ services:
     depends_on:
       - postgres
       - backend
+    volumes:
+      - media-files:/media-files
+      - static-files:/static-files
 
   nginx:
     image: nginx:latest

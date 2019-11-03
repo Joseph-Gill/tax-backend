@@ -32,6 +32,10 @@ services:
     env_file:
       - ./envs/dev.env
     command: 'python manage.py send_mail'
+    volumes:
+      - ./backend:/backend
+      - ./media-files:/media-files
+      - ./static-files:/static-files
     depends_on:
       - postgres
       - backend

@@ -1,7 +1,7 @@
 import time
 from django.core.management.base import BaseCommand
 
-from app.registration.models import Email
+from app.emails.models import Email
 
 
 class Command(BaseCommand):

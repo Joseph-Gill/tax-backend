@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'app',
     'app.users',
     'app.post',
+    'app.emails',
     'app.registration',
 ]
 

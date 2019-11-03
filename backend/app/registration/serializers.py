@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
-from app.registration.models import Email
+from app.emails.models import Email
 from app.users.models import code_generator
 
 User = get_user_model()
