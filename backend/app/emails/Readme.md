@@ -1,10 +1,6 @@
 # Email
 This django app provides all the functionality needed for email sending
-## Usage
-Add this app to your project.
-Migrate to create the Email model shipped with this app.
-Save emails to the Email model and start up a container running this module with `python manage.py send_mail`.
-#### Installation
+#### Installation & Usage
 1. Install and add to your requirements.yml file: 
 ```
 pip install django-extensions
@@ -72,3 +68,5 @@ services:
       - database
       - api
 ```
+8. Migrate
+9. Save emails to the Email model and start up a container running this module with `python manage.py send_mail`.
