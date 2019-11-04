@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from app.post.serializers import PostSerializer
+from app.social.serializers.posts import PostSerializer
 
 User = get_user_model()
 

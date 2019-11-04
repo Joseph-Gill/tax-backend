@@ -3,7 +3,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin
 import random
-from app.post.models import Post
+from app.social.models.posts import Post
 from django.contrib.auth.models import BaseUserManager
 
 

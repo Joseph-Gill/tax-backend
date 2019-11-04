@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'app',
     'app.users',
-    'app.post',
+    'app.social',
     'app.emails',
     'app.registration',
 ]

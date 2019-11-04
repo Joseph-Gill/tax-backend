@@ -1,7 +1,9 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
-from app.post.models import Post, Comment
+
+from app.social.models.comments import Comment
+from app.social.models.posts import Post
 
 user = get_user_model()
 
@@ -10,6 +12,7 @@ class PostUserSerializer(serializers.ModelSerializer):
     """
     UserSerializer for nested usage in PostSerializer.
     """
+
     class Meta:
         model = user
         fields = ['id', 'username', 'email', 'avatar']
@@ -18,6 +21,7 @@ class PostUserSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     user = PostUserSerializer(read_only=True)
     is_from_logged_in_user = SerializerMethodField()
+
     # logged_in_user_clapped = SerializerMethodField()
 
     # def get_logged_in_user_clapped(self, comment):
