@@ -24,3 +24,9 @@ Con: Coupling between User and the Social app
 Option3: Profile + change user in request object + Related managers
 Pro: Social app decoupled from User and simple code
 
+Todos:
+Move token endpoint to user.
+Add Reg Profile to Reg app.
+
+Add Social Profile.
+Move follower enpoints to social app.

@@ -2,7 +2,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from app.emails.models import Email
-from app.users.models import code_generator
+from app.registration.models import RegistrationProfile
+from app.registration.models import code_generator
 
 User = get_user_model()
 
@@ -25,10 +26,13 @@ def email_does_exist(email):
 
 def code_is_valid(code):
     try:
-        User.objects.get(code=code)
-        return code
-    except User.DoesNotExist:
-        raise ValidationError(message='This code is not valid! It might already have been used.')
+        reg_profile = RegistrationProfile.objects.get(code=code)
+        if not reg_profile.code_used:
+            return code
+        else:
+            raise ValidationError(message='This code has already been used!')
+    except RegistrationProfile.DoesNotExist:
+        raise ValidationError(message='This code is not valid!')
 
 
 class RegistrationSerializer(serializers.Serializer):
@@ -42,8 +46,13 @@ class RegistrationSerializer(serializers.Serializer):
             is_active=False,
         )
         new_user.save()
+        reg_profile = RegistrationProfile(
+            user=new_user,
+            code_type='RV'
+        )
+        reg_profile.save()
         email = Email(to=email, subject='Thank you for registering!',
-                      content=f'Here is your validation code: {new_user.code}')
+                      content=f'Here is your validation code: {reg_profile.code}')
         email.save(request=self.context['request'])
         return new_user
 
@@ -57,19 +66,26 @@ class RegistrationValidationSerializer(serializers.Serializer):
     last_name = serializers.CharField(label='Last name')
 
     def validate(self, data):
+        code = data.get('code')
+        email = data.get('email')
+        user = User.objects.get(email=email)
+        reg_profile = RegistrationProfile.objects.get(code=code)
+        if reg_profile != user.registration_profile:
+            raise ValidationError(message='The code does not belong to this email!')
         if data.get('password') != data.get('password_repeat'):
             raise ValidationError(message='Passwords do not match!')
         return data
 
     def save(self, validated_data):
-        code = validated_data.get('code')
-        user = User.objects.get(code=code)
+        email = validated_data.get('email')
+        user = User.objects.get(email=email)
         user.first_name = validated_data.get('first_name')
         user.last_name = validated_data.get('last_name')
         user.is_active = True
         user.set_password(validated_data.get('password'))
-        user.code = code_generator()
+        user.registration_profile.code_used = True
         user.save()
+        user.registration_profile.save()
         return user
 
 
@@ -79,8 +95,12 @@ class PasswordResetSerializer(serializers.Serializer):
     def send_password_reset_email(self):
         email = self.validated_data.get('email')
         user = User.objects.get(email=email)
+        user.registration_profile.code = code_generator()
+        user.registration_profile.code_used = False
+        user.registration_profile.code_type = 'PR'
+        user.registration_profile.save()
         email = Email(to=email, subject='Password reset',
-                      content=f'Here is your password reset code: {user.code}')
+                      content=f'Here is your password reset code: {user.registration_profile.code}')
         email.save(request=self.context['request'])
 
 
@@ -96,8 +116,9 @@ class PasswordResetValidationSerializer(serializers.Serializer):
 
     def save(self, validated_data):
         code = validated_data.get('code')
-        user = User.objects.get(code=code)
+        user = RegistrationProfile.objects.get(code=code).user
         user.set_password(validated_data.get('password'))
-        user.code = code_generator()
+        user.registration_profile.code_used = True
         user.save()
+        user.registration_profile.save()
         return user

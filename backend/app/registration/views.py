@@ -50,8 +50,8 @@ class RegistrationView(GenericAPIView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        new_user = serializer.save(serializer.validated_data)
-        return Response(self.get_serializer(new_user).data)
+        serializer.save(serializer.validated_data)
+        return Response(status=status.HTTP_200_OK)
 
 
 class RegistrationValidationView(GenericAPIView):
@@ -65,8 +65,8 @@ class RegistrationValidationView(GenericAPIView):
     def patch(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.save(serializer.validated_data)
-        return Response(self.get_serializer(user).data)
+        serializer.save(serializer.validated_data)
+        return Response(status=status.HTTP_200_OK)
 
 
 class PasswordResetView(GenericAPIView):

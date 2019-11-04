@@ -157,8 +157,4 @@ EMAIL_HOST_USER = 'students@propulsionacademy.com'
 EMAIL_HOST_PASSWORD = 'Ahsdfhj83j3h4rweeoiuhas83dbj3j3dmnvbl'
 DEFAULT_FROM_EMAIL = 'students@propulsionacademy.com'
 
-# CORS_ALLOW_METHODS = list(default_methods)
-
-# CORS_ALLOW_CREDENTIALS = True
-
 AUTH_USER_MODEL = 'users.User'

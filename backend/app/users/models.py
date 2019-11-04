@@ -2,14 +2,8 @@ from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin
-import random
 from app.social.models.posts import Post
 from django.contrib.auth.models import BaseUserManager
-
-
-def code_generator(length=5):
-    numbers = '0123456789'
-    return ''.join(random.choice(numbers) for i in range(length))
 
 
 class MyUserManager(BaseUserManager):
@@ -132,13 +126,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         related_name='liked_by',
         blank=True,
 
-    )
-
-    code = models.CharField(
-        verbose_name='code',
-        help_text='random code used for registration and for password reset',
-        max_length=15,
-        default=code_generator
     )
 
     def __str__(self):
