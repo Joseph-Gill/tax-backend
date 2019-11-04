@@ -2,7 +2,8 @@
 This django app groups all endpoints needed to register, log in and reset password.
 #### Prerequisites
 1. An Email model you save your emails to, and associated module that takes care of the email sending.
-2. A User model with code field and a method on the Manager that supports creating unverified users.
+2. A User model with a Manager that supports creating unverified users.
+3. A UserSerializer
 #### Installation & Usage
 1. Install the app
 ```
