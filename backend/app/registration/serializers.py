@@ -4,6 +4,7 @@ from rest_framework import serializers
 from app.emails.models import Email
 from app.registration.models import RegistrationProfile
 from app.registration.models import code_generator
+from app.registration.signals import post_user_registration_validation, post_user_password_reset_validation
 
 User = get_user_model()
 
@@ -46,11 +47,15 @@ class RegistrationSerializer(serializers.Serializer):
             is_active=False,
         )
         new_user.save()
+        #####
+        # Creating reg profile here and not with signal because signals are async
+        # and I need the code in the reg profile right now.
         reg_profile = RegistrationProfile(
             user=new_user,
             code_type='RV'
         )
         reg_profile.save()
+        #####
         email = Email(to=email, subject='Thank you for registering!',
                       content=f'Here is your validation code: {reg_profile.code}')
         email.save(request=self.context['request'])
@@ -86,6 +91,7 @@ class RegistrationValidationSerializer(serializers.Serializer):
         user.registration_profile.code_used = True
         user.save()
         user.registration_profile.save()
+        post_user_registration_validation.send(sender=User, user=user)
         return user
 
 
@@ -121,4 +127,5 @@ class PasswordResetValidationSerializer(serializers.Serializer):
         user.registration_profile.code_used = True
         user.save()
         user.registration_profile.save()
+        post_user_password_reset_validation.send(sender=User, user=user)
         return user

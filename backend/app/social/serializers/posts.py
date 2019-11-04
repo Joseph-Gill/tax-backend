@@ -4,6 +4,7 @@ from rest_framework.fields import SerializerMethodField
 
 from app.social.models.comments import Comment
 from app.social.models.posts import Post
+from app.social.models.profile import SocialProfile
 
 user = get_user_model()
 
@@ -15,11 +16,23 @@ class PostUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = user
-        fields = ['id', 'username', 'email', 'avatar']
+        fields = ['id', 'username', 'email']
+
+
+class SocialProfileSerializer(serializers.ModelSerializer):
+    """
+    UserSerializer for nested usage in PostSerializer.
+    """
+    user = PostUserSerializer(read_only=True, many=False)
+
+    class Meta:
+        model = SocialProfile
+        fields = ["id", "user", "created", "modified", "avatar", "location", "about_me", "job","followees",
+                  "liked_posts"]
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    user = PostUserSerializer(read_only=True)
+    social_profile = SocialProfileSerializer(read_only=True)
     is_from_logged_in_user = SerializerMethodField()
 
     # logged_in_user_clapped = SerializerMethodField()
@@ -44,20 +57,20 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    user = PostUserSerializer(read_only=True)
-    comments = CommentSerializer(many=True, read_only=True)
+    social_profile = SocialProfileSerializer(read_only=True)
+    # comments = CommentSerializer(many=True, read_only=True)
     logged_in_user_liked = SerializerMethodField()
     is_from_logged_in_user = SerializerMethodField()
 
     def get_is_from_logged_in_user(self, post):
         user = self.context['request'].user
-        if user == post.user:
+        if user == post.social_profile:
             return True
         return False
 
     def get_logged_in_user_liked(self, post):
-        user = self.context['request'].user
-        if post in user.liked_posts.all():
+        social_profile = self.context['request'].social_profile
+        if post in social_profile.liked_posts.all():
             return True
         return False
 
@@ -66,6 +79,6 @@ class PostSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        validated_data['user'] = self.context['request'].user
+        validated_data['social_profile'] = self.context['request'].social_profile
         post = super().create(validated_data=validated_data)
         return post

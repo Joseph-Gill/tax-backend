@@ -5,21 +5,10 @@ from rest_framework.response import Response
 from app.social.models.posts import Post
 from app.social.permissions import IsOwnerOrReadOnly, IsNotOwner
 from app.social.serializers.posts import PostSerializer
+from app.social.views.cutom_mixins import FilterPostMixin, CustomDispatchMixin
 
 
-class FilterPostMixin:
-    def filter_posts(self, posts):
-        if "search" in self.request.query_params.keys():
-            posts_including_search = []
-            search = self.request.query_params["search"].lower()
-            for item in posts:
-                if item.user and (search in item.content.lower() or search in item.user.username.lower()):
-                    posts_including_search.append(item)
-            return posts_including_search
-        return posts.order_by("-created")
-
-
-class ListCreatePosts(ListCreateAPIView, FilterPostMixin):
+class ListCreatePosts(ListCreateAPIView, FilterPostMixin, CustomDispatchMixin):
     """
     get:
     List all Posts.
@@ -34,7 +23,7 @@ class ListCreatePosts(ListCreateAPIView, FilterPostMixin):
         return self.filter_posts(posts)
 
 
-class RetrieveUpdateDestroyPost(RetrieveUpdateDestroyAPIView):
+class RetrieveUpdateDestroyPost(RetrieveUpdateDestroyAPIView, CustomDispatchMixin):
     """
     get:
     Retrieve Post.
@@ -50,7 +39,7 @@ class RetrieveUpdateDestroyPost(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
 
-class ListPostsUser(ListAPIView):
+class ListPostsUser(ListAPIView, CustomDispatchMixin):
     """
     get:
     List al posts of a specific User.
@@ -62,7 +51,7 @@ class ListPostsUser(ListAPIView):
         return Post.objects.filter(user=user_id).order_by("-created")
 
 
-class ListPostsFollowees(ListAPIView, FilterPostMixin):
+class ListPostsFollowees(ListAPIView, FilterPostMixin, CustomDispatchMixin):
     """
     get:
     List all Posts of Users the logged-in User follows.
@@ -70,12 +59,12 @@ class ListPostsFollowees(ListAPIView, FilterPostMixin):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        followed_user_ids = self.request.user.followees.all().values_list("id", flat=True)
+        followed_user_ids = self.request.social_profile.followees.all().values_list("id", flat=True)
         posts = Post.objects.filter(user__in=followed_user_ids)
         return self.filter_posts(posts)
 
 
-class ListPostsLoggedInUser(ListAPIView, FilterPostMixin):
+class ListPostsLoggedInUser(ListAPIView, FilterPostMixin, CustomDispatchMixin):
     """
     get:
     List all Posts of logged-in User.
@@ -83,11 +72,11 @@ class ListPostsLoggedInUser(ListAPIView, FilterPostMixin):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        posts = self.request.user.posts
+        posts = self.request.social_profile.posts
         return self.filter_posts(posts)
 
 
-class ListLikes(ListAPIView, FilterPostMixin):
+class ListLikes(ListAPIView, FilterPostMixin, CustomDispatchMixin):
     """
     get:
     List all Posts bookmarked by logged-in User.
@@ -95,11 +84,11 @@ class ListLikes(ListAPIView, FilterPostMixin):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        posts = Post.objects.filter(liked_by=self.request.user)
+        posts = Post.objects.filter(liked_by=self.request.social_profile)
         return self.filter_posts(posts)
 
 
-class CreateLike(GenericAPIView):
+class CreateLike(GenericAPIView, CustomDispatchMixin):
     """
     post:
     Like Post for logged-in User.
@@ -110,12 +99,9 @@ class CreateLike(GenericAPIView):
 
     def post(self, request, pk):
         post_to_save = self.get_object()
-        user = request.user
+        user = request.social_profile
         if post_to_save in user.liked_posts.all():
             user.liked_posts.remove(post_to_save)
             return Response(self.get_serializer(instance=post_to_save).data)
         user.liked_posts.add(post_to_save)
         return Response(self.get_serializer(instance=post_to_save).data)
-
-
-

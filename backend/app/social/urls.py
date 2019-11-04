@@ -1,5 +1,6 @@
 from django.urls import path, include
 from app.social.views.comments import CreateComment
+from app.social.views.followers import ListFollowers, ListFollowing, FollowUnfollowUser
 from app.social.views.posts import ListCreatePosts, RetrieveUpdateDestroyPost, ListPostsUser, ListPostsLoggedInUser, \
     ListPostsFollowees, ListLikes, CreateLike
 
@@ -17,7 +18,14 @@ comment_patterns = [
     path("<int:pk>/", CreateComment.as_view(), name="create-post-comment"),
 ]
 
+follow_patterns = [
+    path('me/followers/', ListFollowers.as_view(), name='list-followers'),
+    path('me/following/', ListFollowing.as_view(), name='list-following'),
+    path('toggle-follow/<int:pk>/', FollowUnfollowUser.as_view(), name='follow-unfollow-user'),
+]
+
 urlpatterns = [
     path('posts/', include(post_patterns)),
-    path('comments/', include(comment_patterns))
+    path('comments/', include(comment_patterns)),
+    path('followers/', include(follow_patterns))
 ]

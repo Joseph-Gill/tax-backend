@@ -1,9 +1,5 @@
 # Registration
 This django app groups all endpoints needed to register, log in and reset password.
-#### Prerequisites
-1. An Email model you save your emails to, and associated module that takes care of the email sending.
-2. A User model with a Manager that supports creating unverified users.
-3. A UserSerializer
 #### Installation & Usage
 1. Install the app
 ```
@@ -18,3 +14,23 @@ INSTALLED_APPS = [
 path('backend/api/auth/', include('app.registration.urls')),
 ``` 
 to your root urls.py to have access to all registration endpoints.
+#### Interface
+##### Dependencies
+1. An Email model you save your emails to, and associated module that takes care of the email sending.
+2. A User model with a Manager that supports creating unverified users.
+3. A UserSerializer
+##### API
+1. This module exposes a Signal `post_user_registration_validation`.
+To listen to this signal do:
+```
+@receiver(post_user_registration_validation)
+def handle_signal(sender, user, **kwargs):
+    pass
+```
+2. This module exposes a Signal `post_user_password_reset_validation`.
+To listen to this signal do:
+```
+@receiver(post_user_password_reset_validation)
+def handle_signal(sender, user, **kwargs):
+    pass
+```

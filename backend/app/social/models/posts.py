@@ -1,11 +1,10 @@
-from django.conf import settings
 from django.db import models
 
 
 class Post(models.Model):
-    user = models.ForeignKey(
-        verbose_name='user',
-        to=settings.AUTH_USER_MODEL,
+    social_profile = models.ForeignKey(
+        verbose_name='social user profile',
+        to='SocialProfile',
         on_delete=models.SET_NULL,
         related_name='posts',
         null=True,
@@ -28,4 +27,4 @@ class Post(models.Model):
     )
 
     def __str__(self):
-        return f"{self.user}: {self.content[:50]} ..."
+        return f"{self.social_profile}: {self.content[:50]} ..."
