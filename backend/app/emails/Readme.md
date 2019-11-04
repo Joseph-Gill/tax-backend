@@ -1,5 +1,7 @@
 # Email
 This django app provides all the functionality needed for email sending
+#### Prerequisites
+None
 #### Installation & Usage
 1. Install and add to your requirements.yml file: 
 ```
