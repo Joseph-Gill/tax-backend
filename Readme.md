@@ -21,6 +21,6 @@ Option2: No Profile
 Pro: Simpler and clearer code.
 Con: Coupling between User and the Social app
 
-Option3: Profile + change user in request object
+Option3: Profile + change user in request object + Related managers
 Pro: Social app decoupled from User and simple code
 
