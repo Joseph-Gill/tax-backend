@@ -22,11 +22,12 @@ class Friend(TimeStampedModel):
             ('P', 'Pending'),
             ('A', 'Accepted'),
             ('R', 'Rejected')
-        )
+        ),
+        default='P'
     )
 
-    # class Meta:
-    #     unique_together = ['requester', 'receiver']
+    class Meta:
+        unique_together = ['requester', 'receiver']
 
     def __str__(self):
         return f'{self.requester.user.email}, {self.receiver.user.email}, {self.status}'

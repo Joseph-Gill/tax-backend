@@ -1,3 +1,5 @@
+from itertools import chain
+
 from rest_framework.generics import ListAPIView, GenericAPIView, ListCreateAPIView, \
     RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -98,7 +100,7 @@ class CreateLike(GenericAPIView, CustomDispatchMixin):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
     lookup_url_kwarg = 'post_id'
-    permission_classes = [IsNotOwner]
+    permission_classes = [IsAuthenticated, IsNotOwner]
 
     def post(self, request, pk):
         post_to_save = self.get_object()
@@ -108,3 +110,18 @@ class CreateLike(GenericAPIView, CustomDispatchMixin):
             return Response(self.get_serializer(instance=post_to_save).data)
         user.liked_posts.add(post_to_save)
         return Response(self.get_serializer(instance=post_to_save).data)
+
+
+class ListFriendsPosts(ListAPIView, CustomDispatchMixin):
+    """
+    get:
+    List all posts of the logged-in users accepted friends
+    """
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
+
+    def filter_queryset(self, queryset):
+        posts = []
+        for friend in self.request.social_profile.friends:
+            posts = list(chain(posts, friend.posts.all()))
+        return posts

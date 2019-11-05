@@ -12,5 +12,5 @@ urlpatterns = [
     path('registration/', RegistrationView.as_view(), name='registration'),
     path('registration/validation/', RegistrationValidationView.as_view(), name='registration-validation'),
     path('password-reset/', PasswordResetView.as_view(), name='password-reset'),
-    path('password-reset-validation/', PasswordResetValidationView.as_view(), name='password-reset-validation'),
+    path('password-reset/validation/', PasswordResetValidationView.as_view(), name='password-reset-validation'),
 ]

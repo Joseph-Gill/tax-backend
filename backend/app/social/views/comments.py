@@ -9,17 +9,19 @@ from app.social.views.cutom_mixins import CustomDispatchMixin
 
 class ListCreateComment(ListCreateAPIView, CustomDispatchMixin):
     """
+    get:
+    List all Comments of a post.
     post:
     Create a new Comment.
     """
-    serializer_class = PostSerializer
+    serializer_class = CommentSerializer
     queryset = Post.objects.all()
     lookup_url_kwarg = 'post_id'
 
     def list(self, request, *args, **kwargs):
         post = self.get_object()
         comments = post.comments
-        return Response(CommentSerializer(instance=comments, many=True, context=self.get_serializer_context()).data)
+        return Response(self.get_serializer(instance=comments, many=True).data)
 
     def create(self, request,*args, **kwargs):
         post = self.get_object()

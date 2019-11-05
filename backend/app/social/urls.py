@@ -1,9 +1,12 @@
 from django.urls import path, include
 from app.social.views.comments import ListCreateComment
 from app.social.views.followers import ListFollowers, ListFollowing, FollowUnfollowUser
-from app.social.views.friends import CreateFriendRequest
+from app.social.views.friends import CreateFriendRequest, RetrieveUpdateDestroyFriendRequest, ListFriends, \
+    ListFriendRequests
 from app.social.views.posts import ListCreatePosts, RetrieveUpdateDestroyPost, ListPostsUser, ListPostsLoggedInUser, \
-    ListPostsFollowees, ListLikes, CreateLike
+    ListPostsFollowees, ListLikes, CreateLike, ListFriendsPosts
+from app.social.views.profiles import ListSocialProfiles, RetrieveSocialProfiles, \
+    RetrieveUpdateDestroyLoggedInUserSocialProfiles
 
 post_patterns = [
     path('', ListCreatePosts.as_view(), name='list-create-posts'),
@@ -13,6 +16,8 @@ post_patterns = [
     path("following/", ListPostsFollowees.as_view(), name="list-posts-followees"),
     path("likes/", ListLikes.as_view(), name="list-liked-posts"),
     path("toggle-like/<int:post_id>/", CreateLike.as_view(), name="toggle-like"),
+    path('friends/', ListFriendsPosts.as_view(), name='list-friend-posts'),
+
 ]
 
 comment_patterns = [
@@ -20,12 +25,23 @@ comment_patterns = [
 ]
 
 follow_patterns = [
-    path('me/followers/', ListFollowers.as_view(), name='list-followers'),
-    path('me/following/', ListFollowing.as_view(), name='list-following'),
+    path('followers/', ListFollowers.as_view(), name='list-followers'),
+    path('following/', ListFollowing.as_view(), name='list-following'),
     path('toggle-follow/<int:social_profile_id>/', FollowUnfollowUser.as_view(), name='follow-unfollow-user'),
 ]
 friend_patterns = [
-    path('profile/<int:social_profile_id>/', CreateFriendRequest.as_view(), name='create-friend-request'),
+    path('request/<int:social_profile_id>/', CreateFriendRequest.as_view(), name='create-friend-request'),
+    path('requests/<int:friend_request_id>/', RetrieveUpdateDestroyFriendRequest.as_view(),
+         name='retrieve-update-destroy-friend-request'),
+    path('requests/', ListFriendRequests.as_view(), name='list-friend-request'),
+    path('', ListFriends.as_view(), name='list-friends'),
+]
+
+profile_patterns = [
+    path('', ListSocialProfiles.as_view(), name='list-social-profile'),
+    path('<int:social_profile_id>/', RetrieveSocialProfiles.as_view(), name='retrieve-social-profile'),
+    path('me/', RetrieveUpdateDestroyLoggedInUserSocialProfiles.as_view(),
+         name='retrieve-update-destroy-logged-in-user-social-profile'),
 ]
 
 urlpatterns = [
@@ -33,4 +49,5 @@ urlpatterns = [
     path('comments/', include(comment_patterns)),
     path('followers/', include(follow_patterns)),
     path('friends/', include(friend_patterns)),
+    path('profile/', include(profile_patterns)),
 ]

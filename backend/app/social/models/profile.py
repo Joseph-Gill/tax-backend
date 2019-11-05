@@ -1,7 +1,8 @@
 from django_extensions.db.models import TimeStampedModel
 from django.conf import settings
 from django.db import models
-from app.social.models.posts import Post
+
+from app.social.models import Friend, Post
 
 
 class SocialProfile(TimeStampedModel):
@@ -48,6 +49,24 @@ class SocialProfile(TimeStampedModel):
         blank=True,
 
     )
+
+    @property
+    def friends(self):
+        friends_profiles = []
+
+        received_requests = Friend.objects.filter(
+            receiver=self,
+            status='A'
+        )
+        for friend in received_requests:
+            friends_profiles.append(friend.requester)
+        requested_requests = Friend.objects.filter(
+            requester=self,
+            status='A'
+        )
+        for friend in requested_requests:
+            friends_profiles.append(friend.receiver)
+        return friends_profiles
 
     def __str__(self):
         return f'{self.user.email}'

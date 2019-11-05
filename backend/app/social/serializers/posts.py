@@ -10,8 +10,8 @@ class PostSerializer(serializers.ModelSerializer):
     is_from_logged_in_user = SerializerMethodField()
 
     def get_is_from_logged_in_user(self, post):
-        user = self.context['request'].user
-        if user == post.social_profile:
+        social_profile = self.context['request'].social_profile
+        if social_profile == post.social_profile:
             return True
         return False
 
