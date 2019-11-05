@@ -1,15 +1,13 @@
-from django.conf import settings
 from django.db import models
-
 from app.social.models.posts import Post
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(
+    social_profile = models.ForeignKey(
         verbose_name='user',
-        to=settings.AUTH_USER_MODEL,
+        to='SocialProfile',
         on_delete=models.CASCADE,
-        related_name='clap_comment',
+        related_name='comments',
     )
 
     post = models.ForeignKey(

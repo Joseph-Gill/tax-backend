@@ -5,9 +5,8 @@ class Post(models.Model):
     social_profile = models.ForeignKey(
         verbose_name='social user profile',
         to='SocialProfile',
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name='posts',
-        null=True,
     )
     content = models.TextField(
         verbose_name='content'

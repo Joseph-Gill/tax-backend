@@ -1,20 +1,28 @@
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from app.social.models.comments import Comment
 from app.social.models.posts import Post
+from app.social.serializers.comments import CommentSerializer
 from app.social.serializers.posts import PostSerializer
+from app.social.views.cutom_mixins import CustomDispatchMixin
 
 
-class CreateComment(GenericAPIView):
+class ListCreateComment(ListCreateAPIView, CustomDispatchMixin):
     """
     post:
     Create a new Comment.
     """
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+    lookup_url_kwarg = 'post_id'
 
-    def post(self, request, pk):
+    def list(self, request, *args, **kwargs):
         post = self.get_object()
-        comment = Comment(user=request.user, post=post, comment=request.data['comment'])
+        comments = post.comments
+        return Response(CommentSerializer(instance=comments, many=True, context=self.get_serializer_context()).data)
+
+    def create(self, request,*args, **kwargs):
+        post = self.get_object()
+        comment = Comment(social_profile=request.social_profile, post=post, comment=request.data['comment'])
         comment.save()
         return Response(self.get_serializer(instance=post).data)

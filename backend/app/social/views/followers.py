@@ -40,8 +40,9 @@ class FollowUnfollowUser(GenericAPIView, CustomDispatchMixin):
     queryset = SocialProfile.objects.all()
     serializer_class = SocialProfileSerializer
     permission_classes = [IsAuthenticated, ObjNotLoggedInUser]
+    lookup_url_kwarg = 'social_profile_id'
 
-    def post(self, request, pk):
+    def post(self, request, **kwargs):
         target_user = self.get_object()
         profile = request.social_profile
         if target_user in profile.followees.all():

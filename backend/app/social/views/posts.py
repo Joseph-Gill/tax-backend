@@ -36,6 +36,7 @@ class RetrieveUpdateDestroyPost(RetrieveUpdateDestroyAPIView, CustomDispatchMixi
     """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    lookup_url_kwarg = 'post_id'
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
 
@@ -45,10 +46,11 @@ class ListPostsUser(ListAPIView, CustomDispatchMixin):
     List al posts of a specific User.
     """
     serializer_class = PostSerializer
+    lookup_url_kwarg = 'social_profile_id'
 
     def get_queryset(self):
-        user_id = self.kwargs.get("pk")
-        return Post.objects.filter(user=user_id).order_by("-created")
+        social_profile_id = self.kwargs.get("social_profile_id")
+        return Post.objects.filter(social_profile=social_profile_id).order_by("-created")
 
 
 class ListPostsFollowees(ListAPIView, FilterPostMixin, CustomDispatchMixin):
@@ -60,7 +62,7 @@ class ListPostsFollowees(ListAPIView, FilterPostMixin, CustomDispatchMixin):
 
     def get_queryset(self):
         followed_user_ids = self.request.social_profile.followees.all().values_list("id", flat=True)
-        posts = Post.objects.filter(user__in=followed_user_ids)
+        posts = Post.objects.filter(social_profile__in=followed_user_ids)
         return self.filter_posts(posts)
 
 
@@ -95,6 +97,7 @@ class CreateLike(GenericAPIView, CustomDispatchMixin):
     """
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+    lookup_url_kwarg = 'post_id'
     permission_classes = [IsNotOwner]
 
     def post(self, request, pk):
