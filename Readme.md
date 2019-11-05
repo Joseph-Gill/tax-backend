@@ -7,7 +7,7 @@
 
 4.This template uses a custom User model with email as the unique auth field.
 
-##Endpoints
+## Endpoints
 All the following endpoints should be prefixed with /backend
 #### Auth & Registration
 * `/api/auth/token/` POST: Get a new JWT by passing username and password
