@@ -35,7 +35,7 @@ class RetrieveUpdateDestroyFriendRequest(RetrieveUpdateDestroyAPIView, CustomDis
     Update the status of a friend request
     delete:
     Delete a friend request.
-    Only allowed if logged-in user was the original requester, as specified in IsPendingToAllowUpdate
+    Only allowed if logged-in user is part of the friendship, as specified in IsPendingToAllowUpdate
     """
     queryset = Friend.objects.all()
     serializer_class = FriendSerializer

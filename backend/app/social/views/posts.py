@@ -112,7 +112,7 @@ class CreateLike(GenericAPIView, CustomDispatchMixin):
         return Response(self.get_serializer(instance=post_to_save).data)
 
 
-class ListFriendsPosts(ListAPIView, CustomDispatchMixin):
+class ListFriendsPosts(ListAPIView, FilterPostMixin, CustomDispatchMixin):
     """
     get:
     List all posts of the logged-in users accepted friends

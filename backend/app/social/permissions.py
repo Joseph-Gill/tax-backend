@@ -46,7 +46,7 @@ class FriendRequestDoesNotExist(permissions.BasePermission):
 
 
 class IsPendingToAllowUpdate(permissions.BasePermission):
-    message = 'You can only modify pending requests.'
+    message = 'You can only modify pending requests or you are not part of this friendship.'
 
     def has_object_permission(self, request, view, obj):
         # Read permissions are allowed to any request,
@@ -54,5 +54,5 @@ class IsPendingToAllowUpdate(permissions.BasePermission):
         if request.method == 'PATCH':
             return obj.status == 'P'
         if request.method == 'DELETE':
-            return obj.requester == request.social_profile
+            return obj.requester == request.social_profile or obj.receiver == request.social_profile
         return True

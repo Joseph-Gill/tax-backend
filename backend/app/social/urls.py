@@ -14,9 +14,9 @@ post_patterns = [
     path('profile/<int:social_profile_id>/', ListPostsUser.as_view(), name='list-posts-user'),
     path('me/', ListPostsLoggedInUser.as_view(), name='list-posts-logged-in-user'),
     path("following/", ListPostsFollowees.as_view(), name="list-posts-followees"),
-    path("likes/", ListLikes.as_view(), name="list-liked-posts"),
-    path("toggle-like/<int:post_id>/", CreateLike.as_view(), name="toggle-like"),
     path('friends/', ListFriendsPosts.as_view(), name='list-friend-posts'),
+    path("likes/", ListLikes.as_view(), name="list-liked-posts"),
+    path("toggle-like/<int:post_id>/", CreateLike.as_view(), name="toggle-like")
 
 ]
 
