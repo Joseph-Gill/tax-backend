@@ -8,7 +8,7 @@ from django_extensions.db.models import TimeStampedModel
 class Email(TimeStampedModel):
     template_name = 'mail_base.html'
 
-    to = models.TextField(
+    to = models.EmailField(
         verbose_name='To',
     )
     subject = models.CharField(
