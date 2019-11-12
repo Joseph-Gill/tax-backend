@@ -657,7 +657,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8000/backend/api/social/friends/profile/3/",
+									"raw": "http://localhost:8000/backend/api/social/friends/request/3/",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -668,7 +668,7 @@
 										"api",
 										"social",
 										"friends",
-										"profile",
+										"request",
 										"3",
 										""
 									]

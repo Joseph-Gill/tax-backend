@@ -68,6 +68,6 @@ class ListFriendRequests(ListAPIView, CustomDispatchMixin):
             Q(receiver=self.request.social_profile) | Q(requester=self.request.social_profile)
         ).distinct()
         if "status" in self.request.query_params.keys():
-            status = self.request.query_params["status"].lower()
+            status = self.request.query_params["status"]
             return requests.filter(status=status)
         return requests
