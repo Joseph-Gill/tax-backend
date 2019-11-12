@@ -27,4 +27,4 @@ class ListCreateComment(ListCreateAPIView, CustomDispatchMixin):
         post = self.get_object()
         comment = Comment(social_profile=request.social_profile, post=post, comment=request.data['comment'])
         comment.save()
-        return Response(self.get_serializer(instance=post).data)
+        return Response(self.get_serializer(instance=comment).data)
