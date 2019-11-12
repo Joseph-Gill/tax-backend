@@ -7,6 +7,8 @@
 
 4.This template uses a custom User model with email as the unique auth field.
 
+5.Change HOSTNAME to you hostname in the nginx conf file.
+
 ## Endpoints
 All the following endpoints should be prefixed with /backend
 #### Auth & Registration
