@@ -1,4 +1,12 @@
 # Django Social Media Backend Template
+
+## Usage
+1.Change HOSTNAME to you hostname in the nginx conf file for deployment.
+
+2.IMPORTANT!: Change the secret key in the prod.env or actually don't use a prod.env at all and inject all env variables 
+you need from gitlab.
+
+## Features
 1.To see and test all endpoints use the postman collection included in /backend. Please keep it up to date!
 
 2.This template feature 3 independent modules: email, registration, social
@@ -7,7 +15,7 @@
 
 4.This template uses a custom User model with email as the unique auth field.
 
-5.Change HOSTNAME to you hostname in the nginx conf file.
+5.The backend is hidden in a honeypot. Please change the true admin url to something else in the root urls.py.
 
 ## Endpoints
 All the following endpoints should be prefixed with /backend

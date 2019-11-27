@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import ast
+from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-from datetime import timedelta
-from corsheaders.defaults import default_methods
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,13 +22,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "rrlct#au&z1n)r*ofy1vj!o1#n^ht$y+r68^ixhkinsj3+b--p"
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
 ALLOWED_HOSTS = ['*']
 
-DEBUG = os.environ.get('DJANGO_DEBUG')
+DEBUG = ast.literal_eval(os.environ.get('DJANGO_DEBUG', None))
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,9 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # third party
     'fullurl',
     'rest_framework',
     'corsheaders',
+
+    # own
     'app',
     'app.users',
     'app.social',
@@ -117,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Zurich'
 
 USE_I18N = True
 
@@ -149,12 +153,11 @@ SIMPLE_JWT = {
 }
 
 # Email settings
-BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'students@propulsionacademy.com'
-EMAIL_HOST_PASSWORD = 'Ahsdfhj83j3h4rweeoiuhas83dbj3j3dmnvbl'
-DEFAULT_FROM_EMAIL = 'students@propulsionacademy.com'
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 AUTH_USER_MODEL = 'users.User'

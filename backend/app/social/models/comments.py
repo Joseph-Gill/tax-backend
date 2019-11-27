@@ -31,4 +31,4 @@ class Comment(models.Model):
         ordering = ['-created']
 
     def __str__(self):
-        return f"{self.user} post a comment: {self.comment[:20]}..."
+        return f"{self.social_profile} post a comment: {self.comment[:20]}..."
