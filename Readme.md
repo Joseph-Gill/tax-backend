@@ -1,7 +1,7 @@
 # Django Social Media Backend Template
 
 ## Usage
-1.Change HOSTNAME to you hostname in the nginx conf file for deployment.
+1.Change HOSTNAME to your hostname in the nginx conf file for deployment.
 
 2.IMPORTANT!: Change the secret key in the prod.env or actually don't use a prod.env at all and inject all env variables 
 you need from gitlab.
