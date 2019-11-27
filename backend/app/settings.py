@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'fullurl',
     'rest_framework',
     'corsheaders',
+    'admin_honeypot',
 
     # own
     'app',

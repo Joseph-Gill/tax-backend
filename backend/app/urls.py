@@ -14,11 +14,11 @@ api_patterns = [
 ]
 
 urlpatterns = [
-    path('backend/admin/', admin.site.urls),
+    path('backend/true-admin/', admin.site.urls),  # please change this url for security
+    path('backend/admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path('backend/api/', include(api_patterns)),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
