@@ -1,8 +1,18 @@
+from django.conf import settings
 from django.core.mail import EmailMessage
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django_extensions.db.models import TimeStampedModel
+
+
+class DevEmails(models.Model):
+    email = models.EmailField(
+        verbose_name='dev email'
+    )
+
+    def __str__(self):
+        return self.email
 
 
 class Email(TimeStampedModel):
@@ -47,17 +57,17 @@ class Email(TimeStampedModel):
         super().save(**kwargs)
 
     def send(self):
-        # if not settings.DEBUG:
-        message = EmailMessage(
-            subject=self.subject,
-            body=mark_safe(self.compiled_template),
-            to=self.to.split(','),
-            bcc=self.bcc.split(',')
-        )
-        message.content_subtype = "html"
-        message.send()
-        self.is_sent = True
-        self.save()
+        if not settings.DEBUG or len(DevEmails.objects.filter(email=self.to)) > 0:
+            message = EmailMessage(
+                subject=self.subject,
+                body=mark_safe(self.compiled_template),
+                to=self.to.split(','),
+                bcc=self.bcc.split(',')
+            )
+            message.content_subtype = "html"
+            message.send()
+            self.is_sent = True
+            self.save()
 
     def __str__(self):
-        return self.subject
+        return f'{self.to} - {self.subject}'
