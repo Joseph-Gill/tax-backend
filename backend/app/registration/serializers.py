@@ -49,7 +49,7 @@ class RegistrationSerializer(serializers.Serializer):
 
     def save(self, validated_data):
         email = validated_data.get('email')
-        new_user = User.objects.create_unvalidated_user(
+        new_user = User(
             username=email,
             email=email,
             is_active=False,
