@@ -38,6 +38,11 @@ class NotificationTypes(models.Model):
     description = models.TextField(
         verbose_name='description'
     )
+    template = models.CharField(
+        verbose_name='template name',
+        max_length=200,
+        default='mail_base.html'
+    )
 
     def __str__(self):
         return self.key
@@ -53,7 +58,7 @@ def send_notifications(sender, notification_key, **kwargs):
                 'description': notification_type.description,
             }
             body = render_to_string(
-                template_name=f'mail_base.html',
+                template_name=notification_type.template,
                 context=context,
                 request=kwargs['request']
             )

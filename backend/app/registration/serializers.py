@@ -103,7 +103,7 @@ class RegistrationValidationSerializer(serializers.Serializer):
         user.save()
         user.registration_profile.save()
         post_user_registration_validation.send(sender=User, user=user)
-        notify_users.send(sender=User, notification_key='user_registered', request=self.context['request'])
+        notify_users.send(sender=User, notification_key='new_user_registered', request=self.context['request'], user=user)
         return user
 
 
