@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'app.social',
     'app.emails',
     'app.registration',
+    'app.notifications',
 ]
 
 MIDDLEWARE = [

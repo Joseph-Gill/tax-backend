@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from app.emails.models import Email
+from app.notifications.signals import notify_users
 from app.registration.models import RegistrationProfile
 from app.registration.models import code_generator
 from app.registration.signals import post_user_registration_validation, post_user_password_reset_validation
@@ -102,6 +103,7 @@ class RegistrationValidationSerializer(serializers.Serializer):
         user.save()
         user.registration_profile.save()
         post_user_registration_validation.send(sender=User, user=user)
+        notify_users.send(sender=User, notification_key='user_registered', request=self.context['request'])
         return user
 
 
