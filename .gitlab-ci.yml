@@ -51,16 +51,6 @@ cleanup:
     - docker rmi -f "$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME"
     - docker-compose -p "$CI_PIPELINE_ID" -f docker-compose.ci.yml down --remove-orphans
 
-deploy to sit:
-  when: manual
-  stage: deploy
-  tags:
-    - sit
-  script:
-    - docker-compose -f docker-compose.deploy.sit.yml pull
-    - docker-compose -f docker-compose.deploy.sit.yml down --remove-orphans
-    - docker-compose -f docker-compose.deploy.sit.yml up -d
-
 deploy to prod:
   when: manual
   stage: deploy
