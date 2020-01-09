@@ -1,7 +1,9 @@
+from django.dispatch import receiver
 from django_extensions.db.models import TimeStampedModel
 from django.conf import settings
 from django.db import models
 
+from app.registration.signals import post_user_registration_validation
 from app.social.models import Friend, Post
 
 
@@ -70,3 +72,8 @@ class SocialProfile(TimeStampedModel):
 
     def __str__(self):
         return f'{self.user.email}'
+
+
+@receiver(post_user_registration_validation)
+def create_social_profile(sender, user, **kwargs):
+    SocialProfile(user=user).save()

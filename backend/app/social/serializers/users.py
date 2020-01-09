@@ -1,7 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.dispatch import receiver
 from rest_framework import serializers
-from app.registration.signals import post_user_registration_validation
 from app.social.models.profile import SocialProfile
 
 User = get_user_model()
@@ -31,9 +29,4 @@ class SocialProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = SocialProfile
         fields = ['id', 'avatar', 'location', 'about_me', 'job', 'followees', 'followers',
-                  'logged_in_user_is_following','logged_in_user_is_friends', 'user']
-
-
-@receiver(post_user_registration_validation)
-def create_social_profile(sender, user, **kwargs):
-    SocialProfile(user=user).save()
+                  'logged_in_user_is_following', 'logged_in_user_is_friends', 'user']

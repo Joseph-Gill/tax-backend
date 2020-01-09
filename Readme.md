@@ -1,5 +1,6 @@
 # Django Social Media Backend Template
-
+Please make sure you keep the code style consistent when working on this project. If you are using an Intellij 
+editor you can use the upload the `Propulsion.codestyle.json` to `Editor > Code Style > Python`  
 ## Usage
 1.Change HOSTNAME to your hostname in the nginx conf file for deployment.
 
