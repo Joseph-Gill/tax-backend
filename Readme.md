@@ -1,6 +1,11 @@
 # Django Social Media Backend Template
-Please make sure you keep the code style consistent when working on this project. If you are using an Intellij 
+
+## Extending the template
+1. Please make sure you keep the code style consistent when working on this project. If you are using an Intellij 
 editor you can use the upload the `Propulsion.codestyle.json` to `Editor > Code Style > Python`  
+
+2. Please keep the components of the project independent. Use signals for inter app communication as much as possible.
+
 ## Usage
 1.Change HOSTNAME to your hostname in the nginx conf file for deployment.
 
@@ -10,7 +15,7 @@ you need from gitlab.
 ## Features
 1.To see and test all endpoints use the postman collection included in /backend. Please keep it up to date!
 
-2.This template feature 3 independent modules: email, registration, social
+2.This template feature 4 independent modules: email, registration, admin notifications and social.
 
 3.Nginx is included in this template for convenience  but should probably be put in its own repo in a proper deployment.
 
