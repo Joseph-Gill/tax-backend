@@ -53,14 +53,16 @@ def send_notifications(sender, notification_key, **kwargs):
     try:
         notification_type = NotificationTypes.objects.get(key=notification_key)
         for user_notification_profile in notification_type.subscribed_user_notification_profiles.all():
+            request = kwargs.pop('request', None)
             context = {
                 'title': notification_type.subject,
                 'description': notification_type.description,
+                **kwargs
             }
             body = render_to_string(
                 template_name=notification_type.template,
                 context=context,
-                request=kwargs['request']
+                request=request
             )
             Email(
                 to=user_notification_profile.user.email,
@@ -74,4 +76,5 @@ def send_notifications(sender, notification_key, **kwargs):
 
 @receiver(post_user_registration_validation)
 def create_social_profile(sender, user, **kwargs):
-    NotificationProfile(user=user).save()
+    if user.is_superuser or user.is_staff:
+        NotificationProfile(user=user).save()
