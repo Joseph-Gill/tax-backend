@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.db import models
 from django.dispatch import receiver
-from django.template.loader import render_to_string
 from django.template import Template, Context
 from app.emails.models import Email
 from app.notifications.signals import notify_users
