@@ -13,9 +13,8 @@ INSTALLED_APPS = [
     ...
 ]
 ```
-2.Put any new templates you need into the `templates` folder.
 
-3.Create a new Notification Type in the django admin using that template.
+2.Create a new Notification Type in the django admin.
 
 4.Emit a `notify_users` signal anywhere specifying the Notification Type key and additional parameters.
 
