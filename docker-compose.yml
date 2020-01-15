@@ -25,6 +25,7 @@ services:
       - ./backend:/backend
       - ./media-files:/media-files
       - ./static-files:/static-files
+    tty: true
 
   email:
     image: registry.gitlab.propulsion-home.ch/propulsion/projects/templates/django-social-media:latest

@@ -148,4 +148,5 @@ class PasswordResetValidationSerializer(serializers.Serializer):
         user.save()
         user.registration_profile.save()
         post_user_password_reset_validation.send(sender=User, user=user)
+        notify_users.send(sender=User, notification_key='user_reset_password', request=self.context['request'], email=user.email)
         return user

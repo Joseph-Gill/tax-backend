@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.dispatch import receiver
 from django.template.loader import render_to_string
-
+from django.template import Template, Context
 from app.emails.models import Email
 from app.notifications.signals import notify_users
 from app.registration.signals import post_user_registration_validation
@@ -42,10 +42,9 @@ class NotificationType(models.Model):
     description = models.TextField(
         verbose_name='description'
     )
-    template = models.CharField(
-        verbose_name='template name',
-        max_length=200,
-        default='mail_base.html'
+    template = models.TextField(
+        verbose_name='template extension',
+        default="{% extends 'mail_base.html' %} \n {% block extension %} \n {% endblock %}"
     )
 
     def __str__(self):
@@ -63,11 +62,12 @@ def send_notifications(sender, notification_key, **kwargs):
                 'description': notification_type.description,
                 **kwargs
             }
-            body = render_to_string(
-                template_name=notification_type.template,
-                context=context,
-                request=request
-            )
+            c = Context(context)
+            c.request = request
+            t = Template(notification_type.template)
+
+            body = t.render(c)
+
             Email(
                 to=user_notification_profile.user.email,
                 subject=notification_type.subject,

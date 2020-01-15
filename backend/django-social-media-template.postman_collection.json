@@ -1056,7 +1056,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\t\n\t\"email\": \"SignalFlux@outlook.com\",\n\t\"code\": \"20655\",\n\t\"password\": \"adminadmin\",\n\t\"password_repeat\": \"adminadmin\",\n\t\"username\": \"SignalFlux\",\n\t\"first_name\": \"Daniele\",\n\t\"last_name\": \"Roncaglioni\"\n}",
+							"raw": "{\t\n\t\"email\": \"SignalFlux@outlook.com\",\n\t\"code\": \"18429\",\n\t\"password\": \"adminadmin\",\n\t\"password_repeat\": \"adminadmin\",\n\t\"username\": \"SignalFlux\",\n\t\"first_name\": \"Daniele\",\n\t\"last_name\": \"Roncaglioni\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1135,7 +1135,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"code\":\"26295\",\n\t\"password\": \"adminadmin10\",\n\t\"password_repeat\": \"adminadmin10\"\n}",
+							"raw": "{\t\n\t\"email\": \"SignalFlux@outlook.com\",\n\t\"code\":\"68995\",\n\t\"password\": \"adminadmin\",\n\t\"password_repeat\": \"adminadmin\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
