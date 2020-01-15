@@ -1,4 +1,4 @@
-{% load static fullurl %}
+<!--{% load static fullurl %}-->
 <!--
 ==================== Respmail ====================
 Respmail is a response HTML email designed to work
@@ -566,7 +566,7 @@ Sizes: [
                                                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                                         <tr>
                                                             <td valign="top" class="imageContent">
-                                                                <img src="{% block logo %}{% fullstatic "logo.png" %}{% endblock %}" width="250" class="flexibleImage" style="max-width:250px;width:100%;display:block;" alt="Propulsion Academy" title="Momentum"/>
+<!--                                                                <img src="{% block logo %}{% fullstatic "logo.png" %}{% endblock %}" width="250" class="flexibleImage" style="max-width:250px;width:100%;display:block;" alt="Propulsion Academy" title="Momentum"/>-->
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -617,6 +617,7 @@ Sizes: [
                                                                             <div mc:edit="body" style="text-align:left;font-family:Helvetica,Arial,sans-serif;font-size:15px;margin-bottom:0;color:#5F5F5F;line-height:135%;">
                                                                                 {% block description %}
                                                                                     {{ description | linebreaks}}
+                                                                                    {{logo_url}}
                                                                                 {% endblock %}
                                                                                 {% block extension %}
 

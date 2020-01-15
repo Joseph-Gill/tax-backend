@@ -15,4 +15,6 @@ dependencies:
     - django-fullurl
     - django-admin-honeypot
     - django-extensions
+    - celery
+    - redis
 

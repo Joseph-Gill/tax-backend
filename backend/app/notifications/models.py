@@ -2,7 +2,10 @@ from django.conf import settings
 from django.db import models
 from django.dispatch import receiver
 from django.template import Template, Context
+
+from app.celery import app
 from app.emails.models import Email
+from app.notifications.tasks import send_notification_task
 from app.notifications.signals import notify_users
 from app.registration.signals import post_user_registration_validation
 
@@ -50,31 +53,63 @@ class NotificationType(models.Model):
         return self.key
 
 
+# @app.task
+# def send_notification_task(notification_key, **kwargs):
+#     try:
+#         notification_type = NotificationType.objects.get(key=notification_key)
+#         for user_notification_profile in notification_type.subscribed_user_notification_profiles.all():
+#             request = kwargs.pop('request', None)
+#             context = {
+#                 'title': notification_type.title,
+#                 'description': notification_type.description,
+#                 **kwargs
+#             }
+#             c = Context(context)
+#             c.request = request
+#             t = Template(notification_type.template)
+#
+#             body = t.render(c)
+#
+#             Email(
+#                 to=user_notification_profile.user.email,
+#                 subject=notification_type.subject,
+#                 content=notification_type.description,
+#                 compiled_template=body
+#             ).save()
+#     except NotificationType.DoesNotExist:
+#         pass
+
+
 @receiver(notify_users)
 def send_notifications(sender, notification_key, **kwargs):
-    try:
-        notification_type = NotificationType.objects.get(key=notification_key)
-        for user_notification_profile in notification_type.subscribed_user_notification_profiles.all():
-            request = kwargs.pop('request', None)
-            context = {
-                'title': notification_type.title,
-                'description': notification_type.description,
-                **kwargs
-            }
-            c = Context(context)
-            c.request = request
-            t = Template(notification_type.template)
-
-            body = t.render(c)
-
-            Email(
-                to=user_notification_profile.user.email,
-                subject=notification_type.subject,
-                content=notification_type.description,
-                compiled_template=body
-            ).save()
-    except NotificationType.DoesNotExist:
-        pass
+    kwargs.pop('signal', None)
+    request = kwargs.pop('request', None)
+    logo_url = request.build_absolute_uri(settings.STATIC_URL)
+    kwargs['logo_url'] = logo_url
+    send_notification_task.delay(notification_key, **kwargs)
+    # try:
+    #     notification_type = NotificationType.objects.get(key=notification_key)
+    #     for user_notification_profile in notification_type.subscribed_user_notification_profiles.all():
+    #         request = kwargs.pop('request', None)
+    #         context = {
+    #             'title': notification_type.title,
+    #             'description': notification_type.description,
+    #             **kwargs
+    #         }
+    #         c = Context(context)
+    #         c.request = request
+    #         t = Template(notification_type.template)
+    #
+    #         body = t.render(c)
+    #
+    #         Email(
+    #             to=user_notification_profile.user.email,
+    #             subject=notification_type.subject,
+    #             content=notification_type.description,
+    #             compiled_template=body
+    #         ).save()
+    # except NotificationType.DoesNotExist:
+    #     pass
 
 
 @receiver(post_user_registration_validation)

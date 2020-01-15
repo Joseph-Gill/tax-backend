@@ -42,7 +42,40 @@ services:
       - backend
 
 
+  redis:
+    image: redis:latest
+    restart: always
+    volumes:
+      - redis_data:/data
+
+  celery:
+    image: registry.gitlab.propulsion-home.ch/propulsion/projects/templates/django-social-media:latest
+    restart: always
+    env_file:
+      - ./envs/dev.env
+    command: 'celery -A app worker -B --loglevel=DEBUG --concurrency=3'
+    volumes:
+      - ./backend:/backend
+      - ./media-files:/media-files
+      - ./static-files:/static-files
+    depends_on:
+      - postgres
+      - backend
+      - redis
+
+#  flower:
+#    image: mher/flower:latest
+#    environment:
+#      FLOWER_BROKER: "redis://redis:6379"
+#      FLOWER_URL_PREFIX: "flower"
+#    ports:
+#      - 5555:5555
+#    depends_on:
+#      - redis
+#      - celery
+
 volumes:
   postgres:
+  redis_data:
   media-files:
   static-files:
