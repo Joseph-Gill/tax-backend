@@ -17,7 +17,7 @@ class NotificationProfile(models.Model):
     )
     subscribed_notification_types = models.ManyToManyField(
         verbose_name='subscribed notification types',
-        to='notifications.NotificationTypes',
+        to='notifications.NotificationType',
         related_name='subscribed_user_notification_profiles',
         blank=True
     )
@@ -26,7 +26,7 @@ class NotificationProfile(models.Model):
         return self.user.email
 
 
-class NotificationTypes(models.Model):
+class NotificationType(models.Model):
     key = models.CharField(
         verbose_name='notification key',
         max_length=200
@@ -51,7 +51,7 @@ class NotificationTypes(models.Model):
 @receiver(notify_users)
 def send_notifications(sender, notification_key, **kwargs):
     try:
-        notification_type = NotificationTypes.objects.get(key=notification_key)
+        notification_type = NotificationType.objects.get(key=notification_key)
         for user_notification_profile in notification_type.subscribed_user_notification_profiles.all():
             request = kwargs.pop('request', None)
             context = {
@@ -70,7 +70,7 @@ def send_notifications(sender, notification_key, **kwargs):
                 content=notification_type.description,
                 compiled_template=body
             ).save()
-    except NotificationTypes.DoesNotExist:
+    except NotificationType.DoesNotExist:
         pass
 
 

@@ -8,6 +8,7 @@ api_patterns = [
     path('users/', include('app.users.urls')),
     path('social/', include('app.social.urls')),
     path('auth/', include('app.registration.urls')),
+    path('notifications/', include('app.notifications.urls')),
 
     path('docs/', include_docs_urls(title='Django Template', permission_classes=[])),
 

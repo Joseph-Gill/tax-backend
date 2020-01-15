@@ -40,24 +40,29 @@ All the following endpoints should be prefixed with /backend
 * `/api/users/<int:user_id>/` GET: Get specific user 
 * `/api/users/me/` GET, PATCH, DELETE: Get logged in user 
 
-#### Social Profiles
+#### Notifications
+* `/api/notifications/` GET, POST: Get, create notification type.
+* `/api/notifications/<int:pk>/` GET, PATCH, DELETE: Get, update, delete notification type.
+
+#### Social
+##### Social Profiles
 * `/api/social/profile/?search=<str:search_string>` GET: Get all the social profiles or filter them by search string
 * `/api/social/profile/<int:user_id>/` GET: Get specific social profile
 * `/api/social/profile/me/` GET, PATCH, DELETE: Get, Update, Delete logged in users social profile
 
-#### Follow
+##### Follow
 * `/api/social/toggle-follow/<int:social_profile_id>/` POST: Toggle following a social profile
 * `/api/social/followers/followers/` GET: List of all the logged in user’s followers social profiles
 * `/api/social/followers/following/` GET: List of all the social profiles the user is following
 
 
-#### Friends
+##### Friends
 * `/api/social/friends/request/<int:social_profile_id>/` POST: Send friend request to another user
 * `/api/social/friends/requests/<int:friend_request_id>/` GET,PATCH,DELETE: Get Update (Accept, Reject) or Delete an open friend request
 * `/api/social/friends/requests/?status=<str:status>` GET: List of all friend requests logged in user is in  filtered by status
 * `/api/social/friends/` GET: List all accepted friends¨
 
-#### Posts
+##### Posts
 * `/api/social/posts/` GET,POST: user can make a new post by sending post data, or get all posts.
 * `/api/social/posts/<int:post_id>/` GET, PATCH, DELETE: get a specific post by ID and display all the information about that post. Update or delete it if logged in user is the original poster
 * `/api/social/posts/<int:social_profile_id>/?search=<str:search_string>` GET: lists all the posts of a specific user in chronological order
@@ -67,6 +72,6 @@ All the following endpoints should be prefixed with /backend
 * `/api/social/posts/toggle-like/<int:post_id>/` POST: toggle like a post
 * `/api/social/posts/likes/` GET: the list of the posts the user likes
 
-#### Comments
+##### Comments
 * `api/social/comments/<int:post_id>/` GET, POST: Create new post or get all comments of a post.
 

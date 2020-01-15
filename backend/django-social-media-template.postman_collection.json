@@ -1017,7 +1017,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": \"roncaglionidaniele@icloud.com\"\n}",
+							"raw": "{\n\t\"email\": \"SignalFlux@outlook.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1056,7 +1056,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\t\n\t\"email\": \"roncaglionidaniele@icloud.com\",\n\t\"code\": \"42250\",\n\t\"password\": \"adminadmin\",\n\t\"password_repeat\": \"adminadmin\",\n\t\"first_name\": \"Daniele\",\n\t\"last_name\": \"Roncaglioni\"\n}",
+							"raw": "{\t\n\t\"email\": \"SignalFlux@outlook.com\",\n\t\"code\": \"20655\",\n\t\"password\": \"adminadmin\",\n\t\"password_repeat\": \"adminadmin\",\n\t\"username\": \"SignalFlux\",\n\t\"first_name\": \"Daniele\",\n\t\"last_name\": \"Roncaglioni\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1190,7 +1190,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": \"SignalFlux@outlook.com\",\n\t\"password\": \"adminadmin\"\n}",
+							"raw": "{\n\t\"email\": \"danieler@propulsionacademy.com\",\n\t\"password\": \"adminadmin\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1209,6 +1209,112 @@
 								"api",
 								"auth",
 								"token",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "List Create Notification",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"key\":\"user_reset_password\",\n\t\"subject\":\"A user reset his password\",\n\t\"description\":\"A user reset his password\",\n\t\"template\": \"user_reset_password.html\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/backend/api/notifications/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"backend",
+								"api",
+								"notifications",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Update Destroy Notification Type",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"description\": \"Updated notification description\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/backend/api/notifications/5/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"backend",
+								"api",
+								"notifications",
+								"5",
 								""
 							]
 						}

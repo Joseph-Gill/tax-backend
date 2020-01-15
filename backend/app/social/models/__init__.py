@@ -1,4 +1,4 @@
-from .friends import Friend
-from .posts import Post
-from .comments import Comment
-from .profile import SocialProfile
+from .friends import Friend  # noqa
+from .posts import Post  # noqa
+from .comments import Comment  # noqa
+from .profile import SocialProfile  # noqa

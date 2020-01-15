@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from app.social.models.comments import Comment
 from app.social.models.posts import Post
 from app.social.serializers.comments import CommentSerializer
-from app.social.serializers.posts import PostSerializer
 from app.social.views.cutom_mixins import CustomDispatchMixin
 
 
@@ -23,7 +22,7 @@ class ListCreateComment(ListCreateAPIView, CustomDispatchMixin):
         comments = post.comments
         return Response(self.get_serializer(instance=comments, many=True).data)
 
-    def create(self, request,*args, **kwargs):
+    def create(self, request, *args, **kwargs):
         post = self.get_object()
         comment = Comment(social_profile=request.social_profile, post=post, comment=request.data['comment'])
         comment.save()
