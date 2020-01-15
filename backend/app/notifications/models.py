@@ -35,6 +35,10 @@ class NotificationType(models.Model):
         verbose_name='subject',
         max_length=200
     )
+    title = models.CharField(
+        verbose_name='title',
+        max_length=200
+    )
     description = models.TextField(
         verbose_name='description'
     )
@@ -55,7 +59,7 @@ def send_notifications(sender, notification_key, **kwargs):
         for user_notification_profile in notification_type.subscribed_user_notification_profiles.all():
             request = kwargs.pop('request', None)
             context = {
-                'title': notification_type.subject,
+                'title': notification_type.title,
                 'description': notification_type.description,
                 **kwargs
             }
