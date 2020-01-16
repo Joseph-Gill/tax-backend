@@ -24,3 +24,8 @@ This signal can be called from other apps to trigger notifications.
 When raising the signal through `notify_users.send(sender=User, notification_key='new_user_registered', request=self.context['request'], email=user.email)`
 you need to provide the name of the signal (defined in django admin) and any additional arguments that have to be injected into the html template that will be sent by email.
 (In this example the email will be included in the template)
+
+
+## Celery
+At the moment computation related to notification is outsourced to celery, but not the email sending itself, which is still picked up by the
+dedicated docker container.

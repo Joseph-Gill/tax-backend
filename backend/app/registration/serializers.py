@@ -6,7 +6,6 @@ from app.notifications.signals import notify_users
 from app.registration.models import RegistrationProfile
 from app.registration.models import code_generator
 from app.registration.signals import post_user_registration_validation, post_user_password_reset_validation
-from app.notifications.tasks import debug_task
 
 User = get_user_model()
 

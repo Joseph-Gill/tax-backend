@@ -1,10 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.dispatch import receiver
-from django.template import Template, Context
 
-from app.celery import app
-from app.emails.models import Email
 from app.notifications.tasks import send_notification_task
 from app.notifications.signals import notify_users
 from app.registration.signals import post_user_registration_validation
