@@ -66,11 +66,9 @@ class RegistrationSerializer(serializers.Serializer):
         )
         reg_profile.save()
         #####
-        # email = Email(to=email, subject='Thank you for registering!',
-        #               content=f'Here is your validation code: {reg_profile.code}')
-        # email.save(request=self.context['request'])
-        debug_task.delay()
-        notify_users.send(sender=User, notification_key='new_user_registered', request=self.context['request'], email=new_user.email)
+        email = Email(to=email, subject='Thank you for registering!',
+                      content=f'Here is your validation code: {reg_profile.code}')
+        email.save(request=self.context['request'])
         return new_user
 
 

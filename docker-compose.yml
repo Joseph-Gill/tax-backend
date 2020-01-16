@@ -64,15 +64,23 @@ services:
       - redis
 
 #  flower:
-#    image: mher/flower:latest
-#    environment:
-#      FLOWER_BROKER: "redis://redis:6379"
-#      FLOWER_URL_PREFIX: "flower"
+#    image: registry.gitlab.propulsion-home.ch/propulsion/projects/templates/django-social-media:latest
+#    restart: always
+#    env_file:
+#      - ./envs/dev.env
+#    command: 'celery -A app flower --url_prefix=flower'
 #    ports:
 #      - 5555:5555
+#    volumes:
+#      - ./backend:/backend
+#      - ./media-files:/media-files
+#      - ./static-files:/static-files
 #    depends_on:
+#      - postgres
+#      - backend
 #      - redis
 #      - celery
+
 
 volumes:
   postgres:

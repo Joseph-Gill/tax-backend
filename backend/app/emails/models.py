@@ -47,11 +47,11 @@ class Email(TimeStampedModel):
             context = {
                 'title': self.subject,
                 'description': self.content,
+                'logo_url': request.build_absolute_uri(settings.STATIC_URL)
             }
             body = render_to_string(
                 template_name=self.template_name,
-                context=context,
-                request=request
+                context=context
             )
             self.compiled_template = body
         super().save(**kwargs)

@@ -3,22 +3,23 @@ from django.apps import apps
 from app.celery import app
 from app.emails.models import Email
 
+DEFAULT_EXTENSION_TEMPLATE_START = "{% extends 'mail_base.html' %} \n {% block extension %} \n "
+DEFAULT_EXTENSION_TEMPLATE_END = "\n {% endblock %}"
+
 
 @app.task
 def send_notification_task(notification_key, **kwargs):
-    print('lalallalallalallallalalalalallalallalallallalallala', notification_key)
     try:
-        NotificationType = apps.get_model('notifications', 'NotificationType')
+        NotificationType = apps.get_model('notifications', 'NotificationType')  # need to import model like this or get circular import
         notification_type = NotificationType.objects.get(key=notification_key)
         for user_notification_profile in notification_type.subscribed_user_notification_profiles.all():
-            # request = kwargs.pop('request', None)
             context = {
                 'title': notification_type.title,
                 'description': notification_type.description,
                 **kwargs
             }
             c = Context(context)
-            t = Template(notification_type.template)
+            t = Template(f'{DEFAULT_EXTENSION_TEMPLATE_START}{notification_type.template}{DEFAULT_EXTENSION_TEMPLATE_END}')
 
             body = t.render(c)
 

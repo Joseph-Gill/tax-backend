@@ -12,9 +12,9 @@ dependencies:
     - coreapi
     - Pillow
     - django-cors-headers
-    - django-fullurl
     - django-admin-honeypot
     - django-extensions
     - celery
     - redis
+    - flower
 

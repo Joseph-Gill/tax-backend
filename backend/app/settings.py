@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # third party
-    # 'fullurl',
     'rest_framework',
     'corsheaders',
     'admin_honeypot',
