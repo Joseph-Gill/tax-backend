@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # third party
-    'fullurl',
+    # 'fullurl',
     'rest_framework',
     'corsheaders',
     'admin_honeypot',
@@ -167,10 +167,10 @@ AUTH_USER_MODEL = 'users.User'
 
 #############################################################
 # Task Queue
-BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_BROKER_URL = 'redis://redis:6379'
+# CELERY_RESULT_BACKEND = 'redis://redis:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Zurich'
 #############################################################

@@ -6,6 +6,7 @@ from app.notifications.signals import notify_users
 from app.registration.models import RegistrationProfile
 from app.registration.models import code_generator
 from app.registration.signals import post_user_registration_validation, post_user_password_reset_validation
+from app.notifications.tasks import debug_task
 
 User = get_user_model()
 
@@ -65,9 +66,11 @@ class RegistrationSerializer(serializers.Serializer):
         )
         reg_profile.save()
         #####
-        email = Email(to=email, subject='Thank you for registering!',
-                      content=f'Here is your validation code: {reg_profile.code}')
-        email.save(request=self.context['request'])
+        # email = Email(to=email, subject='Thank you for registering!',
+        #               content=f'Here is your validation code: {reg_profile.code}')
+        # email.save(request=self.context['request'])
+        debug_task.delay()
+        notify_users.send(sender=User, notification_key='new_user_registered', request=self.context['request'], email=new_user.email)
         return new_user
 
 
