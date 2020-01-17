@@ -2,6 +2,18 @@
 This django app provides all the functionality needed for email sending. It has a DevEmails model in which one can whitelist emails so that one can thest email sending in development.
 It also has an EmailType model to define email types that have to be sent. This model is a duplicate of the NotificationType model in app.notifications. It is separate to highlight the conceptual difference
 between the admin group-notifications system and simple one off email sending to users.
+#### API
+1. This module exposes a Signal `send_email`.
+To listen to this signal do:
+```
+send_email.send(sender=User, request=self.context['request'], to=email, email_type='registration_email', code=reg_profile.code)
+
+def send_email(sender, request, to, email_type, code, **kwargs):
+def handle_signal(sender, user, **kwargs):
+    pass
+```
+This signal is used to send individual emails to users via celery.
+
 #### Prerequisites
 None
 #### Installation & Usage
@@ -74,3 +86,5 @@ services:
 ```
 8. Migrate
 9. Save emails to the Email model and start up a container running this module with `python manage.py send_mail`.
+
+

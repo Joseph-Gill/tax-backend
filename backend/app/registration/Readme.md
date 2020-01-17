@@ -34,13 +34,3 @@ To listen to this signal do:
 def handle_signal(sender, user, **kwargs):
     pass
 ```
-3. This module exposes a Signal `send_auth_email`.
-To listen to this signal do:
-```
-send_auth_email.send(sender=User, request=self.context['request'], to=email, email_type='registration_email', code=reg_profile.code)
-
-def send_auth_email(sender, request, to, email_type, code, **kwargs):
-def handle_signal(sender, user, **kwargs):
-    pass
-```
-This signal is used to send individual emails to users via celery.

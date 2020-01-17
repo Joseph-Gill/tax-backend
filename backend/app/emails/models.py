@@ -1,8 +1,12 @@
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.db import models
+from django.dispatch import receiver
 from django.utils.safestring import mark_safe
 from django_extensions.db.models import TimeStampedModel
+
+from app.emails.signals import send_email
+from app.emails.tasks import send_email_task
 
 
 class DevEmails(models.Model):
@@ -73,3 +77,12 @@ class EmailType(models.Model):
 
     def __str__(self):
         return self.key
+
+
+@receiver(send_email)
+def send_email(sender, request, to, email_type, code, **kwargs):
+    # signals only purpose in the registration module is to extract logo_url, otherwise could just call task in serializer.
+    logo_url = request.build_absolute_uri(settings.STATIC_URL)
+    kwargs['code'] = code
+    kwargs.pop('signal', None)
+    send_email_task.delay(logo_url, to, email_type, **kwargs)  # send async task to celery
