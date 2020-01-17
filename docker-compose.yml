@@ -49,23 +49,6 @@ services:
       - backend
       - redis
 
-#  flower:
-#    image: registry.gitlab.propulsion-home.ch/propulsion/projects/templates/django-social-media:latest
-#    restart: always
-#    env_file:
-#      - ./envs/dev.env
-#    command: 'celery -A app flower --basic_auth=user1:password1,user2:password2'
-#    ports:
-#      - 5555:5555
-#    volumes:
-#      - ./backend:/backend
-#      - ./media-files:/media-files
-#      - ./static-files:/static-files
-#    depends_on:
-#      - postgres
-#      - backend
-#      - redis
-#      - celery
 
 
 volumes:
