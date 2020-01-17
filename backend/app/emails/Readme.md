@@ -1,5 +1,7 @@
 # Email
-This django app provides all the functionality needed for email sending
+This django app provides all the functionality needed for email sending. It has a DevEmails model in which one can whitelist emails so that one can thest email sending in development.
+It also has an EmailType model to define email types that have to be sent. This model is a duplicate of the NotificationType model in app.notifications. It is separate to highlight the conceptual difference
+between the admin group-notifications system and simple one off email sending to users.
 #### Prerequisites
 None
 #### Installation & Usage
