@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.db import models
-from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django_extensions.db.models import TimeStampedModel
 
@@ -25,9 +24,6 @@ class Email(TimeStampedModel):
         verbose_name='Subject',
         max_length=200,
     )
-    content = models.TextField(
-        verbose_name='Content',
-    )
     compiled_template = models.TextField(
         verbose_name='compiled_template',
         blank=True,
@@ -40,21 +36,6 @@ class Email(TimeStampedModel):
         verbose_name='is_sent',
         default=False,
     )
-
-    def save(self, **kwargs):
-        if not self.compiled_template:
-            request = kwargs.pop('request')
-            context = {
-                'title': self.subject,
-                'description': self.content,
-                'logo_url': request.build_absolute_uri(settings.STATIC_URL)
-            }
-            body = render_to_string(
-                template_name=self.template_name,
-                context=context
-            )
-            self.compiled_template = body
-        super().save(**kwargs)
 
     def send(self):
         if not settings.DEBUG or len(DevEmails.objects.filter(email=self.to)) > 0:
@@ -71,3 +52,24 @@ class Email(TimeStampedModel):
 
     def __str__(self):
         return f'{self.to} - {self.subject}'
+
+
+class EmailType(models.Model):
+    key = models.CharField(
+        verbose_name='email key',
+        max_length=200
+    )
+    subject = models.CharField(
+        verbose_name='subject',
+        max_length=200
+    )
+    title = models.CharField(
+        verbose_name='title',
+        max_length=200
+    )
+    template = models.TextField(
+        verbose_name='template extension'
+    )
+
+    def __str__(self):
+        return self.key

@@ -42,8 +42,7 @@ class NotificationType(models.Model):
         verbose_name='description'
     )
     template = models.TextField(
-        verbose_name='template extension',
-        default="{% extends 'mail_base.html' %} \n {% block extension %} \n {% endblock %}"
+        verbose_name='template extension'
     )
 
     def __str__(self):

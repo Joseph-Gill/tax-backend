@@ -2,9 +2,7 @@ from django.template import Context, Template
 from django.apps import apps
 from app.celery import app
 from app.emails.models import Email
-
-DEFAULT_EXTENSION_TEMPLATE_START = "{% extends 'mail_base.html' %} \n {% block extension %} \n "
-DEFAULT_EXTENSION_TEMPLATE_END = "\n {% endblock %}"
+from django.conf import settings
 
 
 @app.task
@@ -15,24 +13,19 @@ def send_notification_task(notification_key, **kwargs):
         for user_notification_profile in notification_type.subscribed_user_notification_profiles.all():
             context = {
                 'title': notification_type.title,
-                'description': notification_type.description,
                 **kwargs
             }
             c = Context(context)
-            t = Template(f'{DEFAULT_EXTENSION_TEMPLATE_START}{notification_type.template}{DEFAULT_EXTENSION_TEMPLATE_END}')
+            t = Template(f'{settings.DEFAULT_EXTENSION_TEMPLATE_START}{notification_type.template}{settings.DEFAULT_EXTENSION_TEMPLATE_END}')
 
             body = t.render(c)
 
-            Email(
+            email = Email(
                 to=user_notification_profile.user.email,
                 subject=notification_type.subject,
-                content=notification_type.description,
                 compiled_template=body
-            ).save()
+            )
+            email.save()
+            email.send()
     except NotificationType.DoesNotExist:
         pass
-
-
-@app.task(bind=True)
-def debug_task(self):
-    print('Request: {0!r}'.format(self.request))

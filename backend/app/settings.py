@@ -67,6 +67,10 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'app.urls'
 
+#####################################################################
+DEFAULT_EXTENSION_TEMPLATE_START = "{% extends 'mail_base.html' %} \n {% block extension %} \n "
+DEFAULT_EXTENSION_TEMPLATE_END = "\n {% endblock %}"
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -82,6 +86,7 @@ TEMPLATES = [
         },
     },
 ]
+#####################################################################
 
 WSGI_APPLICATION = 'app.wsgi.application'
 

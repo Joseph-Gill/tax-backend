@@ -1,7 +1,11 @@
+from django.dispatch import receiver
 from django_extensions.db.models import TimeStampedModel
 from django.conf import settings
 from django.db import models
 import random
+
+from app.registration.signals import send_registration_email
+from app.registration.tasks import send_registration_email_task
 
 
 def code_generator(length=5):
@@ -37,3 +41,11 @@ class RegistrationProfile(TimeStampedModel):
 
     def __str__(self):
         return f'{self.user.email}, {self.code}'
+
+
+@receiver(send_registration_email)
+def send_registration_email(sender, request, to, email_type, code, **kwargs):
+    logo_url = request.build_absolute_uri(settings.STATIC_URL)
+    kwargs['code'] = code
+    kwargs.pop('signal', None)
+    send_registration_email_task.delay(logo_url, to, email_type, **kwargs)  # send async task to celery
