@@ -17,4 +17,5 @@ dependencies:
     - celery
     - redis
     - flower
+    - django-celery-results
 

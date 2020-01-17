@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'admin_honeypot',
+    'django_celery_results',
 
     # own
     'app',
@@ -172,9 +173,16 @@ AUTH_USER_MODEL = 'users.User'
 #############################################################
 # Task Queue
 CELERY_BROKER_URL = 'redis://redis:6379'
-# CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
+CELERY_CACHE_BACKEND = 'django-cache'
 CELERY_TIMEZONE = 'Europe/Zurich'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}
 #############################################################
