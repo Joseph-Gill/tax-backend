@@ -1,11 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
-from app.emails.models import Email
 from app.notifications.signals import notify_users
 from app.registration.models import RegistrationProfile
 from app.registration.models import code_generator
-from app.registration.signals import post_user_registration_validation, post_user_password_reset_validation, send_registration_email
+from app.registration.signals import post_user_registration_validation, post_user_password_reset_validation, send_auth_email
 
 User = get_user_model()
 
@@ -65,10 +64,7 @@ class RegistrationSerializer(serializers.Serializer):
         )
         reg_profile.save()
         #####
-        # email = Email(to=email, subject='Thank you for registering!',
-        #               content=f'Here is your validation code: {reg_profile.code}')
-        # email.save(request=self.context['request'])
-        send_registration_email.send(sender=User, request=self.context['request'], to=email, email_type='registration_email', code=reg_profile.code)
+        send_auth_email.send(sender=User, request=self.context['request'], to=email, email_type='registration_email', code=reg_profile.code)
         return new_user
 
 
@@ -118,9 +114,7 @@ class PasswordResetSerializer(serializers.Serializer):
         user.registration_profile.code_used = False
         user.registration_profile.code_type = 'PR'
         user.registration_profile.save()
-        email = Email(to=email, subject='Password reset',
-                      content=f'Here is your password reset code: {user.registration_profile.code}')
-        email.save(request=self.context['request'])
+        send_auth_email.send(sender=User, request=self.context['request'], to=email, email_type='password_reset_email', code=user.registration_profile.code)
 
 
 class PasswordResetValidationSerializer(serializers.Serializer):

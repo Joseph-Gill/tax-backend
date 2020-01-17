@@ -6,7 +6,7 @@ from django.conf import settings
 
 
 @app.task
-def send_registration_email_task(logo_url, to, email_type_key, **kwargs):
+def send_auth_email_task(logo_url, to, email_type_key, **kwargs):
     email_type = EmailType.objects.get(key=email_type_key)
     context = {
         'title': email_type.title,
