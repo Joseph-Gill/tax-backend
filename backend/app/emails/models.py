@@ -61,7 +61,8 @@ class Email(TimeStampedModel):
 class EmailType(models.Model):
     key = models.CharField(
         verbose_name='email key',
-        max_length=200
+        max_length=200,
+        unique=True
     )
     subject = models.CharField(
         verbose_name='subject',
