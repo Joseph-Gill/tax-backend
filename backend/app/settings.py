@@ -16,7 +16,7 @@ from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # folder containing manage.py
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ['*']
 DEBUG = ast.literal_eval(os.environ.get('DJANGO_DEBUG', None))
 
 INSTALLED_APPS = [
+    'app',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,7 +47,6 @@ INSTALLED_APPS = [
     'django_celery_results',
 
     # own
-    'app',
     'app.users',
     'app.social',
     'app.emails',
@@ -67,6 +68,8 @@ MIDDLEWARE = [
 CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'app.urls'
+AUTH_USER_MODEL = 'users.User'
+WSGI_APPLICATION = 'app.wsgi.application'
 
 #####################################################################
 DEFAULT_EXTENSION_TEMPLATE_START = "{% extends 'mail_base.html' %} \n {% block extension %} \n "
@@ -75,7 +78,7 @@ DEFAULT_EXTENSION_TEMPLATE_END = "\n {% endblock %}"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'assets/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,8 +91,6 @@ TEMPLATES = [
     },
 ]
 #####################################################################
-
-WSGI_APPLICATION = 'app.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -123,6 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+###########################################################
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -136,6 +138,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+############################################################
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 FILE_UPLOAD_PERMISSIONS = 0o644
@@ -144,6 +147,11 @@ MEDIA_URL = '/media-files/'
 MEDIA_ROOT = '/media-files/'
 STATIC_ROOT = '/static-files/'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'assets/static'),
+]
+############################################################
+# AUTH
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -160,6 +168,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=4)
 }
 
+############################################################
 # Email settings
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
@@ -167,8 +176,6 @@ EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
 EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-
-AUTH_USER_MODEL = 'users.User'
 
 #############################################################
 # Task Queue
