@@ -18,7 +18,6 @@ services:
     command: "tail -f /dev/null"
     ports:
       - '8000:8000'
-      - '4777:22'
     depends_on:
       - postgres
     volumes:
