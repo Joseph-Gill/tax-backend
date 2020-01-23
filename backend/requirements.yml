@@ -18,4 +18,5 @@ dependencies:
     - redis
     - flower
     - django-celery-results
+    - sentry-sdk==0.14.1
 
