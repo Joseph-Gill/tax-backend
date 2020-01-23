@@ -16,7 +16,7 @@ IF SOMEBODY ELSE USES THE CODE THEY WILL NOT HAVE THOSE ENTRIES IN THE DB!!. The
 2.IMPORTANT!: Change the secret key in the prod.env or actually don't use a prod.env at all and inject all env variables 
 you need from gitlab.
 
-3. Change the sentry dsn in the env files.
+3.Change the sentry dsn in the env files.
 
 4.To avoid crashed you need to define the email and notification types the paltform in the corresponding db model.
 If you don't have them on the db the code will crash. You n 
