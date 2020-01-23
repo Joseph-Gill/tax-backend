@@ -16,7 +16,9 @@ IF SOMEBODY ELSE USES THE CODE THEY WILL NOT HAVE THOSE ENTRIES IN THE DB!!. The
 2.IMPORTANT!: Change the secret key in the prod.env or actually don't use a prod.env at all and inject all env variables 
 you need from gitlab.
 
-3.To avoid crashed you need to define the email and notification types the paltform in the corresponding db model.
+3. Change the sentry dsn in the env files.
+
+4.To avoid crashed you need to define the email and notification types the paltform in the corresponding db model.
 If you don't have them on the db the code will crash. You n 
 
 
@@ -29,7 +31,7 @@ If you don't have them on the db the code will crash. You n
 
 4.This template uses a custom User model with email as the unique auth field.
 
-5.The backend is hidden in a honeypot. Please change the true admin url to something else in the root urls.py.
+5.The backend admin is hidden in a honeypot. Please change the true admin url to something else in the root urls.py.
 
 6.This template is hooked up to Sentry (the error monitoring platform). Change the dsn address pointing to sentry in the .envs files. 
 
