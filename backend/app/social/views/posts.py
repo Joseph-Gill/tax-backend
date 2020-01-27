@@ -17,7 +17,6 @@ class ListCreatePosts(ListCreateAPIView, FilterPostMixin, CustomDispatchMixin):
     post:
     Create a new Post.
     """
-    queryset = Post.objects.all()
     serializer_class = PostSerializer
 
     def get_queryset(self):
