@@ -9,7 +9,7 @@ services:
       - postgres:/var/lib/postgresql/data
 
   backend:
-    image: registry.gitlab.propulsion-home.ch/propulsion/projects/templates/django-social-media:master
+    image: registry.gitlab.propulsion-home.ch/propulsion/projects/templates/django-drf-template:master
     env_file:
       - ./envs/prod.env
     command: "sh /scripts/run.sh"
@@ -20,7 +20,7 @@ services:
       - static-files:/static-files
 
   email:
-    image: registry.gitlab.propulsion-home.ch/propulsion/projects/templates/django-social-media:master
+    image: registry.gitlab.propulsion-home.ch/propulsion/projects/templates/django-drf-template:master
     restart: always
     env_file:
       - ./envs/prod.env

@@ -1,4 +1,4 @@
-# Django Social Media Backend Template
+# Django DRF Backend Template
 
 ## Extending the template
 1. Please make sure you keep the code style consistent when working on this project. If you are using an Intellij 
