@@ -2,7 +2,7 @@ version: '3'
 
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:12
     env_file:
       - ./envs/prod.env
     volumes:
@@ -19,18 +19,26 @@ services:
       - media-files:/media-files
       - static-files:/static-files
 
-  email:
+  redis:
+    image: redis:latest
+    restart: always
+    volumes:
+      - redis_data:/data
+
+  celery:
     image: registry.gitlab.propulsion-home.ch/propulsion/projects/templates/django-drf-template:master
     restart: always
     env_file:
       - ./envs/prod.env
-    command: 'python manage.py send_mail'
+    command: 'celery -A app worker -l info'
+    volumes:
+      - ./backend:/backend
+      - ./media-files:/media-files
+      - ./static-files:/static-files
     depends_on:
       - postgres
       - backend
-    volumes:
-      - media-files:/media-files
-      - static-files:/static-files
+      - redis
 
   nginx:
     image: nginx:latest
@@ -43,6 +51,7 @@ services:
       - static-files:/static-files
       - media-files:/media-files
       - /etc/letsencrypt:/etc/letsencrypt
+      - frontend:/frontend
 
 
 
@@ -50,4 +59,5 @@ volumes:
   postgres:
   static-files:
   media-files:
+  redis_data:
 
