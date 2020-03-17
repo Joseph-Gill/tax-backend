@@ -34,7 +34,7 @@ def populate_db(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('emails', '0002_auto_20200120_1800'),
+        ('emails', '0001_initial'),
     ]
 
     operations = [
