@@ -32,9 +32,8 @@ services:
       - ./envs/prod.env
     command: 'celery -A app worker -l info'
     volumes:
-      - ./backend:/backend
-      - ./media-files:/media-files
-      - ./static-files:/static-files
+      - media-files:/media-files
+      - static-files:/static-files
     depends_on:
       - postgres
       - backend
