@@ -1,5 +1,14 @@
 # Django DRF Backend Template
 
+## Run
+
+1. Build the image
+
+2. Set up pycharm with the docker-compose interpreter as explained in the curriculum.
+	
+3. Run the containers: `docker-compose up -d` and run the desired command from PyCharm.
+
+    
 ## Extending the template
 1. Please make sure you keep the code style consistent when working on this project. If you are using an Intellij 
 editor you can use the upload the `Propulsion.codestyle.json` to `Editor > Code Style > Python`  
