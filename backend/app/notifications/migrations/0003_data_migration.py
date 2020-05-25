@@ -28,7 +28,7 @@ def populate_db(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('notifications', '0003_auto_20200120_1800'),
+        ('notifications', '0002_notificationprofile_user'),
         # ('users', '0002_data_migration'),
     ]
 
