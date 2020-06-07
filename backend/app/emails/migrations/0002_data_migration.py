@@ -16,13 +16,13 @@ def populate_db(apps, schema_editor):
             "key": "registration_email",
             "subject": "Subject: Thank you for registering!",
             "title": "Title: Thank you for registering!",
-            "template": "Click <a href='https://{{ pure_url }}registration-validation?code={{code}}'> here</a> to finalize registration."
+            "template": "Click <a href='{{ base_url }}registration-validation?code={{code}}'> here</a> to finalize registration."
         },
         {
             "key": "password_reset_email",
             "subject": "Subject: Password reset",
             "title": "Title: Password reset",
-            "template": "Click <a href='{{ pure_url }}password-reset-validation?code={{code}}'>  here</a> to reset your password:"
+            "template": "Click <a href='{{ base_url }}password-reset-validation?code={{code}}'>  here</a> to reset your password:"
         },
     ]
     EmailType = apps.get_model('emails', 'EmailType')
