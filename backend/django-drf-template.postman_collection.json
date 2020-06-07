@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "98dbaa0f-cf5a-4f5c-9830-c32517e02856",
-		"name": "django-social-media-template",
+		"name": "django-drf-template",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -1056,7 +1056,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\t\n\t\"email\": \"SignalFlux@outlook.com\",\n\t\"code\": \"18429\",\n\t\"password\": \"adminadmin\",\n\t\"password_repeat\": \"adminadmin\",\n\t\"username\": \"SignalFlux\",\n\t\"first_name\": \"Daniele\",\n\t\"last_name\": \"Roncaglioni\"\n}",
+							"raw": "{\t\n\t\"email\": \"SignalFlux@outlook.com\",\n\t\"code\": \"32649\",\n\t\"password\": \"adminadmin\",\n\t\"password_repeat\": \"adminadmin\",\n\t\"username\": \"SignalFlux\",\n\t\"first_name\": \"Daniele\",\n\t\"last_name\": \"Roncaglioni\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1135,7 +1135,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\t\n\t\"email\": \"SignalFlux@outlook.com\",\n\t\"code\":\"68995\",\n\t\"password\": \"adminadmin\",\n\t\"password_repeat\": \"adminadmin\"\n}",
+							"raw": "{\t\n\t\"email\": \"SignalFlux@outlook.com\",\n\t\"code\":\"07825\",\n\t\"password\": \"adminadmin\",\n\t\"password_repeat\": \"adminadmin\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1320,6 +1320,108 @@
 						}
 					},
 					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Feedback",
+			"item": [
+				{
+					"name": "List Feedback",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/backend/api/feedback/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"backend",
+								"api",
+								"feedback",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Feedback",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"feedback1\",\n\t\"content\": \"feedback1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/backend/api/feedback/new/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"backend",
+								"api",
+								"feedback",
+								"new",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0224c27d-ac5f-4f90-b215-3617fb2701bc",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "6528cf6a-8a6d-4522-bc84-c0d3418254d9",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			],
 			"protocolProfileBehavior": {}

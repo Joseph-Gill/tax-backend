@@ -5,13 +5,11 @@ from .serializers import FeedbackSerializer
 
 
 class GetAllFeedback(ListAPIView):
-    permission_classes = (IsAuthenticated,)
     serializer_class = FeedbackSerializer
     queryset = Feedback.objects.all()
 
 
 class CreateFeedback(CreateAPIView):
-    permission_classes = (IsAuthenticated,)
     serializer_class = FeedbackSerializer
     queryset = Feedback.objects.all()
 
