@@ -5,7 +5,7 @@ from django.db import migrations
 
 def populate_db(apps, schema_editor):
     # Dev Emails
-    dev_emails = ['SignalFlux@outlook.com', 'danieler@propulsionacademy.com', 'rubenv@propulsionacademy.com', 'cedricd@propulsionacademy.com']
+    dev_emails = ['SignalFlux@outlook.com', 'danieler@propulsionacademy.com', 'rubenv@propulsionacademy.com', 'cedricd@propulsionacademy.com', 'sebastianm@propulsionacademy.com']
     DevEmail = apps.get_model('emails', 'DevEmails')
     for email in dev_emails:
         DevEmail(email=email).save()
@@ -16,13 +16,13 @@ def populate_db(apps, schema_editor):
             "key": "registration_email",
             "subject": "Subject: Thank you for registering!",
             "title": "Title: Thank you for registering!",
-            "template": "Here is your validation code: {{code}}"
+            "template": "Click <a href='{{ base_url }}registration-validation?code={{code}}&email={{email_to}}'> here</a> to finalize registration."
         },
         {
             "key": "password_reset_email",
             "subject": "Subject: Password reset",
             "title": "Title: Password reset",
-            "template": "Here is your password reset code: {{code}}"
+            "template": "Click <a href='{{ base_url }}password-reset-validation?code={{code}}&email={{email_to}}'>  here</a> to reset your password."
         },
     ]
     EmailType = apps.get_model('emails', 'EmailType')
