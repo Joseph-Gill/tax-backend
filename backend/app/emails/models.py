@@ -85,5 +85,6 @@ def send_email(sender, request, to, email_type, **kwargs):
     # signals only purpose in the registration module is to extract logo_url, otherwise could just call task in serializer.
     logo_url = request.build_absolute_uri(settings.STATIC_URL)
     kwargs['base_url'] = request.build_absolute_uri(location='/').replace(':8000', ':3000')
+    kwargs['email'] = to
     kwargs.pop('signal', None)
     send_email_task.delay(logo_url, to, email_type, **kwargs)  # send async task to celery
