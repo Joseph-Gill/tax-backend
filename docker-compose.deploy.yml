@@ -56,7 +56,16 @@ services:
 
 volumes:
   postgres:
-  static-files:
-  media-files:
   redis_data:
+  static-files:
+    external: true
+  media-files:
+    external: true
+  frontend:
+    external: true
+
+  networks:
+    default:
+      external:
+        name: templates-network
 
