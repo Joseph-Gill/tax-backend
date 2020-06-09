@@ -42,6 +42,10 @@ services:
 volumes:
   postgres:
   redis_data:
+  static-files:
+    external: true
+  media-files:
+    external: true
 
 networks:
   default:
