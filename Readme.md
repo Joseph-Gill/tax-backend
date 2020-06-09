@@ -19,16 +19,14 @@ editor you can use the upload the `Propulsion.codestyle.json` to `Editor > Code 
 IF SOMEBODY ELSE USES THE CODE THEY WILL NOT HAVE THOSE ENTRIES IN THE DB!!. Therefore please keep the data migration files up to date.  
 
 ## Usage
-### Thins you need to change
-1.Change templates.propulsion-home.ch to your hostname in the nginx conf file for deployment.
-
-2.IMPORTANT!: Change the secret key in the prod.env or actually don't use a prod.env at all and inject all env variables 
+### Things you need to change
+1.IMPORTANT!: Change the secret key in the prod.env or actually don't use a prod.env at all and inject all env variables 
 you need from gitlab.
 
-3.Change the sentry dsn in the env files.
+2.Change the sentry dsn in the env files.
 
-4.To avoid crashed you need to define the email and notification types the paltform in the corresponding db model.
-If you don't have them on the db the code will crash. You n 
+3.To avoid crashed you need to define the email and notification types the paltform in the corresponding db model.
+If you don't have them on the db the code will crash.  
 
 
 ### Misc
@@ -36,13 +34,11 @@ If you don't have them on the db the code will crash. You n
 
 2.This template feature 5 independent modules: users, email, registration, admin notifications and social.
 
-3.Nginx is included in this template for convenience  but should probably be put in its own repo in a proper deployment.
+3.This template uses a custom User model with email as the unique auth field.
 
-4.This template uses a custom User model with email as the unique auth field.
+4.The backend admin is hidden in a honeypot. Please change the true admin url to something else in the root urls.py.
 
-5.The backend admin is hidden in a honeypot. Please change the true admin url to something else in the root urls.py.
-
-6.This template is hooked up to Sentry (the error monitoring platform). Change the dsn address pointing to sentry in the .envs files. 
+5.This template is hooked up to Sentry (the error monitoring platform). Change the dsn address pointing to sentry in the .envs files. 
 
 7.Emails are asynchronusly sent via celery. You can see the status of celery task in the django admin.
 
