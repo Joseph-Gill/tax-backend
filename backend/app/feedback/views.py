@@ -1,5 +1,4 @@
 from rest_framework.generics import ListAPIView, CreateAPIView
-from rest_framework.permissions import IsAuthenticated
 from .models import Feedback
 from .serializers import FeedbackSerializer
 
