@@ -39,30 +39,9 @@ services:
       - backend
       - redis
 
-  nginx:
-    image: nginx:latest
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
-      - static-files:/static-files
-      - media-files:/media-files
-      - /etc/letsencrypt:/etc/letsencrypt
-      - frontend:/frontend
-
-
-
 volumes:
   postgres:
   redis_data:
-  static-files:
-    external: true
-  media-files:
-    external: true
-  frontend:
-    external: true
 
 networks:
   default:

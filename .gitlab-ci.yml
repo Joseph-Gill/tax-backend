@@ -60,9 +60,6 @@ deploy to prod:
   script:
     - echo "create volumes and network for very first deployment"
     - docker network create templates-network || true
-    - docker volume create --name=static-files || true
-    - docker volume create --name=media-files || true
-    - docker volume create --name=frontend || true
 
     - echo "update/restart"
     - docker-compose -f docker-compose.deploy.yml pull
