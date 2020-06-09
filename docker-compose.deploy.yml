@@ -64,8 +64,8 @@ volumes:
   frontend:
     external: true
 
-  networks:
-    default:
-      external:
-        name: templates-network
+networks:
+  default:
+    external:
+      name: templates-network
 
