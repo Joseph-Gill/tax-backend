@@ -72,16 +72,15 @@ deploy test:
   variables:
     ENVIRONMENT: "test"
   script:
-    - echo "deploying version $(git describe --always --tags) to $HOST"
     - echo "create volumes and network for very first deployment"
-    - docker network create website || true
-    - docker volume create --name=static || true
-    - docker volume create --name=dist || true
+    - docker network create templates-network || true
+    - docker volume create --name=static-files || true
+    - docker volume create --name=media-files || true
 
     - echo "update/restart"
-    - docker-compose -f docker-compose.test.yml pull
-    - docker-compose -f docker-compose.test.yml down --remove-orphans
-    - docker-compose -f docker-compose.test.yml up -d
+    - docker-compose -f docker-compose.deploy.yml pull
+    - docker-compose -f docker-compose.deploy.yml down --remove-orphans
+    - docker-compose -f docker-compose.deploy.yml up -d
 
 deploy:
   when: manual
