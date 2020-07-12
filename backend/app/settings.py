@@ -15,8 +15,10 @@ import ast
 from datetime import timedelta
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
-
+# from social_core.backends.google.GoogleOAuth2
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# from django.contrib.auth.backends.ModelBackend
+# from app.backends import CustomGoogleBackend
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # folder containing manage.py
 
@@ -47,6 +49,10 @@ INSTALLED_APPS = [
     'corsheaders',
     'admin_honeypot',
     'django_celery_results',
+
+    'oauth2_provider',
+    'social_django',
+    'rest_framework_social_oauth2',
 
     # own
     'app.users',
@@ -89,6 +95,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -207,3 +216,27 @@ if not DEBUG:
         # django.contrib.auth) you may enable sending PII data.
         send_default_pii=True
     )
+
+
+AUTHENTICATION_BACKENDS = (
+    'app.backends.CustomGoogleBackend',
+
+    # Google OAuth2
+    'social_core.backends.google.GoogleOAuth2',
+
+    # django-rest-framework-social-oauth2
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+
+    # Django
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# Google configuration
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '325279088643-n4q940s55faovcj7ejtu9uafkccbkph6.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '3Le97UDz-CEeuheAfNsG_nYx'
+
+# Define SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE to get extra permissions from Google.
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+]

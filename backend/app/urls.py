@@ -13,6 +13,8 @@ api_patterns = [
 
     path('docs/', include_docs_urls(title='Django Template', permission_classes=[])),
 
+    path('social-auth/', include('rest_framework_social_oauth2.urls')),
+
 ]
 
 urlpatterns = [
