@@ -10,11 +10,9 @@ api_patterns = [
     path('auth/', include('app.registration.urls')),
     path('notifications/', include('app.notifications.urls')),
     path('feedback/', include('app.feedback.urls')),
+    path('social-auth/', include('app.social_auth.urls')),
 
     path('docs/', include_docs_urls(title='Django Template', permission_classes=[])),
-
-    path('social-auth/', include('rest_framework_social_oauth2.urls')),
-
 ]
 
 urlpatterns = [

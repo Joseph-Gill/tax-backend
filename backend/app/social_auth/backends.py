@@ -9,12 +9,12 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '325279088643-n4q940s55faovcj7ejtu9uafkccbkph6.a
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '3Le97UDz-CEeuheAfNsG_nYx'
 
 
-class CustomGoogleBackend(BaseBackend):
+class GoogleOAuth2Backend(BaseBackend):
     def authenticate(self, request, **kwargs):
-        token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjRlNGViZTQ4N2Q1Y2RmMmIwMjZhM2IyMjlkODZmMGQ0MjU4NDQ5ZmUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiMzI1Mjc5MDg4NjQzLW40cTk0MHM1NWZhb3ZjajdlanR1OXVhZmtjY2JrcGg2LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiMzI1Mjc5MDg4NjQzLW40cTk0MHM1NWZhb3ZjajdlanR1OXVhZmtjY2JrcGg2LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTA0NTM5MDAxMjYzODAxMzczMDYzIiwiaGQiOiJwcm9wdWxzaW9uYWNhZGVteS5jb20iLCJlbWFpbCI6ImRhbmllbGVyQHByb3B1bHNpb25hY2FkZW15LmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiS2VOT0FuaWRBSUNWbUhmRDZUSmhEQSIsIm5hbWUiOiJEYW5pZWxlIFJvbmNhZ2xpb25pIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hLS9BT2gxNEdncVBrOFc3REJMQ0lSRzkwWWMzNGNFc3o3bUdhNUg0YTVMdlVVPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkRhbmllbGUiLCJmYW1pbHlfbmFtZSI6IlJvbmNhZ2xpb25pIiwibG9jYWxlIjoiZW4iLCJpYXQiOjE1OTQ1NTM3NzksImV4cCI6MTU5NDU1NzM3OSwianRpIjoiYjNjMzhkMTJmNjBlYzBlMjYyY2NhZGRjNDcwN2Q4MGE2NzZjMDg5ZCJ9.dsOIw1eH2R19X7gcwLt7IeqLE-uNgPT-okjmnKjC4DuJW66lQiRqfx28CD8KTyKe4ygz9XqHuWn88Fe3p3zGWOanulpPyvIMvlmEUiKtXAsaYM-V7nd3a4SamsuIIWPHJJdoGc1_aH6lqiFlzBdFIOD8nfEr3xYmXvAGcCv3lAgOYsZ_dGUQUn_3KhfCDe2KW-RYLb2Qa-AkPZrQOkLkfNFHJKNpru1L3LNqVo8qt1xwfI1pc8dIdrwuzJumuFderbSft3pNU3nLfLpd16143j0vPu8VdKrqX_zCBZMm_tcj2KzvEtS30Ci7pgDrJgUs0O1r6s7_s4R845imo6FRcA"
+        convert_token = kwargs.get('convert_token')
         try:
             # Specify the CLIENT_ID of the app that accesses the backend:
-            idinfo = id_token.verify_oauth2_token(token, requests.Request(), SOCIAL_AUTH_GOOGLE_OAUTH2_KEY)
+            idinfo = id_token.verify_oauth2_token(convert_token, requests.Request(), SOCIAL_AUTH_GOOGLE_OAUTH2_KEY)
 
             # Or, if multiple clients access the backend server:
             # idinfo = id_token.verify_oauth2_token(token, requests.Request())
