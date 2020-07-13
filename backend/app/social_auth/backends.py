@@ -11,6 +11,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '3Le97UDz-CEeuheAfNsG_nYx'
 
 class GoogleOAuth2Backend(BaseBackend):
     def authenticate(self, request, **kwargs):
+        if kwargs.get('backend') is not 'googleOpenId':
+            return None
         convert_token = kwargs.get('convert_token')
         try:
             # Specify the CLIENT_ID of the app that accesses the backend:

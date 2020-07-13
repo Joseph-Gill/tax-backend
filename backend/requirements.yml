@@ -21,4 +21,7 @@ dependencies:
     - sentry-sdk==0.14.1
     - gunicorn
     - google-auth
+    - social-auth-app-django
+    - django-rest-framework-social-oauth2
+    - django-allauth
 
