@@ -3,15 +3,17 @@ from django.contrib.auth.backends import BaseBackend
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
+from app.registration.signals import post_user_registration_validation
+
 User = get_user_model()
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '325279088643-n4q940s55faovcj7ejtu9uafkccbkph6.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '3Le97UDz-CEeuheAfNsG_nYx'
 
 
-class GoogleOAuth2Backend(BaseBackend):
+class GoogleOpenIdBackend(BaseBackend):
     def authenticate(self, request, **kwargs):
-        if kwargs.get('backend') is not 'googleOpenId':
+        if kwargs.get('backend') != 'googleOpenId':
             return None
         convert_token = kwargs.get('convert_token')
         try:
@@ -50,6 +52,9 @@ class GoogleOAuth2Backend(BaseBackend):
                     last_name=idinfo.get('family_name'),
                 )
                 new_user.save()
+                post_user_registration_validation.send(sender=User, user=new_user)
+                new_user.social_profile.social_avatar = idinfo.get('picture', '')
+                new_user.social_profile.save()
                 return new_user
         except ValueError:
             # Invalid token
@@ -69,3 +74,7 @@ class GoogleOAuth2Backend(BaseBackend):
         """
         is_active = getattr(user, 'is_active', None)
         return is_active or is_active is None
+
+
+class LinkedinOAuth2Backend(BaseBackend):
+    pass

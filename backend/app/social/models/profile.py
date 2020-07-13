@@ -14,9 +14,13 @@ class SocialProfile(TimeStampedModel):
         related_name='social_profile',
         to=settings.AUTH_USER_MODEL
     )
-    avatar = models.ImageField(
+    upload_avatar = models.ImageField(
         upload_to='',
         blank=True,
+    )
+    social_avatar = models.URLField(
+        max_length=2000,
+        blank=True
     )
 
     location = models.CharField(
@@ -51,6 +55,15 @@ class SocialProfile(TimeStampedModel):
         blank=True,
 
     )
+
+    # @property
+    # def avatar(self):
+    #     if hasattr(self.upload_avatar, 'url'):
+    #         return self.upload_avatar.url
+    #     elif self.social_avatar:
+    #         return self.social_avatar
+    #     else:
+    #         return None
 
     @property
     def friends(self):

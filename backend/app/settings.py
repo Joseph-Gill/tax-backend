@@ -159,7 +159,7 @@ STATICFILES_DIRS = [
 # AUTH
 AUTHENTICATION_BACKENDS = (
     # Custom
-    'app.social_auth.backends.GoogleOAuth2Backend',
+    'app.social_auth.backends.GoogleOpenIdBackend',
     # Django
     'django.contrib.auth.backends.ModelBackend',
 )
