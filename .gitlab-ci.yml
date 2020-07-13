@@ -78,9 +78,9 @@ deploy test:
     - docker volume create --name=media-files || true
 
     - echo "update/restart"
-    - docker-compose -f docker-compose.deploy.yml pull
-    - docker-compose -f docker-compose.deploy.yml down --remove-orphans
-    - docker-compose -f docker-compose.deploy.yml up -d
+    - docker-compose -f docker-compose.test.yml pull
+    - docker-compose -f docker-compose.test.yml down --remove-orphans
+    - docker-compose -f docker-compose.test.yml up -d
 
 deploy:
   when: manual
