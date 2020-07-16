@@ -1,9 +1,10 @@
 import json
 import urllib
-import requests
+import requests as py_request
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import BaseBackend
 from google.oauth2 import id_token
+from google.auth.transport import requests
 
 from app.registration.signals import post_user_registration_validation
 
@@ -92,12 +93,12 @@ class LinkedinOAuth2Backend(BaseBackend):
             'code': convert_token,
             'redirect_uri': 'http://localhost:3000/login',
         }
-        response = requests.get('https://www.linkedin.com/oauth/v2/accessToken?' + urllib.parse.urlencode(data), headers=headers)
+        response = py_request.get('https://www.linkedin.com/oauth/v2/accessToken?' + urllib.parse.urlencode(data), headers=headers)
         access_token = json.loads(response.text).get('access_token')
 
         headers = {'Authorization': 'Bearer ' + access_token}
 
-        response = requests.get('https://api.linkedin.com/v2/me', headers=headers)
+        response = py_request.get('https://api.linkedin.com/v2/me', headers=headers)
         user_data = json.loads(response.text)
         # Save user
         return None
