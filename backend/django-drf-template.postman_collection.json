@@ -1179,6 +1179,9 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -1376,7 +1379,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"title\": \"feedback1\",\n\t\"content\": \"feedback1\"\n}",
+							"raw": "{\n\t\"title\": \"feedback2\",\n\t\"content\": \"feedback2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1422,6 +1425,59 @@
 							""
 						]
 					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Social_Auth",
+			"item": [
+				{
+					"name": "Convert Social Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b631b8f7-2369-4bdc-a54c-ad62f2b6df15",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setGlobalVariable(\"access\", jsonData.access);",
+									"postman.setGlobalVariable(\"refresh\", jsonData.refresh);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \n    \"backend\": \"linkedinOAuth2\",\n\t\"convert_token\": \"AQS2fbAt7UCh2a7P03tAdWAz_RiNEbSc7F3hqOaxRnBpAJr16mmdmZ1v-EfgCDdt_w4sklM9jLVfsJ1YGun9kv4u-GHfM-V5J6f1zqrW20P6As9GZH6yUUcuFVSTU02vf5Cu2LLws-pNDfXkfts2LkoGwWHCKvUEP612BlyxxOFPpZauLLSKitL4qm5QqQ\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/backend/api/social-auth/convert-token/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"backend",
+								"api",
+								"social-auth",
+								"convert-token",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
