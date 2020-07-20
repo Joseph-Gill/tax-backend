@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework.documentation import include_docs_urls
+from backend.app.swagger import schema_view
 
 api_patterns = [
     path('users/', include('app.users.urls')),
@@ -11,7 +12,10 @@ api_patterns = [
     path('notifications/', include('app.notifications.urls')),
     path('feedback/', include('app.feedback.urls')),
 
+    #  Documentation paths
     path('docs/', include_docs_urls(title='Django Template', permission_classes=[])),
+    path('swagger-docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^swagger-docs(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
 
 ]
 

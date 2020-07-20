@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'admin_honeypot',
     'django_celery_results',
+    'drf_yasg',
 
     # own
     'app.users',
@@ -169,6 +170,20 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+}
+############################################################
+# DOCUMENTATION
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': True,  # Change settings to false in order to remove Django Login option
+    'LOGIN_URL': '/backend/true-admin/',  # URL For Django Login
+    'LOGOUT_URL': '/backend/true-admin/logout/',  # URL For Django Logout
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
 }
 
 ############################################################

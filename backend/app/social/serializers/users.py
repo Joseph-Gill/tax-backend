@@ -5,9 +5,9 @@ from app.social.models.profile import SocialProfile
 User = get_user_model()
 
 
-class UserSerializer(serializers.ModelSerializer):
+class SocialUserSerializer(serializers.ModelSerializer):
     """
-    UserSerializer
+    SocialUserSerializer
     """
 
     class Meta:
@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 class SocialProfileSerializer(serializers.ModelSerializer):
     logged_in_user_is_following = serializers.SerializerMethodField()
     logged_in_user_is_friends = serializers.SerializerMethodField()
-    user = UserSerializer(read_only=True, many=False)
+    user = SocialUserSerializer(read_only=True, many=False)
 
     def get_logged_in_user_is_following(self, social_profile):
         return social_profile in self.context['request'].social_profile.followees.all()

@@ -10,6 +10,7 @@ dependencies:
     - djangorestframework_simplejwt==4.4.0
     - flake8
     - coreapi
+    - drf_yasg
     - Pillow
     - django-cors-headers
     - django-admin-honeypot

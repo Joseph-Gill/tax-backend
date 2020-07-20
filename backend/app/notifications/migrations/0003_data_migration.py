@@ -17,7 +17,7 @@ def populate_db(apps, schema_editor):
             "key": "user_reset_password",
             "subject": "Subject: A User reset his password.",
             "title": "Title: A User reset his password.",
-            "description": "Tittle: A User reset his password.",
+            "description": "Title: A User reset his password.",
             "template": "Password reset for: {{ email }}"
         },
     ]
