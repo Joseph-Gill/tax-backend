@@ -71,6 +71,10 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+# Setup support for proxy headers
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 ROOT_URLCONF = 'app.urls'
 AUTH_USER_MODEL = 'users.User'
 WSGI_APPLICATION = 'app.wsgi.application'
