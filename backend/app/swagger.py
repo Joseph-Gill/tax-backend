@@ -11,7 +11,7 @@ schema_view = get_schema_view(
         contact=openapi.Contact(email="learn@propulsion-home.ch"),
         license=openapi.License(name="BSD License"),
     ),
-    public=False,  # Set to False to enable Django Login to access docs
+    public=False,  # Set to False to enable Django Login to access documentation
     permission_classes=(permissions.AllowAny,
                         #  permissions.IsAuthenticated,  # Uncomment to enable Authenticated access only to docs
                         ),
