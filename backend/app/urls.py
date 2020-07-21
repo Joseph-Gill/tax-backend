@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from backend.app.swagger import schema_view
+from app.swagger import schema_view
 
 api_patterns = [
     path('users/', include('app.users.urls')),
