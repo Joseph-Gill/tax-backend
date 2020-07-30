@@ -93,34 +93,38 @@ class LinkedinOAuth2Backend(BaseBackend):
             'code': convert_token,
             'redirect_uri': 'http://localhost:3000/login',
         }
-        response = py_request.get('https://www.linkedin.com/oauth/v2/accessToken?' + urllib.parse.urlencode(data), headers=headers)
-        access_token = json.loads(response.text).get('access_token')
+        response_access_token = py_request.get('https://www.linkedin.com/oauth/v2/accessToken?' + urllib.parse.urlencode(data), headers=headers)
+        access_token = json.loads(response_access_token.text).get('access_token')
 
         headers = {'Authorization': 'Bearer ' + access_token}
 
-        response = py_request.get('https://api.linkedin.com/v2/me', headers=headers)
-        user_data = json.loads(response.text)
-        # Save user
-        return None
+        response_user_data = py_request.get('https://api.linkedin.com/v2/me/', headers=headers)
+        user_data = json.loads(response_user_data.text)
 
-        # try:
-        #     # Return user
-        #     user = User.objects.get(email=idinfo.get('email'), is_active=True)
-        #     return user
-        # except User.DoesNotExist:
-        #     # Create user
-        #     new_user = User(
-        #         email=idinfo.get('email'),
-        #         username=idinfo.get('email'),
-        #         is_active=True,
-        #         first_name=idinfo.get('given_name'),
-        #         last_name=idinfo.get('family_name'),
-        #     )
-        #     new_user.save()
-        #     post_user_registration_validation.send(sender=User, user=new_user)
-        #     new_user.social_profile.social_avatar = idinfo.get('picture', '')
-        #     new_user.social_profile.save()
-        #     return new_user
+        response_profile_pic = py_request.get('https://api.linkedin.com/v2/me?projection=(id,profilePicture(displayImage~:playableStreams),firstName,lastName)', headers=headers)
+        profile_pic_url = json.loads(response_profile_pic.text).get('profilePicture').get('displayImage~').get('elements')[0].get('identifiers')[0].get('identifier')
+
+        response_user_email = py_request.get('https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))', headers=headers)
+        email = json.loads(response_user_email.text).get('elements')[0].get('handle~').get('emailAddress')
+
+        try:
+            # Return user
+            user = User.objects.get(email=email, is_active=True)
+            return user
+        except User.DoesNotExist:
+            # Create user
+            new_user = User(
+                email=email,
+                username=email,
+                is_active=True,
+                first_name=user_data.get('localizedLastName'),
+                last_name=user_data.get('localizedFirstName'),
+            )
+            new_user.save()
+            post_user_registration_validation.send(sender=User, user=new_user)
+            new_user.social_profile.social_avatar = profile_pic_url
+            new_user.social_profile.save()
+            return new_user
 
     def get_user(self, user_id):
         try:
