@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework.documentation import include_docs_urls
+from app.swagger import schema_view
 
 api_patterns = [
     path('users/', include('app.users.urls')),
@@ -12,7 +12,8 @@ api_patterns = [
     path('feedback/', include('app.feedback.urls')),
     path('contact/', include('app.contact.urls')),
 
-    path('docs/', include_docs_urls(title='Django Template', permission_classes=[])),
+    #  Documentation paths
+    path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 
 ]
 
