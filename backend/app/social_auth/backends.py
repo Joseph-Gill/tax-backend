@@ -96,24 +96,21 @@ class LinkedinOAuth2Backend(BaseBackend):
         }
         response_access_token = py_request.get('https://www.linkedin.com/oauth/v2/accessToken?' + urllib.parse.urlencode(data), headers=headers)
         access_token = json.loads(response_access_token.text).get('access_token')
-
         headers = {'Authorization': 'Bearer ' + access_token}
-
-        response_user_data = py_request.get('https://api.linkedin.com/v2/me/', headers=headers)
-        user_data = json.loads(response_user_data.text)
-
-        response_profile_pic = py_request.get('https://api.linkedin.com/v2/me?projection=(id,profilePicture(displayImage~:playableStreams),firstName,lastName)', headers=headers)
-        profile_pic_url = json.loads(response_profile_pic.text).get('profilePicture').get('displayImage~').get('elements')[0].get('identifiers')[0].get('identifier')
 
         response_user_email = py_request.get('https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))', headers=headers)
         email = json.loads(response_user_email.text).get('elements')[0].get('handle~').get('emailAddress')
 
         try:
-            # Return user
             user = User.objects.get(email=email, is_active=True)
             return user
         except User.DoesNotExist:
-            # Create user
+            response_user_data = py_request.get('https://api.linkedin.com/v2/me/', headers=headers)
+            user_data = json.loads(response_user_data.text)
+
+            response_profile_pic = py_request.get('https://api.linkedin.com/v2/me?projection=(id,profilePicture(displayImage~:playableStreams),firstName,lastName)', headers=headers)
+            profile_pic_url = json.loads(response_profile_pic.text).get('profilePicture').get('displayImage~').get('elements')[0].get('identifiers')[0].get('identifier')
+
             new_user = User(
                 email=email,
                 username=email,
