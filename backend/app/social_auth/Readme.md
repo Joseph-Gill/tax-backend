@@ -43,6 +43,7 @@ The order matters! Put the custom backends first.
 ## How it works with Google
 
 1. Create and configure a new project to get Google OAuth2 Key and Secret on [Google Developer Console](https://console.developers.google.com/)
+<br>In the template we have configured that only people within our organization can login (...@propulsionacademy.com)
 <br>
 <br>
 **Frontend**
