@@ -1,3 +1,4 @@
+import ast
 import json
 import os
 import urllib
@@ -74,7 +75,7 @@ class LinkedinOAuth2Backend(BaseBackend):
         convert_token = kwargs.get('convert_token')
 
         headers = {'Content-Type': 'x-www-form-urlencoded'}
-        redirect_uri = 'http://localhost:3000/login' if DEBUG else 'https://test.app.templates.propulsion-home.ch/login'
+        redirect_uri = 'http://localhost:3000/login' if ast.literal_eval(os.environ.get('DJANGO_DEBUG', None)) else 'https://test.app.templates.propulsion-home.ch/login'
         data = {
             'client_id': os.environ.get('SOCIAL_AUTH_LINKEDIN_OAUTH2_CLIENT_ID'),
             'client_secret': os.environ.get('SOCIAL_AUTH_LINKEDIN_OAUTH2_CLIENT_SECRET'),
