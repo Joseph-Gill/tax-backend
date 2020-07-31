@@ -8,6 +8,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 
 from app.registration.signals import post_user_registration_validation, post_user_social_registration
+from app.settings import DEBUG
 
 User = get_user_model()
 
@@ -73,12 +74,13 @@ class LinkedinOAuth2Backend(BaseBackend):
         convert_token = kwargs.get('convert_token')
 
         headers = {'Content-Type': 'x-www-form-urlencoded'}
+        redirect_uri = 'http://localhost:3000/login' if DEBUG else 'https://test.app.templates.propulsion-home.ch/login'
         data = {
             'client_id': os.environ.get('SOCIAL_AUTH_LINKEDIN_OAUTH2_CLIENT_ID'),
             'client_secret': os.environ.get('SOCIAL_AUTH_LINKEDIN_OAUTH2_CLIENT_SECRET'),
             'grant_type': 'authorization_code',
             'code': convert_token,
-            'redirect_uri': 'http://localhost:3000/login',
+            'redirect_uri': redirect_uri,
         }
         response_access_token = py_request.get('https://www.linkedin.com/oauth/v2/accessToken?' + urllib.parse.urlencode(data), headers=headers)
         access_token = json.loads(response_access_token.text).get('access_token')
