@@ -44,15 +44,18 @@ The order matters! Put the custom backends first.
 
 1. Create and configure a new project to get Google OAuth2 Key and Secret on [Google Developer Console](https://console.developers.google.com/)
 <br>In the template we have configured that only people within our organization can login (...@propulsionacademy.com)
+<br>You will also have to whitelist your domain - for the template localhost 3000, 8000 and test.app.templates.propulsion-home.ch are whitelisted
 <br>
 <br>
 **Frontend**
+
 2. On Google login request, the auth2 library needs to be loaded from gapi and a GoogleAuth session needs to be initialized, by passing the Google OAuth client_id/key from step 1.
 3. The method signIn on googleAuth needs to be called, which will open a new window where the user can select his google account / login with google credentials.
 4. Through googleAuth you now have to retrieve the currentUser to get his id_token. This id_token needs to be sent to this Django backend.
 <br>
 <br>
 **Backend**
+
 5. The id_token needs to be verified with google's provided api endpoint, which will also return the user information.
 6. Now you have access to the email and other data. You can find and return the existing user or create and return a new user.
 7. The SocialTokenConvertSerializer will use the returned user from step 6 to get a JWT from this Django backend and return it to your frontend.
@@ -70,12 +73,14 @@ The order matters! Put the custom backends first.
 <br>
 <br>
 **Frontend**
+
 2. On LinkedIn login request, your application redirects the user to LinkedIn's OAuth 2.0 authorization page, where the member authenticates and grants permission to your app. 
 3. LinkedIn's redirects your user to your defined redirect url and adds an authorization code via URL params.
 4. Your frontend application sends a request to this Django backend with the authorization code.
 <br>
 <br>
 **Backend**
+
 5. With the authorization code you have to send another request to LinkedIn to retreive an accessToken.
 6. With this access token, the user data like email, firstName etc. can be retreived from LinkedIn. With the retreived email, you can find and return the existing user or create and return a new user.
 7. The SocialTokenConvertSerializer will use the returned user from step 6 to get a JWT from this Django backend and return it to your frontend.
