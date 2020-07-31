@@ -2,26 +2,25 @@ name: backend
 
 dependencies:
   - python=3.7
-  - pip
-  - psycopg2
+  - pip=20.1.1
+  - psycopg2=2.8.5
   - pip:
     - Django==3.0.2
     - djangorestframework==3.11.0
     - djangorestframework_simplejwt==4.4.0
-    - flake8
-    - coreapi
-    - Pillow
-    - django-cors-headers
-    - django-admin-honeypot
-    - django-extensions
-    - celery
-    - redis
-    - flower
-    - django-celery-results
+    - flake8==3.8.3
+    - drf_yasg==1.17.1
+    - Pillow==7.2.0
+    - django-cors-headers==3.4.0
+    - django-admin-honeypot==1.1.0
+    - django-extensions==3.0.3
+    - celery==4.4.6
+    - redis==3.5.3
+    - flower==0.9.5
+    - django-celery-results==1.2.1
     - sentry-sdk==0.14.1
-    - gunicorn
+    - gunicorn==20.0.4
     - google-auth
     - social-auth-app-django
     - django-rest-framework-social-oauth2
     - django-allauth
-

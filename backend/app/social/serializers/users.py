@@ -6,9 +6,9 @@ from app.social.models.profile import SocialProfile
 User = get_user_model()
 
 
-class UserSerializer(serializers.ModelSerializer):
+class SocialUserSerializer(serializers.ModelSerializer):
     """
-    UserSerializer
+    SocialUserSerializer
     """
 
     class Meta:
@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
 class SocialProfileSerializer(serializers.ModelSerializer):
     logged_in_user_is_following = serializers.SerializerMethodField()
     logged_in_user_is_friends = serializers.SerializerMethodField()
-    user = UserSerializer(read_only=True, many=False)
+    user = SocialUserSerializer(read_only=True, many=False)
     avatar = serializers.SerializerMethodField()
 
     def get_avatar(self, social_profile):

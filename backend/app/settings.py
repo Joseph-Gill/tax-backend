@@ -18,7 +18,6 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # folder containing manage.py
 
 # Quick-start development settings - unsuitable for production
@@ -48,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'admin_honeypot',
     'django_celery_results',
+    'drf_yasg',
 
     # own
     'app.users',
@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'app.notifications',
     'app.feedback',
     'app.social_auth',
+    'app.contact',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +72,10 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# Setup support for proxy headers
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 ROOT_URLCONF = 'app.urls'
 AUTH_USER_MODEL = 'users.User'
@@ -173,12 +178,25 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=2),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=4)
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+}
+############################################################
+# DOCUMENTATION
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': True,  # Change settings to false in order to remove Django Login option
+    'LOGIN_URL': '/backend/true-admin/',  # URL For Django Login
+    'LOGOUT_URL': '/backend/true-admin/logout/',  # URL For Django Logout
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
 }
 
 ############################################################
