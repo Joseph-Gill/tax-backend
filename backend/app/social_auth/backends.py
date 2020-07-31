@@ -1,4 +1,5 @@
 import json
+import os
 import urllib
 import requests as py_request
 from django.contrib.auth import get_user_model
@@ -6,12 +7,11 @@ from django.contrib.auth.backends import BaseBackend
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
-from app.registration.signals import post_user_registration_validation
+from app.registration.signals import post_user_registration_validation, post_user_social_registration
 
 User = get_user_model()
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '325279088643-n4q940s55faovcj7ejtu9uafkccbkph6.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '3Le97UDz-CEeuheAfNsG_nYx'
+# todo: Cedric - create readme for social auth
 
 
 class GoogleOpenIdBackend(BaseBackend):
@@ -21,7 +21,7 @@ class GoogleOpenIdBackend(BaseBackend):
         convert_token = kwargs.get('convert_token')
         try:
             # Specify the CLIENT_ID of the app that accesses the backend:
-            idinfo = id_token.verify_oauth2_token(convert_token, requests.Request(), SOCIAL_AUTH_GOOGLE_OAUTH2_KEY)
+            idinfo = id_token.verify_oauth2_token(convert_token, requests.Request(), os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY'))
 
             # Or, if multiple clients access the backend server:
             # idinfo = id_token.verify_oauth2_token(token, requests.Request())
@@ -56,6 +56,7 @@ class GoogleOpenIdBackend(BaseBackend):
                 )
                 new_user.save()
                 post_user_registration_validation.send(sender=User, user=new_user)
+                post_user_social_registration.send(sender=User, user=new_user)
                 new_user.social_profile.social_avatar = idinfo.get('picture', '')
                 new_user.social_profile.save()
                 return new_user
@@ -87,8 +88,8 @@ class LinkedinOAuth2Backend(BaseBackend):
 
         headers = {'Content-Type': 'x-www-form-urlencoded'}
         data = {
-            'client_id': '77m6j4ryf8lwak',
-            'client_secret': 'JM7leM90hegfXdyC',
+            'client_id': os.environ.get('SOCIAL_AUTH_LINKEDIN_OAUTH2_CLIENT_ID'),
+            'client_secret': os.environ.get('SOCIAL_AUTH_LINKEDIN_OAUTH2_CLIENT_SECRET'),
             'grant_type': 'authorization_code',
             'code': convert_token,
             'redirect_uri': 'http://localhost:3000/login',
@@ -122,6 +123,7 @@ class LinkedinOAuth2Backend(BaseBackend):
             )
             new_user.save()
             post_user_registration_validation.send(sender=User, user=new_user)
+            post_user_social_registration.send(sender=User, user=new_user)
             new_user.social_profile.social_avatar = profile_pic_url
             new_user.social_profile.save()
             return new_user
