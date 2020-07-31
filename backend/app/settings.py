@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'app.emails',
     'app.registration',
     'app.notifications',
-    'app.feedback'
+    'app.feedback',
+    'app.contact'
 ]
 
 MIDDLEWARE = [
