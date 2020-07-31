@@ -9,7 +9,6 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 
 from app.registration.signals import post_user_registration_validation, post_user_social_registration
-from app.settings import DEBUG
 
 User = get_user_model()
 
