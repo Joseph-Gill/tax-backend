@@ -24,9 +24,6 @@ class GoogleOpenIdBackend(BaseBackend):
             if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
                 raise ValueError('Wrong issuer.')
 
-            # ID token is valid. Get the user's Google Account ID from the decoded token.
-            userid = idinfo['sub']
-
             if 'email_verified' not in idinfo:
                 return None
 
