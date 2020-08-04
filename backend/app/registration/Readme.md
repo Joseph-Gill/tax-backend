@@ -34,3 +34,10 @@ To listen to this signal do:
 def handle_signal(sender, user, **kwargs):
     pass
 ```
+3. This module exposes a Signal `post_user_social_registration`.
+To listen to this signal do:
+```
+@receiver(post_user_social_registration)
+def handle_signal(sender, user, **kwargs):
+    pass
+```

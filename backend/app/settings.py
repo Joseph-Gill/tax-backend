@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'app.registration',
     'app.notifications',
     'app.feedback',
-    'app.contact'
+    'app.social_auth',
+    'app.contact',
 ]
 
 MIDDLEWARE = [
@@ -161,6 +162,14 @@ STATICFILES_DIRS = [
 ]
 ############################################################
 # AUTH
+AUTHENTICATION_BACKENDS = (
+    # Custom
+    'app.social_auth.backends.GoogleOpenIdBackend',
+    'app.social_auth.backends.LinkedinOAuth2Backend',
+    # Django
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',

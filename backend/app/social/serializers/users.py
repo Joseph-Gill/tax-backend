@@ -19,6 +19,17 @@ class SocialProfileSerializer(serializers.ModelSerializer):
     logged_in_user_is_following = serializers.SerializerMethodField()
     logged_in_user_is_friends = serializers.SerializerMethodField()
     user = SocialUserSerializer(read_only=True, many=False)
+    avatar = serializers.SerializerMethodField()
+
+    def get_avatar(self, social_profile):
+        try:
+            upload_url = social_profile.upload_avatar.url
+            return self.context['request'].build_absolute_uri(upload_url)
+        except ValueError:
+            if social_profile.social_avatar:
+                return social_profile.social_avatar
+            else:
+                return ''
 
     def get_logged_in_user_is_following(self, social_profile):
         return social_profile in self.context['request'].social_profile.followees.all()
