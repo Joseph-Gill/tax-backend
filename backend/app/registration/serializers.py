@@ -54,6 +54,7 @@ class RegistrationSerializer(serializers.Serializer):
         new_user = User(
             email=email,
             is_active=False,
+            username=email,
         )
         new_user.save()
         #####
