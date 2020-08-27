@@ -54,6 +54,7 @@ class RegistrationSerializer(serializers.Serializer):
         new_user = User(
             email=email,
             is_active=False,
+            username=email,
         )
         new_user.save()
         #####
@@ -74,7 +75,6 @@ class RegistrationValidationSerializer(serializers.Serializer):
     code = serializers.CharField(label='Validation code', write_only=True, validators=[code_is_valid])
     password = serializers.CharField(label='password', write_only=True)
     password_repeat = serializers.CharField(label='password_repeat', write_only=True)
-    username = serializers.CharField(label='Username', validators=[username_does_not_exist], required=False)
     first_name = serializers.CharField(label='First name', required=False)
     last_name = serializers.CharField(label='Last name', required=False)
 
@@ -92,7 +92,6 @@ class RegistrationValidationSerializer(serializers.Serializer):
     def save(self, validated_data):
         email = validated_data.get('email')
         user = User.objects.get(email=email)
-        user.username = validated_data.get('username', '')
         user.first_name = validated_data.get('first_name')
         user.last_name = validated_data.get('last_name')
         user.is_active = True
