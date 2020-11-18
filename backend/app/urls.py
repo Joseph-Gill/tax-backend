@@ -6,12 +6,9 @@ from app.swagger import schema_view
 
 api_patterns = [
     path('users/', include('app.users.urls')),
-    path('social/', include('app.social.urls')),
     path('auth/', include('app.registration.urls')),
     path('notifications/', include('app.notifications.urls')),
     path('feedback/', include('app.feedback.urls')),
-    path('social-auth/', include('app.social_auth.urls')),
-    path('contact/', include('app.contact.urls')),
 
     #  Documentation paths
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

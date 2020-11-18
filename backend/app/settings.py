@@ -48,16 +48,14 @@ INSTALLED_APPS = [
     'admin_honeypot',
     'django_celery_results',
     'drf_yasg',
+    'django_extensions',
 
     # own
     'app.users',
-    'app.social',
     'app.emails',
     'app.registration',
     'app.notifications',
     'app.feedback',
-    'app.social_auth',
-    'app.contact',
 ]
 
 MIDDLEWARE = [
@@ -164,8 +162,8 @@ STATICFILES_DIRS = [
 # AUTH
 AUTHENTICATION_BACKENDS = (
     # Custom
-    'app.social_auth.backends.GoogleOpenIdBackend',
-    'app.social_auth.backends.LinkedinOAuth2Backend',
+    # 'app.social_auth.backends.GoogleOpenIdBackend',
+    # 'app.social_auth.backends.LinkedinOAuth2Backend',
     # Django
     'django.contrib.auth.backends.ModelBackend',
 )

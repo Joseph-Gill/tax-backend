@@ -59,7 +59,7 @@ def send_notifications(sender, notification_key, **kwargs):
     send_notification_task.delay(notification_key, **kwargs)  # send async task to celery
 
 
-@receiver(post_user_registration_validation)
-def create_social_profile(sender, user, **kwargs):
-    if user.is_superuser or user.is_staff:
-        NotificationProfile(user=user).save()
+# @receiver(post_user_registration_validation)
+# def create_social_profile(sender, user, **kwargs):
+#     if user.is_superuser or user.is_staff:
+#         NotificationProfile(user=user).save()
