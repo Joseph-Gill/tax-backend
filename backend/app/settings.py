@@ -65,7 +65,8 @@ INSTALLED_APPS = [
     'app.steps',
     'app.tasks',
     'app.taxes',
-    'app.userprofiles'
+    'app.userProfiles',
+    'app.projectPermissions'
 ]
 
 MIDDLEWARE = [
