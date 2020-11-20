@@ -30,7 +30,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 ALLOWED_HOSTS = ['*']
 
-DEBUG = ast.literal_eval(os.environ.get('DJANGO_DEBUG', None))
+# DEBUG = ast.literal_eval(os.environ.get('DJANGO_DEBUG', None))
+DEBUG = True
 
 INSTALLED_APPS = [
     'app',
