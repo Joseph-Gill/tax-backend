@@ -16,6 +16,7 @@ api_patterns = [
     path('projects/', include('app.projects.urls')),
     path('charts/', include('app.charts.urls')),
     path('steps/', include('app.steps.urls')),
+    path('tasks/', include('app.tasks.urls')),
 
     #  Documentation paths
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
