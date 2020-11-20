@@ -22,4 +22,4 @@ class Task(models.Model):
     )
 
     def __str__(self):
-        return f'Task #{self.pk}'
+        return f'Task #{self.pk} for Project #{self.step.project.id}, Step #{self.step.number}'

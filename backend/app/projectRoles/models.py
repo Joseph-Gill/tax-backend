@@ -15,4 +15,4 @@ class ProjectRole(models.Model):
     )
 
     def __str__(self):
-        return f'Project Role #{self.pk}'
+        return f'Project Role #{self.pk} for User - {self.registration_profile.user.email}'

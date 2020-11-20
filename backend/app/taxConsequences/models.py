@@ -22,4 +22,4 @@ class TaxConsequence(models.Model):
     )
 
     def __str__(self):
-        return f'Tax Consequence #{self.pk}'
+        return f'Tax Consequence #{self.pk} for Project #{self.step.project.id}, Step #{self.step.number}'

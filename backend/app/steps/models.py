@@ -50,4 +50,4 @@ class Step(models.Model):
     )
 
     def __str__(self):
-        return f'Step #{self.pk}'
+        return f'Step #{self.number} for Project #{self.project.id}'

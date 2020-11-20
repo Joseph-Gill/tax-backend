@@ -24,4 +24,4 @@ class Chart(models.Model):
     )
 
     def __str__(self):
-        return f'Chart #{self.pk} for Project #{self.step.project}, Step #{self.step.number}'
+        return f'Chart #{self.pk} for Group - Name: {self.step.project.group.name} - Project #{self.step.project}, Step #{self.step.number}'

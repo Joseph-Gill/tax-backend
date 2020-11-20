@@ -37,4 +37,4 @@ class Entity(models.Model):
     )
 
     def __str__(self):
-        return f'Entity #{self.pk}'
+        return f'Entity #{self.pk} - Name: {self.name} for Group: {self.group.name}'

@@ -22,4 +22,4 @@ class Organization(models.Model):
     )
 
     def __str__(self):
-        return f'Organization #{self.pk}'
+        return f'Organization #{self.pk} - Name: {self.name}'

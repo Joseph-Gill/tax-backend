@@ -46,4 +46,4 @@ class Project(models.Model):
     )
 
     def __str__(self):
-        return f'Project #{self.pk}'
+        return f'Project #{self.pk} for Group #{self.group.id} - Name: {self.project.group.name}'

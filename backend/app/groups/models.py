@@ -34,4 +34,4 @@ class Group(models.Model):
     )
 
     def __str__(self):
-        return f'Group #{self.pk}'
+        return f'Group #{self.pk} - Name: {self.name}'

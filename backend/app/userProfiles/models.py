@@ -10,7 +10,6 @@ from app.tasks.models import Task
 class UserProfile(models.Model):
     phone_number = models.CharField(
         max_length=13,
-        null=True,
         blank=True
     )
 
@@ -27,7 +26,7 @@ class UserProfile(models.Model):
         related_name='user_profiles'
     )
 
-    registration = models.OneToOneField(
+    registration_profile = models.OneToOneField(
         to=RegistrationProfile,
         on_delete=models.CASCADE,
         related_name='user_profile',
@@ -57,4 +56,4 @@ class UserProfile(models.Model):
     )
 
     def __str__(self):
-        return f'User Profile #{self.pk}'
+        return f'User Profile #{self.pk} for {self.registration_profile.user.email}'
