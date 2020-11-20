@@ -4,5 +4,5 @@ from app.steps.views import ListAllOrCreateStepForSpecificProject, RetrieveUpdat
 
 urlpatterns = [
     path('<int:project_id>/', ListAllOrCreateStepForSpecificProject.as_view(), name='list-create-step'),
-    path('/step/<int:step_id>/', RetrieveUpdateDestroySpecificStep.as_view(), name='retrieve-update-destroy-step')
+    path('step/<int:step_id>/', RetrieveUpdateDestroySpecificStep.as_view(), name='retrieve-update-destroy-step')
 ]

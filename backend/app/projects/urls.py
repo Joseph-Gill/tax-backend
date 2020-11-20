@@ -4,5 +4,5 @@ from app.projects.views import ListAllOrCreateProjectForSpecificGroup, RetrieveU
 
 urlpatterns = [
     path('<int:group_id>/', ListAllOrCreateProjectForSpecificGroup.as_view(), name='list-create-project'),
-    path('/project/<int:project_id>/', RetrieveUpdateDestroySpecificProject.as_view(), name='retrieve-update-destroy-project')
+    path('project/<int:project_id>/', RetrieveUpdateDestroySpecificProject.as_view(), name='retrieve-update-destroy-project')
 ]
