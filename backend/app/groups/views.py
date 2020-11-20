@@ -1,4 +1,4 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 
 
 class ListAllOrCreateGroup(ListCreateAPIView):
@@ -8,6 +8,13 @@ class ListAllOrCreateGroup(ListCreateAPIView):
 
     post:
     Create a new Group
+    """
+    pass
+
+
+class ListAllUsersGroups(ListAPIView):
+    """
+    List all Groups of logged in User
     """
     pass
 
