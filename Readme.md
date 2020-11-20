@@ -70,40 +70,48 @@ All the following endpoints should be prefixed with /backend
 	
 * `/api/users/?search=<str:search_string>` GET: Get all the users or filter them by search string.
 * `/api/users/<int:user_id>/` GET: Get specific user 
-* `/api/users/me/` GET, PATCH, DELETE: Get logged in user 
+* `/api/users/me/` GET, PATCH, DELETE: Get logged in user
+* `/api/users/groups/<int:group_id>/` GET: Get all users for a specified group
 
 #### Notifications
 * `/api/notifications/` GET, POST: Get, create notification type.
 * `/api/notifications/<int:pk>/` GET, PATCH, DELETE: Get, update, delete notification type.
 
-#### Social
-##### Social Profiles
-* `/api/social/profile/?search=<str:search_string>` GET: Get all the social profiles or filter them by search string
-* `/api/social/profile/<int:user_id>/` GET: Get specific social profile
-* `/api/social/profile/me/` GET, PATCH, DELETE: Get, Update, Delete logged in users social profile
+#### User Profiles
+* `/api/userprofiles/me/` GET, PATCH: Get, update the logged in user's profile
+* `/api/userprofiles/tasks/me/` GET: Get all tasks assigned to logged in user
+* `/api/userprofiles/permissions/<id:user_id>/` PATCH: Update the group or project role permissions of a specified user
 
-##### Follow
-* `/api/social/toggle-follow/<int:social_profile_id>/` POST: Toggle following a social profile
-* `/api/social/followers/followers/` GET: List of all the logged in user’s followers social profiles
-* `/api/social/followers/following/` GET: List of all the social profiles the user is following
+#### Organizations
+* `/api/orgs/?search=<str:search_string>` GET, POST: Get all organizations or filter them by search string, create a new organization
+* `/api/orgs/org/<int:org_id>/` GET, PATCH, DELETE: Get, update, delete a specified organization
 
+#### Groups
+* `/api/groups/?search=<str:search_string>` GET, POST: Get all groups or filter them by search string, create a new group
+* `/api/groups/me/` GET: Get all groups of the logged in user
+* `/api/groups/group/<int:group_id>/` GET, PATCH, DELETE: Get, update, delete a specified group
 
-##### Friends
-* `/api/social/friends/request/<int:social_profile_id>/` POST: Send friend request to another user
-* `/api/social/friends/requests/<int:friend_request_id>/` GET,PATCH,DELETE: Get Update (Accept, Reject) or Delete an open friend request
-* `/api/social/friends/requests/?status=<str:status>` GET: List of all friend requests logged in user is in  filtered by status
-* `/api/social/friends/` GET: List all accepted friends¨
+#### Entities
+* `/api/entities/<int:group_id>/` GET, POST: Get all or create an entity for a specified group
+* `/api/entities/entity/<int:entity_id>/` GET, PATCH, DELETE: Get, update, delete a specified entity
 
-##### Posts
-* `/api/social/posts/` GET,POST: user can make a new post by sending post data, or get all posts.
-* `/api/social/posts/<int:post_id>/` GET, PATCH, DELETE: get a specific post by ID and display all the information about that post. Update or delete it if logged in user is the original poster
-* `/api/social/posts/<int:social_profile_id>/?search=<str:search_string>` GET: lists all the posts of a specific user in chronological order
-* `/api/social/posts/me/?search=<str:search_string>` GET: lists all the posts of logged in user.
-* `/api/social/posts/following/?search=<str:search_string>` GET: lists all the posts of of users the logged in user is following.
-* `/api/social/posts/friends/?search=<str:search_string>` GET: lists all the posts of of users the logged in user is following.
-* `/api/social/posts/toggle-like/<int:post_id>/` POST: toggle like a post
-* `/api/social/posts/likes/` GET: the list of the posts the user likes
+#### Projects
+* `/api/projects/<int:group_id>/?search=<str:search_string>` GET, POST: Get all projects or filter them by search string, create a new Project for specified project
+* `/api/projects/project/<int:project_id>/` GET, PATCH, DELETE: Get, update, delete a specified project
 
-##### Comments
-* `api/social/comments/<int:post_id>/` GET, POST: Create new post or get all comments of a post.
+#### Charts
+* `/api/charts/<int:project_id>/` GET: Get all charts for a specified project
+* `/api/charts/step/<int:step_id>/` POST: Create a chart for a specified step
+* `/api/charts/chart/<int:chart_id>/` GET, PATCH, DELETE: Get, update, delete a specified chart
 
+#### Steps
+* `/api/steps/<int:project_id>/` GET, POST: Get all or create a step for a specified project
+* `/api/steps/step/<int:step_id>/` GET, PATCH, DELETE: Get, update, delete a specified step
+
+#### Tasks
+* `/api/tasks/<int:step_id>/` GET, POST: Get all or create a task for a specified step
+* `/api/tasks/task/<int:task_id>/` GET, PATCH, DELETE: Get, update, delete a specified step
+
+#### Tax Consequences
+* `/api/taxes/<int:step_id>/` GET, POST: Get all or create a task consequence for a specified Step
+* `/api/taxes/tax/<int:tax_id>/` GET, PATCH, DELETE: Get, update, delete a specified tax consequence
