@@ -4,21 +4,16 @@ from django.db import models
 class Chart(models.Model):
     # This needs to store an Array of Objects, possibly JSON??
     clinks = models.TextField(
-        null=True,
         blank=True
     )
 
     # This needs to store an Array of Objects, possibly JSON??
     slinks = models.TextField(
-        null=True,
         blank=True
     )
 
     # This needs to store an Array of Objects, possibly JSON??
-    nodes = models.TextField(
-        null=True,
-        blank=True
-    )
+    nodes = models.TextField()
 
     created = models.DateTimeField(
         auto_now_add=True
@@ -29,4 +24,4 @@ class Chart(models.Model):
     )
 
     def __str__(self):
-        return f'Chart #{self.pk}'
+        return f'Chart #{self.pk} for Project #{self.step.project}, Step #{self.step.number}'
