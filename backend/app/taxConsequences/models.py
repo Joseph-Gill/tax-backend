@@ -11,9 +11,7 @@ class TaxConsequence(models.Model):
         max_length=150
     )
 
-    description: models.CharField(
-        max_length=500
-    )
+    description: models.TextField()
 
     created = models.DateTimeField(
         auto_now_add=True

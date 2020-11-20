@@ -3,19 +3,19 @@ from django.db import models
 
 class Chart(models.Model):
     # This needs to store an Array of Objects, possibly JSON??
-    clinks = models.CharField(
+    clinks = models.TextField(
         null=True,
         blank=True
     )
 
     # This needs to store an Array of Objects, possibly JSON??
-    slinks = models.CharField(
+    slinks = models.TextField(
         null=True,
         blank=True
     )
 
     # This needs to store an Array of Objects, possibly JSON??
-    nodes = models.CharField(
+    nodes = models.TextField(
         null=True,
         blank=True
     )

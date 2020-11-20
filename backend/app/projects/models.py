@@ -5,7 +5,7 @@ from app.steps.models import Step
 
 class Project(models.Model):
     name = models.CharField(
-        max_length=30
+        max_length=150
     )
 
     description = models.TextField()
