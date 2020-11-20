@@ -10,6 +10,7 @@ api_patterns = [
     path('notifications/', include('app.notifications.urls')),
     path('feedback/', include('app.feedback.urls')),
     path('userprofiles/', include('app.userProfiles.urls')),
+    path('orgs/', include('app.organizations.urls')),
 
     #  Documentation paths
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
