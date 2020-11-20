@@ -39,3 +39,11 @@ class RetrieveUpdateDestroyLoggedInUser(RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class RetrieveAllUsersForSpecificGroup(RetrieveAPIView):
+    """
+    Retrieve all Users for a specified Group
+    """
+
+    pass
