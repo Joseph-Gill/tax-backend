@@ -1,5 +1,6 @@
 from django.db import models
 
+from app.projectRoles.models import ProjectRole
 from app.steps.models import Step
 
 
@@ -28,6 +29,14 @@ class Project(models.Model):
 
     steps = models.ForeignKey(
         to=Step,
+        on_delete=models.CASCADE,
+        related_name='project',
+        null=True,
+        blank=True
+    )
+
+    assigned_users_roles = models.ForeignKey(
+        to=ProjectRole,
         on_delete=models.CASCADE,
         related_name='project',
         null=True,

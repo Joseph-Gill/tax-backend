@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from app.projectRoles.models import ProjectRole
+
+admin.site.register(ProjectRole)
