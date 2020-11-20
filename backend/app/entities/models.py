@@ -28,7 +28,10 @@ class Entity(models.Model):
     )
 
     # Possibly a decimal number?? / Can an Entity not have a tax rate??
-    tax_rate = models.IntegerField()
+    tax_rate = models.DecimalField(
+        max_digits=5,
+        decimal_places=4
+    )
 
     created = models.DateTimeField(
         auto_now_add=True
