@@ -9,7 +9,9 @@ class Project(models.Model):
         max_length=150
     )
 
-    description = models.TextField()
+    description = models.TextField(
+        blank=True
+    )
 
     start_date = models.DateField()
 
