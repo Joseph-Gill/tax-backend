@@ -1,3 +1,38 @@
 from django.db import models
 
-# Create your models here.
+from app.steps.models import Step
+
+
+class Project(models.Model):
+    name = models.CharField(
+        max_length=30
+    )
+
+    description = models.TextField()
+
+    start_date = models.DateField()
+
+    end_date = models.DateField()
+
+    status = models.CharField(
+        max_length=30
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated = models.DateTimeField(
+        auto_now=True
+    )
+
+    steps = models.ForeignKey(
+        to=Step,
+        on_delete=models.CASCADE,
+        related_name='project',
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return f'Project #{self.pk}'
