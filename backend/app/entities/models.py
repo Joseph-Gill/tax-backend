@@ -12,17 +12,19 @@ class Entity(models.Model):
         max_length=150
     )
 
-    # Can an Entity not have a Legal Form??
+    # Legal Forms will need to be a dropdown, will be used later to auto generate tax consequences
+    # Each entity can only have ONE legal form
     legal_form = models.CharField(
         max_length=50
     )
 
-    # Can an Entity not have a location??
+    # Each entity can only have ONE location ( possibly two, if we differentiate between legal residence and country of tax residence )
+    # Alain wants to leave this at one location at this time
     location = models.CharField(
         max_length=50
     )
 
-    # Possibly a decimal number?? / Can an Entity not have a tax rate??
+    # Needs to store decimal tax rates ( i.e. 0.1259 = 12.59% )
     tax_rate = models.DecimalField(
         max_digits=5,
         decimal_places=4

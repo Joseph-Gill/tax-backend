@@ -12,7 +12,7 @@ class Step(models.Model):
 
     effective_date = models.DateField()
 
-    # Find out what different statuses it can be to adjust length / possibly a choices selection??
+    # There are only 3 current statuses - Not Started, Ongoing, and Completed
     status = models.CharField(
         max_length=30
     )
