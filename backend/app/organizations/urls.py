@@ -4,5 +4,5 @@ from app.organizations.views import ListAllOrCreateOrganization, RetrieveUpdateD
 
 urlpatterns = [
     path('', ListAllOrCreateOrganization.as_view(), name='list-create-organization'),
-    path('org/<int:org_id>', RetrieveUpdateDestroySpecificOrganization.as_view(), name='retrieve-update-destroy-organization')
+    path('org/<int:org_id>/', RetrieveUpdateDestroySpecificOrganization.as_view(), name='retrieve-update-destroy-organization')
 ]
