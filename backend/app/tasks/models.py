@@ -9,9 +9,7 @@ class Task(models.Model):
 
     due_date = models.DateField()
 
-    description = models.CharField(
-        max_length=300
-    )
+    description = models.TextField()
 
     documents = models.FileField(
         blank=True,
