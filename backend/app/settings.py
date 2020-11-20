@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     'app.projects',
     'app.steps',
     'app.tasks',
-    'app.taxes',
+    'app.taxConsequences',
     'app.userProfiles',
     'app.projectPermissions'
 ]
