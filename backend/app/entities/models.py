@@ -4,8 +4,7 @@ from django.db import models
 class Entity(models.Model):
     # Stores the parent Id number of an entity, can have no pid making it the top most entity on a chart
     pid = models.CharField(
-        max_length=150,
-        null=True,
+        max_length=50,
         blank=True
     )
 
@@ -15,16 +14,12 @@ class Entity(models.Model):
 
     # Can an Entity not have a Legal Form??
     legal_form = models.CharField(
-        max_length=150,
-        null=True,
-        blank=True
+        max_length=50
     )
 
     # Can an Entity not have a location??
     location = models.CharField(
-        max_length=150,
-        null=True,
-        blank=True
+        max_length=50
     )
 
     # Possibly a decimal number?? / Can an Entity not have a tax rate??
