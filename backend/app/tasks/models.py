@@ -6,6 +6,10 @@ class Task(models.Model):
 
     due_date = models.DateField()
 
+    title = models.CharField(
+        max_length=150
+    )
+
     description = models.TextField()
 
     documents = models.FileField(

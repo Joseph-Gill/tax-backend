@@ -2,6 +2,7 @@ from django.db import models
 
 
 class ProjectRole(models.Model):
+    # Role choices are Core, Legal, Tax, Other
     role = models.CharField(
         max_length=10
     )

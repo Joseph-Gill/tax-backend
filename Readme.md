@@ -83,7 +83,7 @@ All the following endpoints should be prefixed with /backend
 * `/api/userprofiles/permissions/<id:user_id>/` PATCH: Update the group or project role permissions of a specified user
 
 #### Organizations
-* `/api/orgs/?search=<str:search_string>` GET, POST: Get all organizations or filter them by search string, create a new organization
+* `/api/orgs/<int:group_id>/?search=<str:search_string>` GET, POST: Get all organizations or filter them by search string for a specified group, create a new organization for a specified group
 * `/api/orgs/org/<int:org_id>/` GET, PATCH, DELETE: Get, update, delete a specified organization
 
 #### Groups

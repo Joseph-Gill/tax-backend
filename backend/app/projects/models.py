@@ -17,6 +17,7 @@ class Project(models.Model):
 
     end_date = models.DateField()
 
+    # Ongoing - Not Started, Completed, Not Implemented
     status = models.CharField(
         max_length=30
     )

@@ -6,8 +6,6 @@ from app.taxConsequences.models import TaxConsequence
 
 
 class Step(models.Model):
-    number = models.IntegerField()
-
     description = models.TextField()
 
     effective_date = models.DateField()

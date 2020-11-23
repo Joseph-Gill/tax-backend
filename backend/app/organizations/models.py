@@ -1,7 +1,5 @@
 from django.db import models
 
-from app.groups.models import Group
-
 
 class Organization(models.Model):
     name = models.CharField(
@@ -16,10 +14,5 @@ class Organization(models.Model):
         auto_now=True
     )
 
-    groups = models.ManyToManyField(
-        to=Group,
-        related_name='organizations'
-    )
-
     def __str__(self):
-        return f'Organization #{self.pk} - Name: {self.name}'
+        return f'Organization #{self.pk} - Name: {self.name} for Group: {self.group.name}'

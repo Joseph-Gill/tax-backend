@@ -1,6 +1,7 @@
 from django.db import models
 
 from app.entities.models import Entity
+from app.organizations.models import Organization
 from app.projects.models import Project
 
 
@@ -17,6 +18,11 @@ class Group(models.Model):
         auto_now=True
     )
 
+    avatar = models.ImageField(
+        blank=True,
+        null=True
+    )
+
     entities = models.ForeignKey(
         to=Entity,
         on_delete=models.CASCADE,
@@ -27,6 +33,14 @@ class Group(models.Model):
 
     projects = models.ForeignKey(
         to=Project,
+        on_delete=models.CASCADE,
+        related_name='group',
+        null=True,
+        blank=True
+    )
+
+    organizations = models.ForeignKey(
+        to=Organization,
         on_delete=models.CASCADE,
         related_name='group',
         null=True,
