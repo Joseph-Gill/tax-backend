@@ -25,7 +25,8 @@ class UserProfile(models.Model):
 
     organizations = models.ManyToManyField(
         to=Organization,
-        related_name='user_profiles'
+        related_name='user_profiles',
+        blank=True
     )
 
     user = models.OneToOneField(
@@ -38,7 +39,8 @@ class UserProfile(models.Model):
 
     groups = models.ManyToManyField(
         to=Group,
-        related_name='users'
+        related_name='users',
+        blank=True
     )
 
     assigned_project_roles = models.ForeignKey(
