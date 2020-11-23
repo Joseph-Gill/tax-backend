@@ -1,5 +1,8 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 
+from app.groups.models import Group
+from app.groups.serializers import GroupSerializer
+
 
 class ListAllOrCreateGroup(ListCreateAPIView):
     """
@@ -9,7 +12,8 @@ class ListAllOrCreateGroup(ListCreateAPIView):
     post:
     Create a new Group
     """
-    pass
+    serializer_class = GroupSerializer
+    queryset = Group.objects.all()
 
 
 class ListAllUsersGroups(ListAPIView):

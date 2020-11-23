@@ -1,9 +1,11 @@
 from django.db import models
+from django.dispatch import receiver
+from django.conf import settings
 
 from app.groups.models import Group
 from app.organizations.models import Organization
 from app.projectRoles.models import ProjectRole
-from app.registration.models import RegistrationProfile
+from app.registration.signals import post_user_registration_validation
 from app.tasks.models import Task
 
 
@@ -26,8 +28,8 @@ class UserProfile(models.Model):
         related_name='user_profiles'
     )
 
-    registration_profile = models.OneToOneField(
-        to=RegistrationProfile,
+    user = models.OneToOneField(
+        to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='user_profile',
         blank=True,
@@ -57,3 +59,8 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f'User Profile #{self.pk} for {self.registration_profile.user.email}'
+
+
+@receiver(post_user_registration_validation)
+def create_user_profile(sender, user, **kwargs):
+    UserProfile(user=user).save()
