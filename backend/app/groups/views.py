@@ -3,8 +3,10 @@ from rest_framework import status
 from app.groups.models import Group
 from app.groups.serializers import GroupSerializer
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
 from app.userProfiles.models import UserProfile
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class ListAllOrCreateGroup(ListCreateAPIView):
@@ -64,15 +66,12 @@ class ToggleUserMembershipInSpecificGroup(CreateAPIView):
     Toggle a specified User being a member of a specified Group
     """
     permission_classes = []
-    serializer_class = GroupSerializer
-    queryset = Group.objects.all()
 
-    def get_object(self):
-        queryset = self.get_queryset()
-        filter = {}
-        for field in self.multiple_lookup_fields:
-            filter[field] = self.kwargs[field]
-        obj = get_object_or_404(queryset, **filter)
-        self.check_object_permissions(self.request, obj)
-        return obj
-
+    def create(self, request, *args, **kwargs):
+        target_group = Group.objects.filter(id=kwargs['group_id'])[0]
+        target_user_profile = User.objects.filter(id=kwargs['user_id'])[0].user_profile
+        if target_group in target_user_profile.groups.all():
+            target_user_profile.groups.remove(target_group)
+        else:
+            target_user_profile.groups.add(target_group)
+        return Response(status=status.HTTP_202_ACCEPTED)
