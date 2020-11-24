@@ -1,7 +1,10 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
+from app.entities.models import Entity
+from app.entities.serializers import EntitySerializer
 
-class ListAllOrCreateEntity(ListCreateAPIView):
+
+class ListAllOrCreateEntityForGroup(ListCreateAPIView):
     """
     get:
     List all Entities
@@ -23,4 +26,7 @@ class RetrieveUpdateDestroySpecificEntity(RetrieveUpdateDestroyAPIView):
     delete:
     Delete a specified Entity
     """
-    pass
+    http_method_names = ['get', 'patch', 'delete']
+    serializer_class = EntitySerializer
+    queryset = Entity.objects.all()
+    lookup_url_kwarg = 'entity_id'
