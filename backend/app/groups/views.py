@@ -29,7 +29,7 @@ class ListAllOrCreateGroup(ListCreateAPIView):
         new_group.save()
         users_profile.groups.add(new_group)
         users_profile.save()
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class ListAllUsersGroups(ListAPIView):
