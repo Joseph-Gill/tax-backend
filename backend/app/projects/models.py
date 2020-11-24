@@ -1,7 +1,6 @@
 from django.db import models
 
-from app.projectRoles.models import ProjectRole
-from app.steps.models import Step
+from app.groups.models import Group
 
 
 class Project(models.Model):
@@ -30,18 +29,10 @@ class Project(models.Model):
         auto_now=True
     )
 
-    steps = models.ForeignKey(
-        to=Step,
+    group = models.ForeignKey(
+        to=Group,
         on_delete=models.CASCADE,
-        related_name='project',
-        null=True,
-        blank=True
-    )
-
-    assigned_users_roles = models.ForeignKey(
-        to=ProjectRole,
-        on_delete=models.CASCADE,
-        related_name='project',
+        related_name='projects',
         null=True,
         blank=True
     )

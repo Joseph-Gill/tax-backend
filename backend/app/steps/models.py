@@ -1,8 +1,7 @@
 from django.db import models
 
 from app.charts.models import Chart
-from app.tasks.models import Task
-from app.taxConsequences.models import TaxConsequence
+from app.projects.models import Project
 
 
 class Step(models.Model):
@@ -31,18 +30,10 @@ class Step(models.Model):
         blank=True
     )
 
-    tax_consequences = models.ForeignKey(
-        to=TaxConsequence,
+    project = models.ForeignKey(
+        to=Project,
         on_delete=models.CASCADE,
-        related_name='step',
-        null=True,
-        blank=True
-    )
-
-    tasks = models.ForeignKey(
-        to=Task,
-        on_delete=models.CASCADE,
-        related_name='step',
+        related_name='steps',
         null=True,
         blank=True
     )

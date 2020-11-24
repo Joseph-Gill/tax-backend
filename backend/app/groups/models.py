@@ -1,10 +1,5 @@
 from django.db import models
 
-from app.entities.models import Entity
-from app.organizations.models import Organization
-from app.projects.models import Project
-
-
 class Group(models.Model):
     name = models.CharField(
         max_length=150
@@ -21,30 +16,6 @@ class Group(models.Model):
     avatar = models.ImageField(
         blank=True,
         null=True
-    )
-
-    entities = models.ForeignKey(
-        to=Entity,
-        on_delete=models.CASCADE,
-        related_name='group',
-        null=True,
-        blank=True
-    )
-
-    projects = models.ForeignKey(
-        to=Project,
-        on_delete=models.CASCADE,
-        related_name='group',
-        null=True,
-        blank=True
-    )
-
-    organizations = models.ForeignKey(
-        to=Organization,
-        on_delete=models.CASCADE,
-        related_name='group',
-        null=True,
-        blank=True
     )
 
     def __str__(self):

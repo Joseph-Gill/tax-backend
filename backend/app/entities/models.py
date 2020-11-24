@@ -1,5 +1,7 @@
 from django.db import models
 
+from app.groups.models import Group
+
 
 class Entity(models.Model):
     # Stores the parent Id number of an entity, can have no pid making it the top most entity on a chart
@@ -36,6 +38,14 @@ class Entity(models.Model):
 
     updated = models.DateTimeField(
         auto_now=True
+    )
+
+    group = models.ForeignKey(
+        to=Group,
+        on_delete=models.CASCADE,
+        related_name='entities',
+        null=True,
+        blank=True
     )
 
     def __str__(self):

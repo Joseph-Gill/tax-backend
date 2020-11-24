@@ -1,12 +1,9 @@
 from django.db import models
 from django.dispatch import receiver
 from django.conf import settings
-
 from app.groups.models import Group
 from app.organizations.models import Organization
-from app.projectRoles.models import ProjectRole
 from app.registration.signals import post_user_registration_validation
-from app.tasks.models import Task
 
 
 class UserProfile(models.Model):
@@ -41,22 +38,6 @@ class UserProfile(models.Model):
         to=Group,
         related_name='users',
         blank=True
-    )
-
-    assigned_project_roles = models.ForeignKey(
-        to=ProjectRole,
-        on_delete=models.CASCADE,
-        related_name='user',
-        blank=True,
-        null=True
-    )
-
-    assigned_tasks = models.ForeignKey(
-        to=Task,
-        on_delete=models.SET_NULL,
-        related_name='assigned_user',
-        blank=True,
-        null=True
     )
 
     def __str__(self):

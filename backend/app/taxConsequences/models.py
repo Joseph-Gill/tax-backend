@@ -1,5 +1,7 @@
 from django.db import models
 
+from app.steps.models import Step
+
 
 class TaxConsequence(models.Model):
     location: models.CharField(
@@ -21,6 +23,14 @@ class TaxConsequence(models.Model):
 
     updated = models.DateTimeField(
         auto_now=True
+    )
+
+    step = models.ForeignKey(
+        to=Step,
+        on_delete=models.CASCADE,
+        related_name='tax_consequences',
+        null=True,
+        blank=True
     )
 
     def __str__(self):

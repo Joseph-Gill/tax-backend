@@ -1,5 +1,7 @@
 from django.db import models
 
+from app.groups.models import Group
+
 
 class Organization(models.Model):
     name = models.CharField(
@@ -12,6 +14,14 @@ class Organization(models.Model):
 
     updated = models.DateTimeField(
         auto_now=True
+    )
+
+    group = models.ForeignKey(
+        to=Group,
+        on_delete=models.CASCADE,
+        related_name='organizations',
+        null=True,
+        blank=True
     )
 
     def __str__(self):
