@@ -1,9 +1,9 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, CreateAPIView
 from rest_framework import status
 from app.groups.models import Group
 from app.groups.serializers import GroupSerializer
 from rest_framework.response import Response
-
+from django.shortcuts import get_object_or_404
 from app.userProfiles.models import UserProfile
 
 
@@ -57,3 +57,22 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
     lookup_url_kwarg = 'group_id'
+
+
+class ToggleUserMembershipInSpecificGroup(CreateAPIView):
+    """
+    Toggle a specified User being a member of a specified Group
+    """
+    permission_classes = []
+    serializer_class = GroupSerializer
+    queryset = Group.objects.all()
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        filter = {}
+        for field in self.multiple_lookup_fields:
+            filter[field] = self.kwargs[field]
+        obj = get_object_or_404(queryset, **filter)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
