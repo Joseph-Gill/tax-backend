@@ -3,6 +3,7 @@ from rest_framework import status
 from app.groups.models import Group
 from app.groups.serializers import GroupSerializer
 from rest_framework.response import Response
+from app.groups.signals import post_user_group_creation
 from app.userProfiles.models import UserProfile
 from django.contrib.auth import get_user_model
 
@@ -29,6 +30,7 @@ class ListAllOrCreateGroup(ListCreateAPIView):
         new_group.save()
         users_profile.groups.add(new_group)
         users_profile.save()
+        post_user_group_creation.send(sender=Group, user_profile=users_profile, name=request.data['name'], new_group=new_group)
         return Response(status=status.HTTP_201_CREATED)
 
 
