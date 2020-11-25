@@ -1,6 +1,4 @@
 from django.db import models
-
-from app.charts.models import Chart
 from app.projects.models import Project
 
 
@@ -25,14 +23,6 @@ class Step(models.Model):
 
     updated = models.DateTimeField(
         auto_now=True
-    )
-
-    chart = models.OneToOneField(
-        to=Chart,
-        on_delete=models.CASCADE,
-        related_name='step',
-        null=True,
-        blank=True
     )
 
     project = models.ForeignKey(
