@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from app.groups.models import Group
 from app.projects.models import Project
 from app.projects.serializers import ProjectSerializer
+from app.projects.signals import post_user_project_creation
+from app.userProfiles.models import UserProfile
 
 
 class ListAllOrCreateProjectForSpecificGroup(ListCreateAPIView):
@@ -26,6 +28,7 @@ class ListAllOrCreateProjectForSpecificGroup(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
+        users_profile = UserProfile.objects.get(user=request.user)
         target_group = self.get_object()
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -34,6 +37,7 @@ class ListAllOrCreateProjectForSpecificGroup(ListCreateAPIView):
         )
         new_project.save()
         target_group.projects.add(new_project)
+        post_user_project_creation.send(sender=Project, user_profile=users_profile, new_project=new_project)
         return Response(status=status.HTTP_201_CREATED)
 
 

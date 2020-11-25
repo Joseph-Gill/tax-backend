@@ -1,6 +1,7 @@
 from django.db import models
-
+from django.dispatch import receiver
 from app.projects.models import Project
+from app.projects.signals import post_user_project_creation
 from app.userProfiles.models import UserProfile
 
 
@@ -35,4 +36,14 @@ class ProjectRole(models.Model):
     )
 
     def __str__(self):
-        return f'Project Role #{self.pk} for User - {self.registration_profile.user.email}'
+        return f'Project Role #{self.pk} for User - {self.user.user.email}'
+
+
+@receiver(post_user_project_creation)
+def create_user_profile(user_profile, new_project, **kwargs):
+    new_project_role = ProjectRole(
+        role="core",
+        user=user_profile
+    )
+    new_project_role.save()
+    new_project.assigned_users_roles.add(new_project_role)
