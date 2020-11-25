@@ -1,7 +1,9 @@
+from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-
+from rest_framework.response import Response
 from app.entities.models import Entity
 from app.entities.serializers import EntitySerializer
+from app.groups.models import Group
 
 
 class ListAllOrCreateEntityForGroup(ListCreateAPIView):
@@ -12,7 +14,25 @@ class ListAllOrCreateEntityForGroup(ListCreateAPIView):
     post:
     Create a new Entity
     """
-    pass
+    queryset = Group
+    serializer_class = EntitySerializer
+    lookup_url_kwarg = 'group_id'
+    permission_classes = []
+
+    def list(self, request, *args, **kwargs):
+        target_group = self.get_object()
+        entities = target_group.entities.all().order_by('pid')
+        serializer = self.get_serializer(entities, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        target_group = self.get_object()
+        new_entity = Entity(
+            **request.data
+        )
+        new_entity.save()
+        target_group.entities.add(new_entity)
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class RetrieveUpdateDestroySpecificEntity(RetrieveUpdateDestroyAPIView):
