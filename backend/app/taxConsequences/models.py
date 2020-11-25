@@ -4,18 +4,25 @@ from app.steps.models import Step
 
 
 class TaxConsequence(models.Model):
-    location: models.CharField(
-        max_length=150
+    location = models.CharField(
+        max_length=150,
+        null=True,
+        blank=True
     )
 
     # This will store different Tax Types ( i.e. Corporate Income Tax, Withholding Tax, etc )
     # This will be stored in a drop down
     # Looking to use this information at a later date to possibly generate Tax Rulings
-    type: models.CharField(
-        max_length=150
+    type = models.CharField(
+        max_length=150,
+        null=True,
+        blank=True
     )
 
-    description: models.TextField()
+    description = models.TextField(
+        null=True,
+        blank=True
+    )
 
     created = models.DateTimeField(
         auto_now_add=True
