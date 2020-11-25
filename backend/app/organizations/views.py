@@ -28,14 +28,14 @@ class ListAllOrCreateOrganizationForGroup(ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         target_group = self.get_object()
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
         new_organization = Organization(
-            name=request.data['name']
+            **serializer.validated_data
         )
         new_organization.save()
         target_group.organizations.add(new_organization)
-        target_group.save()
-        serializer = self.get_serializer(new_organization)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class RetrieveUpdateDestroySpecificOrganization(RetrieveUpdateDestroyAPIView):
