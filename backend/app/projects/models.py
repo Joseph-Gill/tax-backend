@@ -1,5 +1,4 @@
 from django.db import models
-
 from app.groups.models import Group
 
 
@@ -38,4 +37,5 @@ class Project(models.Model):
     )
 
     def __str__(self):
-        return f'Project #{self.pk} for Group #{self.group.id} - Name: {self.project.group.name}'
+        return f'Project #{self.pk} for Group #{self.group.id} - Name: {self.group.name}'
+
