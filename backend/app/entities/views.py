@@ -27,8 +27,10 @@ class ListAllOrCreateEntityForGroup(ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         target_group = self.get_object()
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
         new_entity = Entity(
-            **request.data
+            **serializer.validated_data
         )
         new_entity.save()
         target_group.entities.add(new_entity)
