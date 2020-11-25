@@ -21,7 +21,7 @@ class ListAllOrCreateTaxConsequenceForSpecificStep(ListCreateAPIView):
 
     def list(self, request, *args, **kwargs):
         target_step = self.get_object()
-        tax_consequences = target_step.tax_consequences.all().order_by('created')
+        tax_consequences = target_step.tax_consequences.all().order_by('location')
         serializer = self.get_serializer(tax_consequences, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

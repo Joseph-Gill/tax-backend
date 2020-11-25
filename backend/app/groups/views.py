@@ -24,12 +24,13 @@ class ListAllOrCreateGroup(ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         users_profile = UserProfile.objects.get(user=request.user)
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
         new_group = Group(
-            name=request.data['name']
+            **serializer.validated_data
         )
         new_group.save()
         users_profile.groups.add(new_group)
-        users_profile.save()
         post_user_group_creation.send(sender=Group, user_profile=users_profile, name=request.data['name'], new_group=new_group)
         return Response(status=status.HTTP_201_CREATED)
 
