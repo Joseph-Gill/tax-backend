@@ -27,8 +27,10 @@ class ListAllOrCreateProjectForSpecificGroup(ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         target_group = self.get_object()
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
         new_project = Project(
-            **request.data
+            **serializer.validated_data
         )
         new_project.save()
         target_group.projects.add(new_project)

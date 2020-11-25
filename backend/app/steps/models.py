@@ -5,6 +5,11 @@ from app.projects.models import Project
 
 
 class Step(models.Model):
+    number = models.IntegerField(
+        blank=True,
+        null=True
+    )
+
     description = models.TextField()
 
     effective_date = models.DateField()
@@ -39,4 +44,4 @@ class Step(models.Model):
     )
 
     def __str__(self):
-        return f'Step #{self.number} for Project #{self.project.id}'
+        return f'Step #{self.number} (id #{self.id}) for Project: {self.project.name} - Group: {self.project.group.name}'
