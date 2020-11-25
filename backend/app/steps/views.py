@@ -25,6 +25,17 @@ class ListAllOrCreateStepForSpecificProject(ListCreateAPIView):
         serializer = self.get_serializer(steps, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def create(self, request, *args, **kwargs):
+        target_project = self.get_object()
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_step = Step(
+            **serializer.validated_data
+        )
+        new_step.save()
+        target_project.steps.add(new_step)
+        return Response(status=status.HTTP_201_CREATED)
+
 
 class RetrieveUpdateDestroySpecificStep(RetrieveUpdateDestroyAPIView):
     """
