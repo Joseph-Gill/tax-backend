@@ -9,3 +9,9 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'email', 'first_name', 'last_name', 'username']
         read_only_fields = ['email']
+
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['email', 'first_name', 'last_name', 'username']
