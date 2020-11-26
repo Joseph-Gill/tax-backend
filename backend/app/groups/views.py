@@ -74,17 +74,19 @@ class AddRemoveUserInSpecificGroup(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         target_user = User.objects.filter(email=request.data["email"])
+        target_group = Group.objects.filter(id=kwargs['group_id'])[0]
         if target_user:
             target_user_profile = target_user[0].user_profile
-            target_group = Group.objects.filter(id=kwargs['group_id'])[0]
             if target_group in target_user_profile.groups.all():
                 target_user_profile.groups.remove(target_group)
             else:
                 target_user_profile.groups.add(target_group)
+                # Need to remove User's Registration Profile from Group.invited_new_users if it exists there
                 # Need to add sending them an email here
             return Response(status=status.HTTP_202_ACCEPTED)
         else:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save(serializer.validated_data)
+            # Need to add the newly created Registration Profile to Group.invited_new_users
             return Response(status=status.HTTP_200_OK)
