@@ -80,7 +80,7 @@ All the following endpoints should be prefixed with /backend
 #### User Profiles
 * `/api/userprofiles/me/` GET, PATCH: Get, update the logged in user's profile
 * `/api/userprofiles/tasks/me/` GET: Get all tasks assigned to logged in user
-* `/api/userprofiles/permissions/<id:user_id>/` PATCH: Update the group or project role permissions of a specified user
+* `/api/userprofiles/project/<int:project_id>/role/<int:user_id>/` PATCH: Update a specified User's role for a specified Project
 
 #### Organizations
 * `/api/orgs/<int:group_id>/?search=<str:search_string>` GET, POST: Get all organizations or filter them by search string for a specified group, create a new organization for a specified group
@@ -88,6 +88,7 @@ All the following endpoints should be prefixed with /backend
 
 #### Groups
 * `/api/groups/?search=<str:search_string>` GET, POST: Get all groups or filter them by search string, create a new group
+* `/api/groups/group/<int:group_id>/user/<int:user_id>/` POST: Add or remove a specified User from a specified Group
 * `/api/groups/me/` GET: Get all groups of the logged in user
 * `/api/groups/group/<int:group_id>/` GET, PATCH, DELETE: Get, update, delete a specified group
 
@@ -100,7 +101,6 @@ All the following endpoints should be prefixed with /backend
 * `/api/projects/project/<int:project_id>/` GET, PATCH, DELETE: Get, update, delete a specified project
 
 #### Charts
-* `/api/charts/<int:project_id>/` GET: Get all charts for a specified project
 * `/api/charts/step/<int:step_id>/` POST: Create a chart for a specified step
 * `/api/charts/chart/<int:chart_id>/` GET, PATCH, DELETE: Get, update, delete a specified chart
 
@@ -109,7 +109,9 @@ All the following endpoints should be prefixed with /backend
 * `/api/steps/step/<int:step_id>/` GET, PATCH, DELETE: Get, update, delete a specified step
 
 #### Tasks
-* `/api/tasks/<int:step_id>/` GET, POST: Get all or create a task for a specified step
+* `/api/tasks/<int:step_id>/` GET: Get all tasks for a specified step
+* `/api/tasks/step/<int:step_id>/user/<int:user_id>/` POST: Create a new Task for a specified Step and User
+* `/api/tasks/task/<int:task_id>/user/<int:user_id>/` POST: Update specified Task with a new specified User
 * `/api/tasks/task/<int:task_id>/` GET, PATCH, DELETE: Get, update, delete a specified step
 
 #### Tax Consequences
