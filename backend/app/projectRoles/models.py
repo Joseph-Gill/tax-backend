@@ -6,7 +6,7 @@ from app.userProfiles.models import UserProfile
 
 
 class ProjectRole(models.Model):
-    # Role choices are Core, Legal, Tax, Other
+    # Role choices are core, legal, tax, other, coreLegal, or coreTax
     role = models.CharField(
         max_length=10
     )

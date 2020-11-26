@@ -4,6 +4,7 @@ from app.groups.models import Group
 from app.groups.serializers import GroupSerializer
 from rest_framework.response import Response
 from app.groups.signals import post_user_group_creation
+from app.registration.serializers import RegistrationSerializer
 from app.userProfiles.models import UserProfile
 from django.contrib.auth import get_user_model
 
@@ -64,17 +65,26 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'group_id'
 
 
-class ToggleUserMembershipInSpecificGroup(CreateAPIView):
+class AddRemoveUserInSpecificGroup(CreateAPIView):
     """
     Toggle a specified User being a member of a specified Group
     """
+    serializer_class = RegistrationSerializer
     permission_classes = []
 
     def create(self, request, *args, **kwargs):
-        target_group = Group.objects.filter(id=kwargs['group_id'])[0]
-        target_user_profile = User.objects.filter(id=kwargs['user_id'])[0].user_profile
-        if target_group in target_user_profile.groups.all():
-            target_user_profile.groups.remove(target_group)
+        target_user = User.objects.filter(email=request.data["email"])
+        if target_user:
+            target_user_profile = target_user[0].user_profile
+            target_group = Group.objects.filter(id=kwargs['group_id'])[0]
+            if target_group in target_user_profile.groups.all():
+                target_user_profile.groups.remove(target_group)
+            else:
+                target_user_profile.groups.add(target_group)
+                # Need to add sending them an email here
+            return Response(status=status.HTTP_202_ACCEPTED)
         else:
-            target_user_profile.groups.add(target_group)
-        return Response(status=status.HTTP_202_ACCEPTED)
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(serializer.validated_data)
+            return Response(status=status.HTTP_200_OK)
