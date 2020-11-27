@@ -59,28 +59,21 @@ class CreateUpdateSpecificUserSpecificProjectRole(CreateAPIView):
     """
     Create or Update a specified User's Role for a specified Project
     """
-
     def post(self, request, *args, **kwargs):
         target_user_profile = User.objects.filter(id=kwargs['user_id'])[0].user_profile
         target_project = Project.objects.filter(id=kwargs['project_id'])[0]
         all_assigned_roles = target_project.assigned_users_roles.all()
-        # IF user already has a ProjectRole for Project
         for project_role in all_assigned_roles:
             if project_role.user == target_user_profile:
-                # Update the Project Role with the new requst.data["role"]
                 project_role.role = request.data['role']
+                project_role.save()
                 return Response(status=status.HTTP_200_OK)
-        # ELSE
-        # Create the Project Role that connects the User to the Project
         new_project_role = ProjectRole(
-            # Assign its role to be request.data["role"]
             role=request.data['role'],
             user=target_user_profile,
             project=target_project
         )
         new_project_role.save()
-        # Add the role to Project.assigned_users_roles
         target_project.assigned_users_roles.add(new_project_role)
-        # Add the role to UserProfile.assigned_project_roles
         target_user_profile.assigned_project_roles.add(new_project_role)
         return Response(status=status.HTTP_200_OK)
