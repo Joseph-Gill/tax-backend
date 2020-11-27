@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
 from rest_framework.response import Response
+from app.emails.signals import send_email
 from app.steps.models import Step
 from app.tasks.models import Task
 from app.tasks.serializers import TaskSerializer
@@ -59,6 +60,7 @@ class CreateTaskForSpecificStepForSpecificUser(CreateAPIView):
         )
         new_task.save()
         target_step.tasks.add(new_task)
+        send_email.send(sender=Task, request=request, to=target_user_profile.user.email, email_type='user_assigned_task')
         return Response(status=status.HTTP_201_CREATED)
 
 
@@ -73,4 +75,5 @@ class UpdateUserForSpecificTask(CreateAPIView):
         target_user_profile = User.objects.filter(id=kwargs['user_id'])[0].user_profile
         target_task.assigned_user = target_user_profile
         target_task.save()
+        send_email.send(sender=Task, request=request, to=target_user_profile.user.email, email_type='user_assigned_task')
         return Response(status=status.HTTP_202_ACCEPTED)
