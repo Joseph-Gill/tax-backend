@@ -1,4 +1,4 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, CreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, CreateAPIView, DestroyAPIView
 from rest_framework import status
 from app.emails.signals import send_email
 from app.groups.models import Group
@@ -94,4 +94,19 @@ class AddRemoveUserInSpecificGroup(CreateAPIView):
             target_user = serializer.save(serializer.validated_data)
             target_user.registration_profile.inviting_group = target_group
             target_user.registration_profile.save()
-            return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_202_ACCEPTED)
+
+
+class DestroyUserFromNewUserList(DestroyAPIView):
+    """
+    Delete a new User from a specified Group's new User list
+    """
+    queryset = Group.objects.all()
+    lookup_url_kwarg = 'group_id'
+
+    def delete(self, request, *args, **kwargs):
+        target_group = self.get_object()
+        target_user = User.objects.filter(id=request['email'])
+        if target_user.registration_profile.inviting_group == target_group:
+            target_user.registration_profile.inviting_group = None
+        return Response(status=status.HTTP_202_ACCEPTED)
