@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models
 import random
 
+from app.groups.models import Group
 from app.registration.signals import post_user_social_registration
 
 
@@ -36,6 +37,14 @@ class RegistrationProfile(TimeStampedModel):
     code_used = models.BooleanField(
         verbose_name='code used',
         default=False
+    )
+
+    inviting_group = models.ForeignKey(
+        to=Group,
+        related_name='invited_new_users',
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
     )
 
     def __str__(self):
