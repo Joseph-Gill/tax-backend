@@ -1,5 +1,6 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, CreateAPIView
 from rest_framework import status
+from app.emails.signals import send_email
 from app.groups.models import Group
 from app.groups.serializers import GroupSerializer
 from rest_framework.response import Response
@@ -79,13 +80,13 @@ class AddRemoveUserInSpecificGroup(CreateAPIView):
             target_user_profile = target_user[0].user_profile
             if target_group in target_user_profile.groups.all():
                 target_user_profile.groups.remove(target_group)
-                # Do we need to add sending an email when the User is removed from a Group???
             else:
                 target_user_profile.groups.add(target_group)
                 if target_group == target_user[0].registration_profile.inviting_group:
                     target_user[0].registration_profile.inviting_group = None
                     target_user[0].registration_profile.save()
                 # Need to add sending them an email to the User informing them they were added to a Group
+                send_email.send(sender=Group, request=request, to=target_user[0].email, email_type='added_to_group')
             return Response(status=status.HTTP_202_ACCEPTED)
         else:
             serializer = self.get_serializer(data=request.data)
