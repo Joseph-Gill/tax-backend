@@ -79,14 +79,18 @@ class AddRemoveUserInSpecificGroup(CreateAPIView):
             target_user_profile = target_user[0].user_profile
             if target_group in target_user_profile.groups.all():
                 target_user_profile.groups.remove(target_group)
+                # Do we need to add sending an email when the User is removed from a Group???
             else:
                 target_user_profile.groups.add(target_group)
-                # Need to remove User's Registration Profile from Group.invited_new_users if it exists there
-                # Need to add sending them an email here
+                if target_group == target_user[0].registration_profile.inviting_group:
+                    target_user[0].registration_profile.inviting_group = None
+                    target_user[0].registration_profile.save()
+                # Need to add sending them an email to the User informing them they were added to a Group
             return Response(status=status.HTTP_202_ACCEPTED)
         else:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            serializer.save(serializer.validated_data)
-            # Need to add the newly created Registration Profile to Group.invited_new_users
+            target_user = serializer.save(serializer.validated_data)
+            target_user.registration_profile.inviting_group = target_group
+            target_user.registration_profile.save()
             return Response(status=status.HTTP_200_OK)
