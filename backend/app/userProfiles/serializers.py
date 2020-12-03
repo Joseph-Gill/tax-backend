@@ -1,11 +1,29 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
+from app.groups.models import Group
+from app.organizations.serialziers import OrganizationSerializer
+from app.projectRoles.serializers import ProjectRoleSerializer
 from app.registration.serializers import email_does_not_exist
+from app.tasks.models import Task
 from app.userProfiles.models import UserProfile
 from app.users.serializers import UserSerializer
 
 User = get_user_model()
+
+
+# Used by UserProfileSerializer to prevent circular serialization from Group Serializer
+class ProfileGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'name']
+
+
+# Used by UserProfileSerializer to prevent circular serialization from Task Serializer
+class ProfileTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ['id', 'planned_completion_date', 'due_date']
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -13,9 +31,29 @@ class UserProfileSerializer(serializers.ModelSerializer):
         required=False
     )
 
+    organizations = OrganizationSerializer(
+        required=False,
+        many=True
+    )
+
+    groups = ProfileGroupSerializer(
+        required=False,
+        many=True
+    )
+
+    assigned_project_roles = ProjectRoleSerializer(
+        required=False,
+        many=True
+    )
+
+    assigned_tasks = ProfileTaskSerializer(
+        required=False,
+        many=True
+    )
+
     class Meta:
         model = UserProfile
-        fields = ['id', 'phone_number', 'user', 'created', 'updated']
+        fields = ['id', 'phone_number', 'user', 'created', 'updated', 'organizations', 'groups', 'assigned_project_roles', 'assigned_tasks']
 
 
 class UpdateUserProfileSerializer(serializers.Serializer):
@@ -24,7 +62,7 @@ class UpdateUserProfileSerializer(serializers.Serializer):
     password_repeat = serializers.CharField(label='password_repeat', write_only=True, allow_blank=True)
     first_name = serializers.CharField(label='First name', required=False)
     last_name = serializers.CharField(label='Last name', required=False)
-    phone_number = serializers.CharField(label='phone number', required=False)
+    phone_number = serializers.CharField(label='phone number', required=False, allow_null=True)
 
     def validate(self, data):
         if data.get('password') != data.get('password_repeat'):

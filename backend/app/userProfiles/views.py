@@ -19,11 +19,11 @@ class RetrieveUpdateLoggedInUserProfile(RetrieveUpdateAPIView):
     Update the logged in User's Profile
     """
     permission_classes = []
+    serializer_class = UpdateUserProfileSerializer
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return UserProfileSerializer
-        return UpdateUserProfileSerializer
 
     def get_object(self):
         return self.request.user.user_profile
