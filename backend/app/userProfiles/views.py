@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from app.projectRoles.models import ProjectRole
 from app.projects.models import Project
 from app.tasks.serializers import TaskSerializer
+from app.userProfiles.serializers import UpdateUserProfileSerializer
 from app.users.serializers import UpdateUserSerializer
 
 User = get_user_model()
@@ -18,26 +19,20 @@ class RetrieveUpdateLoggedInUserProfile(RetrieveUpdateAPIView):
     update:
     Update the logged in User's Profile
     """
-    serializer_class = UpdateUserSerializer
+    serializer_class = UpdateUserProfileSerializer
     permission_classes = []
 
     def get_object(self):
         return self.request.user.user_profile
 
     def patch(self, request, *args, **kwargs):
+        user_profile = self.get_object()
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        validated_data = {
-            **serializer.validated_data
-        }
-        user_profile = self.get_object()
-        user_profile.phone_number = request.data['phone_number']
-        user_profile.user.email = validated_data['email']
-        user_profile.user.username = validated_data['username']
-        user_profile.user.first_name = validated_data['first_name']
-        user_profile.user.last_name = validated_data['last_name']
-        user_profile.save()
-        user_profile.user.save()
+        serializer.save(
+            serializer.validated_data,
+            user_profile
+        )
         return Response(status=status.HTTP_200_OK)
 
 
