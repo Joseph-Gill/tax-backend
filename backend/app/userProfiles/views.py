@@ -5,8 +5,7 @@ from rest_framework.response import Response
 from app.projectRoles.models import ProjectRole
 from app.projects.models import Project
 from app.tasks.serializers import TaskSerializer
-from app.userProfiles.serializers import UpdateUserProfileSerializer
-from app.users.serializers import UpdateUserSerializer
+from app.userProfiles.serializers import UpdateUserProfileSerializer, UserProfileSerializer
 
 User = get_user_model()
 
@@ -19,8 +18,12 @@ class RetrieveUpdateLoggedInUserProfile(RetrieveUpdateAPIView):
     update:
     Update the logged in User's Profile
     """
-    serializer_class = UpdateUserProfileSerializer
     permission_classes = []
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return UserProfileSerializer
+        return UpdateUserProfileSerializer
 
     def get_object(self):
         return self.request.user.user_profile
