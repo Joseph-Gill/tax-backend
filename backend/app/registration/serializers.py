@@ -7,6 +7,7 @@ from app.notifications.signals import notify_users
 from app.registration.models import RegistrationProfile
 from app.registration.models import code_generator
 from app.registration.signals import post_user_registration_validation, post_user_password_reset_validation
+from app.userProfiles.models import UserProfile
 
 User = get_user_model()
 
@@ -77,6 +78,7 @@ class RegistrationValidationSerializer(serializers.Serializer):
     password_repeat = serializers.CharField(label='password_repeat', write_only=True)
     first_name = serializers.CharField(label='First name', required=False)
     last_name = serializers.CharField(label='Last name', required=False)
+    phone_number = serializers.CharField(label='phone number', required=False)
 
     def validate(self, data):
         code = data.get('code')
@@ -99,7 +101,13 @@ class RegistrationValidationSerializer(serializers.Serializer):
         user.registration_profile.code_used = True
         user.save()
         user.registration_profile.save()
-        post_user_registration_validation.send(sender=User, user=user)
+        # Creating user profile here and not with signal because I need to set
+        # the user's phone number
+        user_profile = UserProfile(
+            user=user,
+            phone_number=validated_data.get('phone_number')
+        )
+        user_profile.save()
         notify_users.send(sender=User, notification_key='new_user_registered', request=self.context['request'], email=user.email)
         return user
 
