@@ -4,6 +4,7 @@ from rest_framework import serializers
 from app.groups.models import Group
 from app.organizations.serialziers import OrganizationSerializer
 from app.projectRoles.serializers import ProjectRoleSerializer
+from app.projects.models import Project
 from app.registration.serializers import email_does_not_exist
 from app.tasks.models import Task
 from app.userProfiles.models import UserProfile
@@ -12,11 +13,23 @@ from app.users.serializers import UserSerializer
 User = get_user_model()
 
 
+# Used by UserProfileSerializer to prevent circular serialization from Project Serializer
+class ProfileProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ['id', 'name']
+
+
 # Used by UserProfileSerializer to prevent circular serialization from Group Serializer
 class ProfileGroupSerializer(serializers.ModelSerializer):
+    projects = ProfileProjectSerializer(
+        required=False,
+        many=True
+    )
+
     class Meta:
         model = Group
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'projects']
 
 
 # Used by UserProfileSerializer to prevent circular serialization from Task Serializer
