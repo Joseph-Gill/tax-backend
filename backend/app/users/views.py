@@ -2,10 +2,10 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
-
 from app.groups.models import Group
 from app.userProfiles.serializers import UserProfileSerializer
 from app.users.serializers import UserSerializer
+from django.contrib.auth.hashers import check_password
 
 User = get_user_model()
 
@@ -43,6 +43,15 @@ class RetrieveUpdateDestroyLoggedInUser(RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return self.request.user
+
+    def destroy(self, request, *args, **kwargs):
+        target_user = self.get_object()
+        current_password = target_user.password
+        match = check_password(request.data['password'], current_password)
+        if match:
+            self.perform_destroy(target_user)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 class RetrieveAllUsersForSpecificGroup(ListAPIView):
