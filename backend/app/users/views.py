@@ -51,7 +51,7 @@ class RetrieveUpdateDestroyLoggedInUser(RetrieveUpdateDestroyAPIView):
         if match:
             self.perform_destroy(target_user)
             return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
 
 class RetrieveAllUsersForSpecificGroup(ListAPIView):
