@@ -11,9 +11,15 @@ class Project(models.Model):
         blank=True
     )
 
-    start_date = models.DateField()
+    start_date = models.DateField(
+        blank=True,
+        null=True
+    )
 
-    end_date = models.DateField()
+    end_date = models.DateField(
+        blank=True,
+        null=True
+    )
 
     # Ongoing - Not Started, Completed, Not Implemented
     status = models.CharField(

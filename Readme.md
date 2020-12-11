@@ -98,7 +98,7 @@ All the following endpoints should be prefixed with /backend
 * `/api/entities/entity/<int:entity_id>/` GET, PATCH, DELETE: Get, update, delete a specified entity
 
 #### Projects
-* `/api/projects/<int:group_id>/?search=<str:search_string>` GET, POST: Get all projects or filter them by search string, create a new Project for specified project
+* `/api/projects/<int:group_id>/?search=<str:search_string>` GET, POST: Get all projects or filter them by search string, create a new Project for specified group
 * `/api/projects/project/<int:project_id>/` GET, PATCH, DELETE: Get, update, delete a specified project
 
 #### Charts
