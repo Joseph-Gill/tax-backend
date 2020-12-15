@@ -112,7 +112,7 @@ class AddRemoveUserInSpecificGroup(CreateAPIView):
                     target_user[0].registration_profile.save()
                 # Need to add sending them an email to the User informing them they were added to a Group
                 send_email.send(sender=Group, request=request, to=target_user[0].email, email_type='added_to_group')
-            return Response(status=status.HTTP_202_ACCEPTED)
+            return Response(status=status.HTTP_201_CREATED)
         else:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
