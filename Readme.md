@@ -85,6 +85,7 @@ All the following endpoints should be prefixed with /backend
 #### Organizations
 * `/api/orgs/<int:group_id>/?search=<str:search_string>` GET, POST: Get all organizations or filter them by search string for a specified group, create a new organization for a specified group
 * `/api/orgs/org/<int:org_id>/` GET, PATCH, DELETE: Get, update, delete a specified organization
+* `/api/orgs/group/user/` GET: Get the organization shared by a specified user and specified group
 
 #### Groups
 * `/api/groups/?search=<str:search_string>` GET, POST: Get all groups or filter them by search string, create a new group, creating user is assigned to the group

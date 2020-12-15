@@ -1,10 +1,13 @@
+from django.contrib.auth import get_user_model
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.response import Response
-
 from app.groups.models import Group
 from app.organizations.models import Organization
 from app.organizations.serialziers import OrganizationSerializer
+
+
+User = get_user_model()
 
 
 class ListAllOrCreateOrganizationForGroup(ListCreateAPIView):
@@ -53,3 +56,20 @@ class RetrieveUpdateDestroySpecificOrganization(RetrieveUpdateDestroyAPIView):
     serializer_class = OrganizationSerializer
     queryset = Organization.objects.all()
     lookup_url_kwarg = 'org_id'
+
+
+class RetrieveOrganizationForSpecificUserGroup(RetrieveAPIView):
+    """
+    List the Organization shared by a specified User and specified Group
+    """
+    serializer_class = OrganizationSerializer
+    queryset = Organization
+
+    def retrieve(self, request, *args, **kwargs):
+        target_user = User.objects.get(id=kwargs['user_id'])
+        target_group = Group.objects.get(id=kwargs['group_id'])
+        instance = Organization.objects.filter(user_profiles__user_id=target_user.id, group__id=target_group.id)
+        if len(instance):
+            serializer = self.get_serializer(instance[0])
+            return Response(serializer.data)
+        return Response({'organization': {'name': 'Not Assigned'}}, status=status.HTTP_204_NO_CONTENT)
