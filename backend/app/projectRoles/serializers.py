@@ -6,7 +6,7 @@ from app.projects.models import Project
 class ProjectProjectRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ['group']
+        fields = ['id', 'group', 'name']
 
 
 class ProjectRoleSerializer(serializers.ModelSerializer):

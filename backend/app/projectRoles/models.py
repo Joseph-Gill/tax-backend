@@ -42,7 +42,7 @@ class ProjectRole(models.Model):
 @receiver(post_user_project_creation)
 def create_user_profile(user_profile, new_project, **kwargs):
     new_project_role = ProjectRole(
-        role="core",
+        role="Core",
         user=user_profile
     )
     new_project_role.save()
