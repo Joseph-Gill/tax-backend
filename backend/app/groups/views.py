@@ -26,40 +26,38 @@ class ListAllOrCreateGroup(ListCreateAPIView):
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
 
-    def create(self, request, *args, **kwargs):
-        users_profile = UserProfile.objects.get(user=request.user)
-        list_of_entities = json.loads(request.data['entities'])
-        name = request.data['name']
+    def perform_create(self, serializer):
+        users_profile = UserProfile.objects.get(user=self.request.user)
+        list_of_entities = json.loads(self.request.data['entities'])
+        name = serializer.data['name']
         new_group = Group(
             name=name
         )
         new_group.save()
         for entity in list_of_entities:
-            if entity['parent'] == 'Ultimate':
+            if entity['pid'] == 'Ultimate':
                 new_entity = Entity(
                     pid='',
                     name=entity['name'],
-                    location=entity['country'],
-                    legal_form=entity['legalForm'],
-                    tax_rate=float(entity['taxRate'])
+                    location=entity['location'],
+                    legal_form=entity['legal_form'],
+                    tax_rate=float(entity['tax_rate'])
                 )
                 new_entity.save()
                 new_group.entities.add(new_entity)
             else:
-                target_parent = Entity.objects.get(group=new_group, name=entity['parent'])
+                target_parent = Entity.objects.get(group=new_group, name=entity['pid'])
                 new_entity = Entity(
                     pid=target_parent.id,
                     name=entity['name'],
-                    location=entity['country'],
-                    legal_form=entity['legalForm'],
-                    tax_rate=float(entity['taxRate'])
+                    location=entity['location'],
+                    legal_form=entity['legal_form'],
+                    tax_rate=float(entity['tax_rate'])
                 )
                 new_entity.save()
                 new_group.entities.add(new_entity)
         users_profile.groups.add(new_group)
-        serializer = self.get_serializer(new_group)
-        post_user_group_creation.send(sender=Group, user_profile=users_profile, name=request.data['name'], new_group=new_group)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        post_user_group_creation.send(sender=Group, user_profile=users_profile, name=serializer.data['name'], new_group=new_group)
 
 
 class ListAllUsersGroups(ListAPIView):
@@ -89,6 +87,21 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
     lookup_url_kwarg = 'group_id'
+
+    def perform_update(self, serializer):
+        target_group = self.get_object()
+        list_of_entities = json.loads(self.request.data['entities'])
+        for entity in list_of_entities:
+            target_parent=Entity.objects.get(group=target_group, name=entity['pid'])
+            new_entity = Entity(
+                pid=target_parent.id,
+                name=entity['name'],
+                location=entity['location'],
+                legal_form=entity['legal_form'],
+                tax_rate=float(entity['tax_rate'])
+            )
+            new_entity.save()
+            target_group.entities.add(new_entity)
 
 
 class AddRemoveUserInSpecificGroup(CreateAPIView):
