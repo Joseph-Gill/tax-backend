@@ -1,10 +1,11 @@
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView, CreateAPIView
+from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from app.projectRoles.models import ProjectRole
 from app.projects.models import Project
 from app.tasks.serializers import TaskSerializer
+from app.userProfiles.models import UserProfile
 from app.userProfiles.serializers import UpdateUserProfileSerializer, UserProfileSerializer
 
 User = get_user_model()
@@ -75,3 +76,13 @@ class CreateUpdateSpecificUserSpecificProjectRole(CreateAPIView):
         target_project.assigned_users_roles.add(new_project_role)
         target_user_profile.assigned_project_roles.add(new_project_role)
         return Response(status=status.HTTP_200_OK)
+
+
+class RetrieveSpecificUser(RetrieveAPIView):
+    """
+    Get a specified User's information
+    """
+    serializer_class = UserProfileSerializer
+    permission_classes = []
+    queryset = UserProfile.objects.all()
+    lookup_url_kwarg = 'userprofile_id'
