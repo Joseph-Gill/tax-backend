@@ -112,19 +112,17 @@ class AddRemoveUserInSpecificGroup(CreateAPIView):
     permission_classes = []
 
     def create(self, request, *args, **kwargs):
-        target_user = User.objects.filter(email=request.data["email"])
-        target_group = Group.objects.filter(id=kwargs['group_id'])[0]
+        target_user = User.objects.get(email=request.data["email"])
+        target_group = Group.objects.get(id=kwargs['group_id'])
         if target_user:
-            target_user_profile = target_user[0].user_profile
+            # Need to create a way to check if an invited User has already been invited
+            # by another group, but has not yet finalized their registration
+            target_user_profile = target_user.user_profile
             if target_group in target_user_profile.groups.all():
                 target_user_profile.groups.remove(target_group)
             else:
                 target_user_profile.groups.add(target_group)
-                # if target_group == target_user[0].registration_profile.inviting_group:
-                #     target_user[0].registration_profile.inviting_group = None
-                #     target_user[0].registration_profile.save()
-                # Need to add sending them an email to the User informing them they were added to a Group
-                send_email.send(sender=Group, request=request, to=target_user[0].email, email_type='added_to_group')
+                send_email.send(sender=Group, request=request, to=target_user.email, email_type='added_to_group')
             return Response(status=status.HTTP_201_CREATED)
         else:
             serializer = self.get_serializer(data=request.data)

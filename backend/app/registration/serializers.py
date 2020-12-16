@@ -109,10 +109,15 @@ class RegistrationValidationSerializer(serializers.Serializer):
             phone_number=validated_data.get('phone_number')
         )
         user_profile.save()
+        # If the user is registering because they were invited to an Existing Group
+        # This adds them to the group, removes them as being an Invited User and
+        # emails them they were added to a new Group
         if user.registration_profile.inviting_group:
             target_group = Group.objects.get(id=user.registration_profile.inviting_group.id)
             user.user_profile.groups.add(target_group)
             user.registration_profile.inviting_group = None
+            user.registration_profile.save()
+            send_email.send(sender=Group, request=self.request, to=user.email, email_type='added_to_group')
         notify_users.send(sender=User, notification_key='new_user_registered', request=self.context['request'], email=user.email)
         return user
 
