@@ -120,9 +120,9 @@ class AddRemoveUserInSpecificGroup(CreateAPIView):
                 target_user_profile.groups.remove(target_group)
             else:
                 target_user_profile.groups.add(target_group)
-                if target_group == target_user[0].registration_profile.inviting_group:
-                    target_user[0].registration_profile.inviting_group = None
-                    target_user[0].registration_profile.save()
+                # if target_group == target_user[0].registration_profile.inviting_group:
+                #     target_user[0].registration_profile.inviting_group = None
+                #     target_user[0].registration_profile.save()
                 # Need to add sending them an email to the User informing them they were added to a Group
                 send_email.send(sender=Group, request=request, to=target_user[0].email, email_type='added_to_group')
             return Response(status=status.HTTP_201_CREATED)

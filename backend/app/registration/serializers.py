@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from app.emails.signals import send_email
+from app.groups.models import Group
 from app.notifications.signals import notify_users
 from app.registration.models import RegistrationProfile
 from app.registration.models import code_generator
@@ -108,6 +109,10 @@ class RegistrationValidationSerializer(serializers.Serializer):
             phone_number=validated_data.get('phone_number')
         )
         user_profile.save()
+        if user.registration_profile.inviting_group:
+            target_group = Group.objects.get(id=user.registration_profile.inviting_group.id)
+            user.user_profile.groups.add(target_group)
+            user.registration_profile.inviting_group = None
         notify_users.send(sender=User, notification_key='new_user_registered', request=self.context['request'], email=user.email)
         return user
 
