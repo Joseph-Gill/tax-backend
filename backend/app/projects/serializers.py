@@ -8,7 +8,7 @@ from app.steps.serializers import StepSerializer
 class ProjectGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'users']
 
 
 class ProjectSerializer(serializers.ModelSerializer):
