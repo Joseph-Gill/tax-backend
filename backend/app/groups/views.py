@@ -9,6 +9,7 @@ from app.groups.signals import post_user_group_creation
 from app.registration.serializers import RegistrationSerializer
 from app.userProfiles.models import UserProfile
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import check_password
 import json
 
 User = get_user_model()
@@ -104,7 +105,7 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
             target_group.entities.add(new_entity)
 
 
-class AddRemoveUserInSpecificGroup(CreateAPIView):
+class AddUserInSpecificGroup(CreateAPIView):
     """
     Toggle a specified User being a member of a specified Group
     """
@@ -115,15 +116,12 @@ class AddRemoveUserInSpecificGroup(CreateAPIView):
         target_user = User.objects.filter(email=request.data["email"])
         target_group = Group.objects.get(id=kwargs['group_id'])
         if target_user:
-            # Need to create a way to check if an invited User has already been invited
+            # Need a way to check if the invited email has already been invited
             # by another group, but has not yet finalized their registration yet
             try:
                 target_user_profile = UserProfile.objects.get(user=target_user[0])
-                if target_group in target_user_profile.groups.all():
-                    target_user_profile.groups.remove(target_group)
-                else:
-                    target_user_profile.groups.add(target_group)
-                    send_email.send(sender=Group, request=request, to=target_user[0].email, email_type='added_to_group')
+                target_user_profile.groups.add(target_group)
+                send_email.send(sender=Group, request=request, to=target_user[0].email, email_type='added_to_group')
                 return Response(status=status.HTTP_201_CREATED)
             except UserProfile.DoesNotExist:
                 return Response({"detail": "This New User has a pending Registration to verify."},
@@ -150,3 +148,27 @@ class DestroyUserFromNewUserList(DestroyAPIView):
         if target_user.registration_profile.inviting_group == target_group:
             target_user.registration_profile.inviting_group = None
         return Response(status=status.HTTP_202_ACCEPTED)
+
+
+class RemoveUsersFromGroupAndProjects(DestroyAPIView):
+    """
+    Delete an existing User from a specified Group and all the Group's Projects
+    """
+    queryset = Group.objects.all()
+    lookup_url_kwarg = 'group_id'
+
+    def destroy(self, request, *args, **kwargs):
+        requesting_user = request.user
+        match = check_password(request.data['password'], requesting_user.password)
+        if match:
+            target_group = self.get_object()
+            list_of_emails = json.loads(self.request.data['emails'])
+            for email in list_of_emails:
+                target_profile = UserProfile.objects.get(user__email=email)
+                target_group.users.remove(target_profile)
+                target_project_roles = target_profile.assigned_project_roles.filter(project__group_id=target_group.id)
+                if len(target_project_roles):
+                    for role in target_project_roles:
+                        self.perform_destroy(role)
+                return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_403_FORBIDDEN)
