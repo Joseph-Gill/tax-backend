@@ -22,4 +22,4 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Organization
-        fields = ['name', 'created', 'updated', 'group', 'user_profiles']
+        fields = ['id', 'name', 'created', 'updated', 'group', 'user_profiles']

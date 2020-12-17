@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from app.groups.models import Group
+from app.groups.serializers import GroupSerializer
 from app.organizations.models import Organization
 from app.organizations.serialziers import OrganizationSerializer
 
@@ -38,7 +39,8 @@ class ListAllOrCreateOrganizationForGroup(ListCreateAPIView):
         )
         new_organization.save()
         target_group.organizations.add(new_organization)
-        return Response(status=status.HTTP_201_CREATED)
+        group_info = GroupSerializer(target_group)
+        return Response(group_info.data, status=status.HTTP_201_CREATED)
 
 
 class RetrieveUpdateDestroySpecificOrganization(RetrieveUpdateDestroyAPIView):
