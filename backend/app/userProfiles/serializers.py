@@ -70,7 +70,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class UpdateUserProfileSerializer(serializers.Serializer):
-    email = serializers.EmailField(label='E-Mail Address', validators=[email_does_not_exist])
+    email = serializers.EmailField(label='E-Mail Address', validators=[email_does_not_exist], required=False)
     password = serializers.CharField(label='password', write_only=True, allow_blank=True)
     password_repeat = serializers.CharField(label='password_repeat', write_only=True, allow_blank=True)
     first_name = serializers.CharField(label='First name', required=False)
@@ -86,8 +86,9 @@ class UpdateUserProfileSerializer(serializers.Serializer):
         if validated_data.get('password'):
             user_profile.user.set_password(validated_data.get('password'))
         user_profile.phone_number = validated_data.get('phone_number')
-        user_profile.user.email = validated_data.get('email')
-        user_profile.user.username = validated_data.get('email')
+        if validated_data.get('email'):
+            user_profile.user.email = validated_data.get('email')
+            user_profile.user.username = validated_data.get('email')
         user_profile.user.first_name = validated_data.get('first_name')
         user_profile.user.last_name = validated_data.get('last_name')
         user_profile.save()
