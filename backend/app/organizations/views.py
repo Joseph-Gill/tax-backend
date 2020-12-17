@@ -39,8 +39,8 @@ class ListAllOrCreateOrganizationForGroup(ListCreateAPIView):
         )
         new_organization.save()
         target_group.organizations.add(new_organization)
-        group_info = GroupSerializer(target_group)
-        return Response(group_info.data, status=status.HTTP_201_CREATED)
+        group_organizations = OrganizationSerializer(target_group.organizations, many=True)
+        return Response(group_organizations.data, status=status.HTTP_201_CREATED)
 
 
 class RetrieveUpdateDestroySpecificOrganization(RetrieveUpdateDestroyAPIView):
