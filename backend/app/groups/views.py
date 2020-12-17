@@ -112,18 +112,22 @@ class AddRemoveUserInSpecificGroup(CreateAPIView):
     permission_classes = []
 
     def create(self, request, *args, **kwargs):
-        target_user = User.objects.get(email=request.data["email"])
+        target_user = User.objects.filter(email=request.data["email"])
         target_group = Group.objects.get(id=kwargs['group_id'])
         if target_user:
             # Need to create a way to check if an invited User has already been invited
-            # by another group, but has not yet finalized their registration
-            target_user_profile = target_user.user_profile
-            if target_group in target_user_profile.groups.all():
-                target_user_profile.groups.remove(target_group)
-            else:
-                target_user_profile.groups.add(target_group)
-                send_email.send(sender=Group, request=request, to=target_user.email, email_type='added_to_group')
-            return Response(status=status.HTTP_201_CREATED)
+            # by another group, but has not yet finalized their registration yet
+            try:
+                target_user_profile = UserProfile.objects.get(user=target_user[0])
+                if target_group in target_user_profile.groups.all():
+                    target_user_profile.groups.remove(target_group)
+                else:
+                    target_user_profile.groups.add(target_group)
+                    send_email.send(sender=Group, request=request, to=target_user[0].email, email_type='added_to_group')
+                return Response(status=status.HTTP_201_CREATED)
+            except UserProfile.DoesNotExist:
+                return Response({"detail": "This New User has a pending Registration to verify."},
+                                status=status.HTTP_204_NO_CONTENT)
         else:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)

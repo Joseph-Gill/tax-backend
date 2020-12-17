@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
-
 from app.emails.signals import send_email
 from app.groups.models import Group
 from app.notifications.signals import notify_users
@@ -117,7 +116,6 @@ class RegistrationValidationSerializer(serializers.Serializer):
             user.user_profile.groups.add(target_group)
             user.registration_profile.inviting_group = None
             user.registration_profile.save()
-            send_email.send(sender=Group, request=self.request, to=user.email, email_type='added_to_group')
         notify_users.send(sender=User, notification_key='new_user_registered', request=self.context['request'], email=user.email)
         return user
 
