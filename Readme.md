@@ -80,7 +80,7 @@ All the following endpoints should be prefixed with /backend
 #### User Profiles
 * `/api/userprofiles/me/` GET, PATCH: Get, update the logged in user's profile
 * `/api/userprofiles/tasks/me/` GET: Get all tasks assigned to logged in user
-* `/api/userprofiles/project/<int:project_id>/role/<int:user_id>/` PATCH: Update a specified User's role for a specified Project
+* `/api/userprofiles/group/<int:group_id>/userprofile/<int:userprofile_id>/` PATCH: Update or remove a specified User's role for a specified Project
 
 #### Organizations
 * `/api/orgs/group/<int:group_id>/?search=<str:search_string>` GET, POST: Get all organizations or filter them by search string for a specified group, create a new organization for a specified group
