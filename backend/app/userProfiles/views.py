@@ -4,6 +4,7 @@ from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView, CreateAP
 from rest_framework.response import Response
 
 from app.groups.models import Group
+from app.organizations.models import Organization
 from app.projectRoles.models import ProjectRole
 from app.projects.models import Project
 from app.tasks.serializers import TaskSerializer
@@ -62,27 +63,25 @@ class CreateUpdateSpecificUserSpecificProjectRole(CreateAPIView):
     Create or Update a specified User's Role for a specified Project
     """
     def post(self, request, *args, **kwargs):
-        # Will receive groupId, userId, groupProjects, and role
         group_project_statuses = request.data['member_project_access']
+        target_user_profile = UserProfile.objects.get(id=kwargs['userprofile_id'])
         user_project_roles = ProjectRole.objects.filter(user__id=kwargs['userprofile_id'], project__group__id=kwargs['group_id'])
         current_role = request.data['role']
-        # Loop over all the projects in the group project statuses
+        current_org = Organization.objects.get(id=request.data['organization']['id'])
+        previous_user_org_for_group = Organization.objects.filter(user_profiles__id=kwargs['userprofile_id'], group__id=kwargs['group_id'])
+        if len(previous_user_org_for_group):
+            for org in previous_user_org_for_group:
+                org.user_profiles.remove(target_user_profile)
+        target_user_profile.organizations.add(current_org)
         for project in group_project_statuses:
-            # Find if the user has a project role with a project id that matches the id in group project statuses
             filtered_role = list(filter(lambda role: (role.project.id == project['id']), user_project_roles))
-            # If there was a matching role
             if len(filtered_role):
-                # Checks if the Role has changed, and changes that value
                 if not filtered_role[0].role == current_role:
                     filtered_role[0].role = current_role
                     filtered_role[0].save()
-                # If they have a match and project.access is false, delete the user_project_role
                 if not project['access']:
                     filtered_role[0].delete()
-                # If they have a match and project.access is true, do nothing
-            # If the user doesn't have a project role with a project id that matches the id in the group project statuses
             else:
-                # If they don't have a match and project.access is true, create a new project_role for the user, with their current_role
                 if project['access']:
                     target_project = Project.objects.get(id=project['id'])
                     target_user_profile = UserProfile.objects.get(id=kwargs['userprofile_id'])
@@ -92,7 +91,6 @@ class CreateUpdateSpecificUserSpecificProjectRole(CreateAPIView):
                     new_project_role.save()
                     target_user_profile.assigned_project_roles.add(new_project_role)
                     target_project.assigned_users_roles.add(new_project_role)
-                # If they don't have a match and project.access is false, do nothing
         return Response(status=status.HTTP_202_ACCEPTED)
 
 
