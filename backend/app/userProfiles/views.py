@@ -2,15 +2,12 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
-
-from app.groups.models import Group
 from app.organizations.models import Organization
 from app.projectRoles.models import ProjectRole
 from app.projects.models import Project
 from app.tasks.serializers import TaskSerializer
 from app.userProfiles.models import UserProfile
 from app.userProfiles.serializers import UpdateUserProfileSerializer, UserProfileSerializer
-import json
 
 User = get_user_model()
 

@@ -12,6 +12,12 @@ class UserProfile(models.Model):
         blank=True
     )
 
+    country = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+
     created = models.DateTimeField(
         auto_now_add=True,
     )

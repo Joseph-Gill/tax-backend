@@ -66,7 +66,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ['id', 'phone_number', 'user', 'created', 'updated', 'organizations', 'groups', 'assigned_project_roles', 'assigned_tasks']
+        fields = ['id', 'phone_number', 'country', 'user', 'created', 'updated', 'organizations', 'groups', 'assigned_project_roles', 'assigned_tasks']
 
 
 class UpdateUserProfileSerializer(serializers.Serializer):
@@ -76,6 +76,7 @@ class UpdateUserProfileSerializer(serializers.Serializer):
     first_name = serializers.CharField(label='First name', required=False)
     last_name = serializers.CharField(label='Last name', required=False)
     phone_number = serializers.CharField(label='phone number', required=False, allow_null=True)
+    country = serializers.CharField(label='country', required=False, allow_null=True)
 
     def validate(self, data):
         if data.get('password') != data.get('password_repeat'):
@@ -86,6 +87,7 @@ class UpdateUserProfileSerializer(serializers.Serializer):
         if validated_data.get('password'):
             user_profile.user.set_password(validated_data.get('password'))
         user_profile.phone_number = validated_data.get('phone_number')
+        user_profile.country = validated_data.get('country')
         if validated_data.get('email'):
             user_profile.user.email = validated_data.get('email')
             user_profile.user.username = validated_data.get('email')
