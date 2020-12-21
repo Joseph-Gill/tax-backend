@@ -124,8 +124,7 @@ class AddUserInSpecificGroup(CreateAPIView):
                 send_email.send(sender=Group, request=request, to=target_user[0].email, email_type='added_to_group')
                 return Response(status=status.HTTP_201_CREATED)
             except UserProfile.DoesNotExist:
-                return Response({"detail": "This New User has a pending Registration to verify."},
-                                status=status.HTTP_204_NO_CONTENT)
+                return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -162,13 +161,13 @@ class RemoveUsersFromGroupAndProjects(DestroyAPIView):
         match = check_password(request.data['password'], requesting_user.password)
         if match:
             target_group = self.get_object()
-            list_of_emails = json.loads(self.request.data['emails'])
-            for email in list_of_emails:
-                target_profile = UserProfile.objects.get(user__email=email)
+            list_of_users = self.request.data['users']
+            for user in list_of_users:
+                target_profile = UserProfile.objects.get(user__email=user['email'])
                 target_group.users.remove(target_profile)
                 target_project_roles = target_profile.assigned_project_roles.filter(project__group_id=target_group.id)
                 if len(target_project_roles):
                     for role in target_project_roles:
                         self.perform_destroy(role)
-                return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(status=status.HTTP_403_FORBIDDEN)
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)

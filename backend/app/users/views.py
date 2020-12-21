@@ -50,8 +50,8 @@ class RetrieveUpdateDestroyLoggedInUser(RetrieveUpdateDestroyAPIView):
         match = check_password(request.data['password'], current_password)
         if match:
             self.perform_destroy(target_user)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(status=status.HTTP_403_FORBIDDEN)
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class RetrieveAllUsersForSpecificGroup(ListAPIView):
