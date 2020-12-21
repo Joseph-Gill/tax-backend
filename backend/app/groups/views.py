@@ -134,21 +134,6 @@ class AddUserInSpecificGroup(CreateAPIView):
             return Response(status=status.HTTP_202_ACCEPTED)
 
 
-class DestroyUserFromNewUserList(DestroyAPIView):
-    """
-    Delete a new User from a specified Group's new User list
-    """
-    queryset = Group.objects.all()
-    lookup_url_kwarg = 'group_id'
-
-    def delete(self, request, *args, **kwargs):
-        target_group = self.get_object()
-        target_user = User.objects.filter(id=request['email'])
-        if target_user.registration_profile.inviting_group == target_group:
-            target_user.registration_profile.inviting_group = None
-        return Response(status=status.HTTP_202_ACCEPTED)
-
-
 class RemoveUsersFromGroupAndProjects(DestroyAPIView):
     """
     Delete an existing User from a specified Group and all the Group's Projects
@@ -169,5 +154,11 @@ class RemoveUsersFromGroupAndProjects(DestroyAPIView):
                 if len(target_project_roles):
                     for role in target_project_roles:
                         self.perform_destroy(role)
+            list_of_invited_users = self.request.data['invited_users']
+            for user in list_of_invited_users:
+                target_user = User.objects.get(email=user['email'])
+                if target_user.registration_profile.inviting_group == target_group:
+                    target_user.registration_profile.inviting_group = None
+                    target_user.registration_profile.save()
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -78,8 +78,8 @@ All the following endpoints should be prefixed with /backend
 * `/api/notifications/<int:pk>/` GET, PATCH, DELETE: Get, update, delete notification type.
 
 #### User Profiles
-* `/api/userprofiles/me/` GET, PATCH: Get, update the logged in user's profile
-* `/api/userprofiles/tasks/me/` GET: Get all tasks assigned to logged in user
+* `/api/userprofiles/me/` GET, PATCH: Get, update the logged-in user's profile
+* `/api/userprofiles/tasks/me/` GET: Get all tasks assigned to logged-in user
 * `/api/userprofiles/group/<int:group_id>/userprofile/<int:userprofile_id>/` PATCH: Update or remove a specified User's role for a specified Project
 
 #### Organizations
@@ -90,8 +90,7 @@ All the following endpoints should be prefixed with /backend
 #### Groups
 * `/api/groups/?search=<str:search_string>` GET, POST: Get all groups or filter them by search string, create a new group, creating user is assigned to the group
 * `/api/groups/group/<int:group_id>/user/` POST: Add a user to a specified group, triggers registration on new to app users
-* `/api/groups/group/<int:group_id>/newuser/` DELETE: Remove a new to app user from a specified group's invited new users list
-* `/api/groups/me/` GET: Get all groups of the logged in user
+* `/api/groups/me/` GET: Get all groups of the logged-in user
 * `/api/groups/group/<int:group_id>/` GET, PATCH, DELETE: Get, update, delete a specified group
 * `/api/groups/group/<int:group_id>/removeusers/` DELETE: Delete a list of users from a specified group, and all that groups Projects
 
