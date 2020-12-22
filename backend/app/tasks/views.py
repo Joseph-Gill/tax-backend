@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
 from rest_framework.response import Response
 from app.emails.signals import send_email
+from app.projects.models import Project
 from app.steps.models import Step
 from app.tasks.models import Task
 from app.tasks.serializers import TaskSerializer
@@ -77,3 +78,18 @@ class UpdateUserForSpecificTask(CreateAPIView):
         target_task.save()
         send_email.send(sender=Task, request=request, to=target_user_profile.user.email, email_type='user_assigned_task')
         return Response(status=status.HTTP_202_ACCEPTED)
+
+
+class ListAllTasksForSpecifiedProject(ListAPIView):
+    """
+    Get all tasks for a specified Project
+    """
+    serializer_class = TaskSerializer
+    queryset = Project.objects.all()
+    lookup_url_kwarg = 'project_id'
+
+    def list(self, request, *args, **kwargs):
+        target_project = self.get_object()
+        tasks = Task.objects.filter(step__project__id=target_project.id)
+        serializer = self.get_serializer(tasks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

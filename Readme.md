@@ -115,6 +115,7 @@ All the following endpoints should be prefixed with /backend
 * `/api/tasks/step/<int:step_id>/user/<int:user_id>/` POST: Create a new Task for a specified Step and User
 * `/api/tasks/task/<int:task_id>/user/<int:user_id>/` POST: Update specified Task with a new specified User
 * `/api/tasks/task/<int:task_id>/` GET, PATCH, DELETE: Get, update, delete a specified step
+* `/api/tasks/project/<int:project_id>/` GET: Get all tasks for a specified project
 
 #### Tax Consequences
 * `/api/taxes/<int:step_id>/` GET, POST: Get all or create a task consequence for a specified Step
