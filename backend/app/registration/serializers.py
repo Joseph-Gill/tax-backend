@@ -79,6 +79,7 @@ class RegistrationValidationSerializer(serializers.Serializer):
     first_name = serializers.CharField(label='First name', required=False)
     last_name = serializers.CharField(label='Last name', required=False)
     phone_number = serializers.CharField(label='phone number', required=False)
+    country = serializers.CharField(label='country', required=False)
 
     def validate(self, data):
         code = data.get('code')
@@ -105,7 +106,8 @@ class RegistrationValidationSerializer(serializers.Serializer):
         # the user's phone number
         user_profile = UserProfile(
             user=user,
-            phone_number=validated_data.get('phone_number')
+            phone_number=validated_data.get('phone_number'),
+            country=validated_data.get('country')
         )
         user_profile.save()
         # If the user is registering because they were invited to an Existing Group

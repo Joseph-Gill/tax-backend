@@ -131,7 +131,7 @@ class AddUserInSpecificGroup(CreateAPIView):
             target_user = serializer.save(serializer.validated_data)
             target_user.registration_profile.inviting_group = target_group
             target_user.registration_profile.save()
-            return Response(status=status.HTTP_202_ACCEPTED)
+            return Response(status=status.HTTP_201_CREATED)
 
 
 class RemoveUsersFromGroupAndProjects(DestroyAPIView):
