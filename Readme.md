@@ -107,7 +107,7 @@ All the following endpoints should be prefixed with /backend
 * `/api/charts/chart/<int:chart_id>/` GET, PATCH, DELETE: Get, update, delete a specified chart
 
 #### Steps
-* `/api/steps/<int:project_id>/` GET, POST: Get all or create a step for a specified project
+* `/api/steps/project/<int:project_id>/` GET, POST: Get all or create a step for a specified project
 * `/api/steps/step/<int:step_id>/` GET, PATCH, DELETE: Get, update, delete a specified step
 
 #### Tasks
