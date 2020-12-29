@@ -118,7 +118,7 @@ All the following endpoints should be prefixed with /backend
 * `/api/tasks/project/<int:project_id>/` GET: Get all tasks for a specified project
 
 #### Tax Consequences
-* `/api/taxes/<int:step_id>/` GET, POST: Get all or create a task consequence for a specified Step
+* `/api/taxes/step/<int:step_id>/` GET, POST: Get all or create a task consequence for a specified Step
 * `/api/taxes/tax/<int:tax_id>/` GET, PATCH, DELETE: Get, update, delete a specified tax consequence
 
 #### Project Roles

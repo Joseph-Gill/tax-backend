@@ -1,6 +1,6 @@
 from django.db import models
-
 from app.steps.models import Step
+from app.userProfiles.models import UserProfile
 
 
 class TaxConsequence(models.Model):
@@ -24,6 +24,10 @@ class TaxConsequence(models.Model):
         blank=True
     )
 
+    reviewed = models.BooleanField(
+        default=False
+    )
+
     created = models.DateTimeField(
         auto_now_add=True
     )
@@ -36,6 +40,22 @@ class TaxConsequence(models.Model):
         to=Step,
         on_delete=models.CASCADE,
         related_name='tax_consequences',
+        null=True,
+        blank=True
+    )
+
+    reviewing_user = models.ForeignKey(
+        to=UserProfile,
+        on_delete=models.SET_NULL,
+        related_name='reviewed_tax_consequences',
+        null=True,
+        blank=True
+    )
+
+    creating_user = models.ForeignKey(
+        to=UserProfile,
+        on_delete=models.SET_NULL,
+        related_name='created_tax_consequences',
         null=True,
         blank=True
     )
