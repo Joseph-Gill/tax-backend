@@ -18,7 +18,6 @@ class ListAllOrCreateTaxConsequenceForSpecificStep(ListCreateAPIView):
     queryset = Step
     serializer_class = TaxConsequenceSerializer
     lookup_url_kwarg = 'step_id'
-    permission_classes = []
 
     def list(self, request, *args, **kwargs):
         target_step = self.get_object()
