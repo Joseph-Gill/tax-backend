@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
 from rest_framework.response import Response
 from app.steps.models import Step
 from app.taxConsequences.models import TaxConsequence
@@ -54,3 +54,20 @@ class RetrieveUpdateDestroySpecificTaxConsequence(RetrieveUpdateDestroyAPIView):
     serializer_class = TaxConsequenceSerializer
     queryset = TaxConsequence.objects.all()
     lookup_url_kwarg = 'tax_id'
+
+
+class SetTaxConsequenceReviewedByLoggedInUser(CreateAPIView):
+    """
+    Mark a specified Tax Consequence as reviewed by the logged in User
+    """
+
+    queryset = TaxConsequence.objects.all()
+    lookup_url_kwarg = 'tax_id'
+
+    def create(self, request, *args, **kwargs):
+        target_user_profile = UserProfile.objects.get(user=request.user)
+        target_tax_consequence = self.get_object()
+        target_tax_consequence.reviewed = True
+        target_tax_consequence.save()
+        target_user_profile.reviewed_tax_consequences.add(target_tax_consequence)
+        return Response(status=status.HTTP_200_OK)
