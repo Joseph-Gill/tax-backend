@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from app.steps.models import Step
 from app.taxConsequences.models import TaxConsequence
 from app.taxConsequences.serializers import TaxConsequenceSerializer
+from app.userProfiles.models import UserProfile
 
 
 class ListAllOrCreateTaxConsequenceForSpecificStep(ListCreateAPIView):
@@ -27,12 +28,14 @@ class ListAllOrCreateTaxConsequenceForSpecificStep(ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         target_step = self.get_object()
+        target_user_profile = UserProfile.objects.get(user=request.user)
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         new_tax_consequence = TaxConsequence(
             **serializer.validated_data
         )
         new_tax_consequence.save()
+        target_user_profile.created_tax_consequences.add(new_tax_consequence)
         target_step.tax_consequences.add(new_tax_consequence)
         return Response(status=status.HTTP_201_CREATED)
 
