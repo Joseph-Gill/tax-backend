@@ -58,7 +58,7 @@ class RetrieveUpdateDestroySpecificTaxConsequence(RetrieveUpdateDestroyAPIView):
 
 class SetTaxConsequenceReviewedByLoggedInUser(CreateAPIView):
     """
-    Mark a specified Tax Consequence as reviewed by the logged in User
+    Set a specified Tax Consequence as reviewed by the logged in User
     """
 
     queryset = TaxConsequence.objects.all()
@@ -70,4 +70,20 @@ class SetTaxConsequenceReviewedByLoggedInUser(CreateAPIView):
         target_tax_consequence.reviewed = True
         target_tax_consequence.save()
         target_user_profile.reviewed_tax_consequences.add(target_tax_consequence)
+        return Response(status=status.HTTP_200_OK)
+
+
+class SetTaxConsequenceNotReviewed(CreateAPIView):
+    """
+    Set a specified Tax Consequence as not reviewed
+    """
+
+    queryset = TaxConsequence.objects.all()
+    lookup_url_kwarg = 'tax_id'
+
+    def create(self, request, *args, **kwargs):
+        target_tax_consequence = self.get_object()
+        target_tax_consequence.reviewed = False
+        target_tax_consequence.reviewing_user = None
+        target_tax_consequence.save()
         return Response(status=status.HTTP_200_OK)
