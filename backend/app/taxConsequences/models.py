@@ -6,8 +6,6 @@ from app.userProfiles.models import UserProfile
 class TaxConsequence(models.Model):
     location = models.CharField(
         max_length=150,
-        null=True,
-        blank=True
     )
 
     # This will store different Tax Types ( i.e. Corporate Income Tax, Withholding Tax, etc )
@@ -19,10 +17,7 @@ class TaxConsequence(models.Model):
         blank=True
     )
 
-    description = models.TextField(
-        null=True,
-        blank=True
-    )
+    description = models.TextField()
 
     reviewed = models.BooleanField(
         default=False
