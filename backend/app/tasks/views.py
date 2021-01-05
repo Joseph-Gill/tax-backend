@@ -7,6 +7,7 @@ from app.projects.models import Project
 from app.steps.models import Step
 from app.tasks.models import Task
 from app.tasks.serializers import TaskSerializer
+from app.userProfiles.models import UserProfile
 
 User = get_user_model()
 
@@ -52,7 +53,7 @@ class CreateTaskForSpecificStepForSpecificUser(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         target_step = Step.objects.filter(id=kwargs['step_id'])[0]
-        target_user_profile = User.objects.filter(id=kwargs['user_id'])[0].user_profile
+        target_user_profile = UserProfile.objects.get(id=kwargs['userprofile_id'])
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         new_task = Task(
