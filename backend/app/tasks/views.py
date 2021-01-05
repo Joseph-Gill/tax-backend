@@ -5,9 +5,11 @@ from rest_framework.response import Response
 from app.emails.signals import send_email
 from app.projects.models import Project
 from app.steps.models import Step
+from app.taskDocuments.models import TaskDocument
 from app.tasks.models import Task
 from app.tasks.serializers import TaskSerializer
 from app.userProfiles.models import UserProfile
+import json
 
 User = get_user_model()
 
@@ -61,6 +63,12 @@ class CreateTaskForSpecificStepForSpecificUser(CreateAPIView):
             assigned_user=target_user_profile
         )
         new_task.save()
+        for task_document in request.FILES:
+            new_task_document = TaskDocument(
+                document=request.FILES[task_document],
+                task=new_task
+            )
+            new_task_document.save()
         target_step.tasks.add(new_task)
         send_email.send(sender=Task, request=request, to=target_user_profile.user.email, email_type='user_assigned_task')
         return Response(status=status.HTTP_201_CREATED)
