@@ -66,7 +66,8 @@ INSTALLED_APPS = [
     'app.tasks',
     'app.taxConsequences',
     'app.userProfiles',
-    'app.projectRoles'
+    'app.projectRoles',
+    'app.taskDocuments'
 ]
 
 MIDDLEWARE = [

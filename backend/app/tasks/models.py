@@ -15,11 +15,6 @@ class Task(models.Model):
 
     description = models.TextField()
 
-    documents = models.FileField(
-        blank=True,
-        null=True
-    )
-
     created = models.DateTimeField(
         auto_now_add=True
     )
