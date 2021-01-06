@@ -65,6 +65,7 @@ class CreateTaskForSpecificStepForSpecificUser(CreateAPIView):
         new_task.save()
         for task_document in request.FILES:
             new_task_document = TaskDocument(
+                name=request.FILES[task_document].name,
                 document=request.FILES[task_document],
                 task=new_task
             )
@@ -99,6 +100,7 @@ class ListAllTasksForSpecifiedProject(ListAPIView):
 
     def list(self, request, *args, **kwargs):
         target_project = self.get_object()
-        tasks = Task.objects.filter(step__project__id=target_project.id)
+        tasks = list(Task.objects.filter(step__project__id=target_project.id))
+        tasks.sort(key=lambda x: (x.step.number, x.created))
         serializer = self.get_serializer(tasks, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -11,6 +11,12 @@ class TaskDocument(models.Model):
         auto_now=True
     )
 
+    name = models.CharField(
+        max_length=500,
+        blank=True,
+        null=True
+    )
+
     document = models.FileField(
         blank=True,
         null=True
