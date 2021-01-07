@@ -92,7 +92,8 @@ All the following endpoints should be prefixed with /backend
 * `/api/groups/group/<int:group_id>/user/` POST: Add a user to a specified group, triggers registration on new to app users
 * `/api/groups/me/` GET: Get all groups of the logged-in user
 * `/api/groups/group/<int:group_id>/` GET, PATCH, DELETE: Get, update, delete a specified group
-* `/api/groups/group/<int:group_id>/removeusers/` DELETE: Delete a list of users from a specified group, and all that groups Projects
+* `/api/groups/group/<int:group_id>/removeusers/` DELETE: Delete a list of users from a specified group, and all that groups projects
+* `/api/groups/project/<int:project_id>/` GET: Get the group a specified project belongs to
 
 #### Entities
 * `/api/entities/<int:group_id>/` GET, POST: Get all or create an entity for a specified group

@@ -1,4 +1,4 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, CreateAPIView, DestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, CreateAPIView, DestroyAPIView, RetrieveAPIView
 from rest_framework import status
 from app.emails.signals import send_email
 from app.entities.models import Entity
@@ -6,6 +6,7 @@ from app.groups.models import Group
 from app.groups.serializers import GroupSerializer
 from rest_framework.response import Response
 from app.groups.signals import post_user_group_creation
+from app.projects.models import Project
 from app.registration.serializers import RegistrationSerializer
 from app.userProfiles.models import UserProfile
 from django.contrib.auth import get_user_model
@@ -162,3 +163,19 @@ class RemoveUsersFromGroupAndProjects(DestroyAPIView):
                     target_user.registration_profile.save()
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class RetrieveGroupForSpecificProject(RetrieveAPIView):
+    """
+    List the group a specified Project belongs to
+    """
+
+    queryset = Project.objects.all()
+    lookup_url_kwarg = 'project_id'
+    serializer_class = GroupSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        target_project = self.get_object()
+        target_group = Group.objects.get(id=target_project.group.id)
+        serializer = self.get_serializer(target_group)
+        return Response(serializer.data)
