@@ -126,3 +126,6 @@ All the following endpoints should be prefixed with /backend
 
 #### Project Roles
 * `/api/projectroles/userprofile/<int:userprofile_id>/group/<int:group_id>/` GET: Get all project roles for a specified user and group
+
+#### Task Documents
+* `/api/taskdocuments/<int:taskdocument_id>/` DELETE: Delete specified task document
