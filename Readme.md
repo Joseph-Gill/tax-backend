@@ -80,7 +80,7 @@ All the following endpoints should be prefixed with /backend
 #### User Profiles
 * `/api/userprofiles/me/` GET, PATCH: Get, update the logged-in user's profile
 * `/api/userprofiles/tasks/me/` GET: Get all tasks assigned to logged-in user
-* `/api/userprofiles/group/<int:group_id>/userprofile/<int:userprofile_id>/` PATCH: Update or remove a specified User's role for a specified Project
+* `/api/userprofiles/group/<int:group_id>/userprofile/<int:userprofile_id>/` PATCH: Update or remove a specified User's role for projects of a specified group
 
 #### Organizations
 * `/api/orgs/group/<int:group_id>/?search=<str:search_string>` GET, POST: Get all organizations or filter them by search string for a specified group, create a new organization for a specified group
@@ -92,7 +92,7 @@ All the following endpoints should be prefixed with /backend
 * `/api/groups/group/<int:group_id>/user/` POST: Add a user to a specified group, triggers registration on new to app users
 * `/api/groups/me/` GET: Get all groups of the logged-in user
 * `/api/groups/group/<int:group_id>/` GET, PATCH, DELETE: Get, update, delete a specified group
-* `/api/groups/group/<int:group_id>/removeusers/` DELETE: Delete a list of users from a specified group, and all that groups projects
+* `/api/groups/group/<int:group_id>/removeusers/` DELETE: Delete a list of users from a specified group, and all that group's projects
 * `/api/groups/project/<int:project_id>/` GET: Get the group a specified project belongs to
 
 #### Entities
