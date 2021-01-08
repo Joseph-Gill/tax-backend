@@ -46,6 +46,26 @@ class RetrieveUpdateDestroySpecificTask(RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     lookup_url_kwarg = 'task_id'
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        target_task = self.get_object()
+        serializer = self.get_serializer(target_task, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        target_userprofile = UserProfile.objects.get(id=request.data['assigned_user_profile'])
+        target_step = Step.objects.get(id=request.data['task_step'])
+        target_task.step = target_step
+        target_task.assigned_user = target_userprofile
+        target_task.save()
+        for task_document in request.FILES:
+            new_task_document = TaskDocument(
+                name=request.FILES[task_document].name,
+                document=request.FILES[task_document],
+                task=target_task
+            )
+            new_task_document.save()
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
 
 class CreateTaskForSpecificStepForSpecificUser(CreateAPIView):
     """
