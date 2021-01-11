@@ -1,6 +1,6 @@
 from django.urls import path
 from app.tasks.views import ListAllTasksForSpecificStep, RetrieveUpdateDestroySpecificTask, CreateTaskForSpecificStepForSpecificUser, UpdateUserForSpecificTask, ListAllTasksForSpecifiedProject, ListAllTasksForSpecifiedStepOfProject, \
-    RetrieveProjectTasksStatusNumbers
+    RetrieveProjectTasksStatusNumbers, RetrievePastDueNumberAndUncompletedTasksForLoggedInUserForProject
 
 urlpatterns = [
     path('<int:step_id>/', ListAllTasksForSpecificStep.as_view(), name='list-task'),
@@ -9,5 +9,6 @@ urlpatterns = [
     path('task/<int:task_id>/user/<int:user_id>/', UpdateUserForSpecificTask.as_view(), name='update-user-assigned-task'),
     path('project/<int:project_id>/', ListAllTasksForSpecifiedProject.as_view(), name='list-tasks-project'),
     path('project/<int:project_id>/stepnumber/<int:step_number>/', ListAllTasksForSpecifiedStepOfProject.as_view(), name='list-tasks-step-of-project'),
-    path('project/<int:project_id>/statusnumbers/', RetrieveProjectTasksStatusNumbers.as_view(), name='retrieve-project-tasks-status-numbers')
+    path('project/<int:project_id>/statusnumbers/', RetrieveProjectTasksStatusNumbers.as_view(), name='retrieve-project-tasks-status-numbers'),
+    path('project/<int:project_id>/user/uncompleted/', RetrievePastDueNumberAndUncompletedTasksForLoggedInUserForProject.as_view(), name='retrieve-tasks-uncompleted-logged-in-user')
 ]

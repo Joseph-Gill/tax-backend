@@ -9,7 +9,7 @@ from app.taskDocuments.models import TaskDocument
 from app.tasks.models import Task
 from app.tasks.serializers import TaskSerializer
 from app.userProfiles.models import UserProfile
-import json
+from datetime import date
 
 User = get_user_model()
 
@@ -162,3 +162,28 @@ class RetrieveProjectTasksStatusNumbers(RetrieveAPIView):
         for task in target_tasks:
             task_status_results[task.status] = task_status_results[task.status] + 1
         return Response(task_status_results, status=status.HTTP_200_OK)
+
+
+class RetrievePastDueNumberAndUncompletedTasksForLoggedInUserForProject(RetrieveAPIView):
+    """
+    Retrieve all Tasks for logged in User that are not Completed for a specified Project
+    """
+    queryset = Project.objects.all()
+    lookup_url_kwarg = 'project_id'
+    serializer_class = TaskSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        target_project = self.get_object()
+        target_user_profile = UserProfile.objects.get(user=request.user)
+        target_tasks = Task.objects.filter(assigned_user=target_user_profile, step__project=target_project).exclude(status='Completed').order_by('due_date')
+        past_due_tasks = 0
+        today = date.today()
+        for task in target_tasks:
+            if task.due_date < today:
+                past_due_tasks = past_due_tasks + 1
+        serializer = self.get_serializer(target_tasks, many=True)
+        task_data = {
+            'past_due_tasks': past_due_tasks,
+            'user_uncompleted_tasks': serializer.data
+        }
+        return Response(task_data, status=status.HTTP_200_OK)
