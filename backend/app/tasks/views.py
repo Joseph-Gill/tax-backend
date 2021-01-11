@@ -102,8 +102,8 @@ class UpdateUserForSpecificTask(CreateAPIView):
     permission_classes = []
 
     def create(self, request, *args, **kwargs):
-        target_task = Task.objects.filter(id=kwargs['task_id'])[0]
-        target_user_profile = User.objects.filter(id=kwargs['user_id'])[0].user_profile
+        target_task = Task.objects.get(id=kwargs['task_id'])
+        target_user_profile = User.objects.get(id=kwargs['user_id']).user_profile
         target_task.assigned_user = target_user_profile
         target_task.save()
         send_email.send(sender=Task, request=request, to=target_user_profile.user.email, email_type='user_assigned_task')
@@ -122,5 +122,22 @@ class ListAllTasksForSpecifiedProject(ListAPIView):
         target_project = self.get_object()
         tasks = list(Task.objects.filter(step__project__id=target_project.id))
         tasks.sort(key=lambda x: (x.step.number, x.created))
+        serializer = self.get_serializer(tasks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ListAllTasksForSpecifiedStepOfProject(ListAPIView):
+    """
+    GFet all tasks for a specified Step of a specified Project
+    """
+
+    serializer_class = TaskSerializer
+    queryset = Project.objects.all()
+    lookup_url_kwarg = 'project_id'
+
+    def list(self, request, *args, **kwargs):
+        target_project = self.get_object()
+        tasks = list(Task.objects.filter(step__project__id=target_project.id, step__number=kwargs['step_number']))
+        tasks.sort(key=lambda x: x.created)
         serializer = self.get_serializer(tasks, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
