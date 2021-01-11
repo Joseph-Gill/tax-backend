@@ -17,7 +17,14 @@ class TaxConsequence(models.Model):
         blank=True
     )
 
-    description = models.TextField()
+    # The three Tax Consequence "statuses" depend on the state of description and reviewed
+    # 1) Open - description is blank ( i.e. false ) and reviewed is false
+    # 2) To Review - description is filled in ( i.e. true ) and reviewed is false
+    # 3) Reviewed - description is filled in (i.e. true ) and reviewed is true
+    description = models.TextField(
+        blank=True,
+        null=True
+    )
 
     reviewed = models.BooleanField(
         default=False
