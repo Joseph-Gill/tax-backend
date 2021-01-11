@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from app.emails.signals import send_email
 from app.projects.models import Project
@@ -128,7 +128,7 @@ class ListAllTasksForSpecifiedProject(ListAPIView):
 
 class ListAllTasksForSpecifiedStepOfProject(ListAPIView):
     """
-    GFet all tasks for a specified Step of a specified Project
+    Get all tasks for a specified Step of a specified Project
     """
 
     serializer_class = TaskSerializer
@@ -141,3 +141,24 @@ class ListAllTasksForSpecifiedStepOfProject(ListAPIView):
         tasks.sort(key=lambda x: x.created)
         serializer = self.get_serializer(tasks, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class RetrieveProjectTasksStatusNumbers(RetrieveAPIView):
+    """
+    Retrieve status numbers for all Tasks of a specified Project
+    """
+    queryset = Project.objects.all()
+    lookup_url_kwarg = 'project_id'
+
+    def retrieve(self, request, *args, **kwargs):
+        target_project = self.get_object()
+        task_status_results = {
+            "Ongoing": 0,
+            "Planned": 0,
+            "Completed": 0,
+            "Not Started": 0
+        }
+        target_tasks = Task.objects.filter(step__project__id=target_project.id)
+        for task in target_tasks:
+            task_status_results[task.status] = task_status_results[task.status] + 1
+        return Response(task_status_results, status=status.HTTP_200_OK)

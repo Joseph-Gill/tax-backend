@@ -55,6 +55,9 @@ class RetrieveUpdateDestroySpecificStep(RetrieveUpdateDestroyAPIView):
 
 
 class RetrieveProjectStepsStatusNumbers(RetrieveAPIView):
+    """
+    Retrieve status numbers for all Steps of a specified Project
+    """
     queryset = Project.objects.all()
     lookup_url_kwarg = 'project_id'
 
