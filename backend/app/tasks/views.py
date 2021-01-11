@@ -166,7 +166,7 @@ class RetrieveProjectTasksStatusNumbers(RetrieveAPIView):
 
 class RetrievePastDueNumberAndUncompletedTasksForLoggedInUserForProject(RetrieveAPIView):
     """
-    Retrieve all Tasks for logged in User that are not Completed for a specified Project
+    Retrieve all uncompleted Tasks for logged-in User for a specified Project and how many Tasks are past due for that User.
     """
     queryset = Project.objects.all()
     lookup_url_kwarg = 'project_id'
