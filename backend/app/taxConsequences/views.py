@@ -45,7 +45,7 @@ class RetrieveUpdateDestroySpecificTaxConsequence(RetrieveUpdateDestroyAPIView):
     List a specified Tax Consequence
 
     update:
-    Update a specified Tax Consequence
+    Update a specified Tax Consequence, sets logged-in User as editing User
 
     delete:
     Delete a specified Tax Consequence
@@ -54,6 +54,17 @@ class RetrieveUpdateDestroySpecificTaxConsequence(RetrieveUpdateDestroyAPIView):
     serializer_class = TaxConsequenceSerializer
     queryset = TaxConsequence.objects.all()
     lookup_url_kwarg = 'tax_id'
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        target_tax_consequence = self.get_object()
+        serializer = self.get_serializer(target_tax_consequence, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        target_user_profile = UserProfile.objects.get(user=request.user)
+        target_tax_consequence.editing_user = target_user_profile
+        target_tax_consequence.save()
+        return Response(serializer.data)
 
 
 class SetTaxConsequenceReviewedByLoggedInUser(CreateAPIView):

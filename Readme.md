@@ -123,8 +123,8 @@ All the following endpoints should be prefixed with /backend
 
 #### Tax Consequences
 * `/api/taxes/step/<int:step_id>/` GET, POST: Get all or create a task consequence for a specified Step
-* `/api/taxes/tax/<int:tax_id>/` GET, PATCH, DELETE: Get, update, delete a specified tax consequence
-* `/api/taxes/tax/<int:tax_id>/reviewed/` POST: Set the reviewed status of a specified tax consequence as true, reviewing_user is set as logged in user
+* `/api/taxes/tax/<int:tax_id>/` GET, PATCH, DELETE: Get, update, delete a specified tax consequence, updating sets logged-in user as editing_user of tax consequence
+* `/api/taxes/tax/<int:tax_id>/reviewed/` POST: Set the reviewed status of a specified tax consequence as true, reviewing_user is set as logged-in user
 * `/api/taxes/tax/<int:tax_id>/notreviewed/` POST: Set the reviewed status of a specified tax as false
 
 #### Project Roles

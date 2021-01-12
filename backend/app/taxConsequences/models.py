@@ -62,5 +62,13 @@ class TaxConsequence(models.Model):
         blank=True
     )
 
+    editing_user = models.ForeignKey(
+        to=UserProfile,
+        on_delete=models.SET_NULL,
+        related_name='edited_tax_consequences',
+        null=True,
+        blank=True
+    )
+
     def __str__(self):
         return f'Tax Consequence #{self.pk} for Project #{self.step.project.id}, Step #{self.step.number}'
