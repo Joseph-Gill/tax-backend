@@ -102,7 +102,6 @@ All the following endpoints should be prefixed with /backend
 #### Projects
 * `/api/projects/<int:group_id>/?search=<str:search_string>` GET, POST: Get all projects or filter them by search string, create a new Project for specified group
 * `/api/projects/project/<int:project_id>/` GET, PATCH, DELETE: Get, update, delete a specified project
-* `/api/projects/project/<int:project_id>/statusnumbers` GET: Get the status numbers of all steps of a specified project
 
 #### Charts
 * `/api/charts/step/<int:step_id>/` POST: Create a chart for a specified step
@@ -111,6 +110,8 @@ All the following endpoints should be prefixed with /backend
 #### Steps
 * `/api/steps/project/<int:project_id>/` GET, POST: Get all or create a step for a specified project
 * `/api/steps/step/<int:step_id>/` GET, PATCH, DELETE: Get, update, delete a specified step
+* `/api/steps/project/<int:project_id>/statusnumbers/` GET: Get the status numbers of all steps of a specified project
+* `/api/steps/project/<int:project_id>/firstuncompleted/` GET: Get the first uncompleted step for a specified project
 
 #### Tasks
 * `/api/tasks/<int:step_id>/` GET: Get all tasks for a specified step

@@ -72,3 +72,22 @@ class RetrieveProjectStepsStatusNumbers(RetrieveAPIView):
         for step in target_project.steps.all():
             step_status_results[step.status] = step_status_results[step.status] + 1
         return Response(step_status_results, status=status.HTTP_200_OK)
+
+
+class RetrieveProjectFirstUncompletedStep(RetrieveAPIView):
+    """
+    Retrieve the first step of a specified Project that is not "Completed" status
+    """
+    queryset = Project.objects.all()
+    lookup_url_kwarg = 'project_id'
+    serializer_class = StepSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        target_project = self.get_object()
+        if not len(target_project.steps.all()):
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        for step in target_project.steps.all().order_by('number'):
+            if step.status != 'Completed':
+                serializer = self.get_serializer(step)
+                return Response(serializer.data)
+        return Response(status=status.HTTP_204_NO_CONTENT)
