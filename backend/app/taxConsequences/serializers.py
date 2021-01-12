@@ -23,6 +23,10 @@ class TaxConsequenceSerializer(serializers.ModelSerializer):
         required=False
     )
 
+    editing_user = TaxConsequenceUserProfileSerializer(
+        required=False
+    )
+
     class Meta:
         model = TaxConsequence
-        fields = ['id', 'location', 'type', 'description', 'reviewed', 'created', 'updated', 'reviewing_user', 'creating_user']
+        fields = ['id', 'location', 'type', 'description', 'reviewed', 'created', 'updated', 'reviewing_user', 'creating_user', 'editing_user']

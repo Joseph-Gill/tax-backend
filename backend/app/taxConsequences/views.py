@@ -1,6 +1,8 @@
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
 from rest_framework.response import Response
+
+from app.projects.models import Project
 from app.steps.models import Step
 from app.taxConsequences.models import TaxConsequence
 from app.taxConsequences.serializers import TaxConsequenceSerializer
@@ -98,3 +100,20 @@ class SetTaxConsequenceNotReviewed(CreateAPIView):
         target_tax_consequence.reviewing_user = None
         target_tax_consequence.save()
         return Response(status=status.HTTP_200_OK)
+
+
+class ListAllTaxConsequencesNotReviewedSameCountryAsUser(ListAPIView):
+    """
+    List all Tax Consequences that are not reviewed and for the same country as the logged-in User
+    """
+
+    queryset = Project.objects.all()
+    lookup_url_kwarg = 'project_id'
+    serializer_class = TaxConsequenceSerializer
+
+    def list(self, request, *args, **kwargs):
+        target_project = self.get_object()
+        target_user_profile = UserProfile.objects.get(user=request.user)
+        target_tax_consequences = TaxConsequence.objects.filter(step__project=target_project, location=target_user_profile.country).exclude(reviewed=True)
+        serializer = self.get_serializer(target_tax_consequences, many=True)
+        return Response(serializer.data)
