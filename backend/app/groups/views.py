@@ -31,9 +31,10 @@ class ListAllOrCreateGroup(ListCreateAPIView):
     def perform_create(self, serializer):
         users_profile = UserProfile.objects.get(user=self.request.user)
         list_of_entities = json.loads(self.request.data['entities'])
-        name = serializer.data['name']
+        # name = serializer.data['name']
         new_group = Group(
-            name=name
+            name=serializer.validated_data.get('name'),
+            avatar=serializer.validated_data.get('avatar')
         )
         new_group.save()
         for entity in list_of_entities:

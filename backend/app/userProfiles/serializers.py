@@ -29,7 +29,7 @@ class ProfileGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ['id', 'name', 'projects', 'users']
+        fields = ['id', 'name', 'projects', 'users', 'avatar']
 
 
 # Used by UserProfileSerializer to prevent circular serialization from Task Serializer
