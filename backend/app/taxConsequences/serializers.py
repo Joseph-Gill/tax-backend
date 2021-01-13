@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from app.steps.models import Step
 from app.taxConsequences.models import TaxConsequence
 from app.userProfiles.models import UserProfile
 from app.users.serializers import UserSerializer
@@ -14,6 +16,12 @@ class TaxConsequenceUserProfileSerializer(serializers.ModelSerializer):
         fields = ['user']
 
 
+class TaxConsequenceStepSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Step
+        fields = ['id', 'number']
+
+
 class TaxConsequenceSerializer(serializers.ModelSerializer):
     creating_user = TaxConsequenceUserProfileSerializer(
         required=False
@@ -27,6 +35,10 @@ class TaxConsequenceSerializer(serializers.ModelSerializer):
         required=False
     )
 
+    step = TaxConsequenceStepSerializer(
+        required=False
+    )
+
     class Meta:
         model = TaxConsequence
-        fields = ['id', 'location', 'type', 'description', 'reviewed', 'created', 'updated', 'reviewing_user', 'creating_user', 'editing_user']
+        fields = ['id', 'step', 'location', 'type', 'description', 'reviewed', 'created', 'updated', 'reviewing_user', 'creating_user', 'editing_user']
