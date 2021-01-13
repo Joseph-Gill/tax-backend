@@ -14,8 +14,6 @@ class UserProfile(models.Model):
 
     country = models.CharField(
         max_length=100,
-        blank=True,
-        null=True
     )
 
     created = models.DateTimeField(

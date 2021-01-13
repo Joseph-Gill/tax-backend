@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
 from app.projects.models import Project
@@ -117,3 +117,10 @@ class ListAllTaxConsequencesNotReviewedSameCountryAsUser(ListAPIView):
         target_tax_consequences = TaxConsequence.objects.filter(step__project=target_project, location=target_user_profile.country).exclude(reviewed=True)
         serializer = self.get_serializer(target_tax_consequences, many=True)
         return Response(serializer.data)
+
+
+class GetOpenReviewTaxConsequenceNumbers(RetrieveAPIView):
+    """
+    Get the number of "Open" and "Not Reviewed" Tax Consequences from the logged-in User's country, for a specified Project
+    """
+    pass

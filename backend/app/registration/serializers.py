@@ -79,7 +79,7 @@ class RegistrationValidationSerializer(serializers.Serializer):
     first_name = serializers.CharField(label='First name', required=False)
     last_name = serializers.CharField(label='Last name', required=False)
     phone_number = serializers.CharField(label='phone number', required=False)
-    country = serializers.CharField(label='country', required=False)
+    country = serializers.CharField(label='country')
 
     def validate(self, data):
         code = data.get('code')
