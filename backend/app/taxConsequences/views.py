@@ -121,6 +121,24 @@ class ListAllTaxConsequencesNotReviewedSameCountryAsUser(ListAPIView):
 
 class GetOpenReviewTaxConsequenceNumbers(RetrieveAPIView):
     """
-    Get the number of "Open" and "Not Reviewed" Tax Consequences from the logged-in User's country, for a specified Project
+    Get the number of "Open" and "Not Reviewed" Tax Consequences of the logged-in User's country, for a specified Project
     """
-    pass
+    queryset = Project.objects.all()
+    lookup_url_kwarg = 'project_id'
+
+    def retrieve(self, request, *args, **kwargs):
+        target_project = self.get_object()
+        target_user_profile = UserProfile.objects.get(user=request.user)
+        target_tax_consequences = TaxConsequence.objects.filter(location=target_user_profile.country, step__project=target_project).exclude(reviewed=True)
+        comments_open = 0
+        comments_to_review = 0
+        for tax in target_tax_consequences:
+            if not tax.description:
+                comments_open = comments_open + 1
+            else:
+                comments_to_review = comments_to_review + 1
+        tax_consequence_data = {
+            'comments_open': comments_open,
+            'comments_to_review': comments_to_review
+        }
+        return Response(tax_consequence_data, status=status.HTTP_200_OK)

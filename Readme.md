@@ -128,6 +128,7 @@ All the following endpoints should be prefixed with /backend
 * `/api/taxes/tax/<int:tax_id>/reviewed/` POST: Set the reviewed status of a specified tax consequence as true, reviewing_user is set as logged-in user
 * `/api/taxes/tax/<int:tax_id>/notreviewed/` POST: Set the reviewed status of a specified tax as false
 * `/api/taxes/project/<int:project_id>/notreviewed/samecountry/` GET: List all tax consequences that are not reviewed and for the same country as the logged-in user
+* `/api/taxes/project/<int:project_id/opencomments/toreviewcomments/` GET: Get the number of "open" and "not Reviewed" tax consequences of the logged-in user's country, for a specified project
 
 #### Project Roles
 * `/api/projectroles/userprofile/<int:userprofile_id>/group/<int:group_id>/` GET: Get all project roles for a specified user and group
