@@ -93,6 +93,9 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         target_group = self.get_object()
+        if serializer.validated_data.get('avatar'):
+            target_group.avatar = serializer.validated_data.get('avatar')
+            target_group.save()
         list_of_entities = json.loads(self.request.data['entities'])
         for entity in list_of_entities:
             target_parent=Entity.objects.get(group=target_group, name=entity['pid'])
