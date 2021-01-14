@@ -1,7 +1,6 @@
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
-
 from app.projects.models import Project
 from app.steps.models import Step
 from app.taxConsequences.models import TaxConsequence
