@@ -1,8 +1,8 @@
 from django.urls import path
 
-from app.charts.views import CreateChartForSpecificProjectStep, RetrieveUpdateDestroySpecificChart
+from app.charts.views import CreateChartForSpecificProjectStep, RetrieveUpdateDestroyChartForSpecificProjectStep
 
 urlpatterns = [
-    path('step/<int:step_id>/', CreateChartForSpecificProjectStep.as_view(), name='create-chart'),
-    path('chart/<int:chart_id>/', RetrieveUpdateDestroySpecificChart.as_view(), name='retrieve-update-destroy-chart')
+    path('project/<int:project_id>/stepnumber/<int:step_number>/createchart/', CreateChartForSpecificProjectStep.as_view(), name='create-chart'),
+    path('project/<int:project_id>/stepnumber/<int:step_number>/', RetrieveUpdateDestroyChartForSpecificProjectStep.as_view(), name='retrieve-update-destroy-chart')
 ]
