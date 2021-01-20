@@ -1,11 +1,12 @@
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework.response import Response
 from app.groups.models import Group
 from app.projects.models import Project
 from app.projects.serializers import ProjectSerializer
 from app.projects.signals import post_user_project_creation
 from app.userProfiles.models import UserProfile
+from app.userProfiles.serializers import UserProfileSerializer
 
 
 class ListAllOrCreateProjectForSpecificGroup(ListCreateAPIView):
@@ -56,3 +57,18 @@ class RetrieveUpdateDestroySpecificProject(RetrieveUpdateDestroyAPIView):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
     lookup_url_kwarg = 'project_id'
+
+
+class ListUsersWithAccessToProject(ListAPIView):
+    """
+    List all User Profiles with access to a specified Project
+    """
+    serializer_class = UserProfileSerializer
+    queryset = Project.objects.all()
+    lookup_url_kwarg = 'project_id'
+
+    def list(self, request, *args, **kwargs):
+        target_project = self.get_object()
+        target_user_profiles = UserProfile.objects.filter(assigned_project_roles__project=target_project)
+        serializer = self.get_serializer(target_user_profiles, many=True)
+        return Response(serializer.data)

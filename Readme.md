@@ -102,6 +102,7 @@ All the following endpoints should be prefixed with /backend
 #### Projects
 * `/api/projects/<int:group_id>/?search=<str:search_string>` GET, POST: Get all projects or filter them by search string, create a new Project for specified group
 * `/api/projects/project/<int:project_id>/` GET, PATCH, DELETE: Get, update, delete a specified project
+* `/api/projects/project/<int:project_id>/accessusers/` GET: List all user profiles with access to a specified project
 
 #### Charts
 * `/api/charts/project/<int:project_id>/stepnumber/<int:step_number>/createchart/` POST: Create a chart for a specified step
