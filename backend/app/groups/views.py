@@ -31,7 +31,6 @@ class ListAllOrCreateGroup(ListCreateAPIView):
     def perform_create(self, serializer):
         users_profile = UserProfile.objects.get(user=self.request.user)
         list_of_entities = json.loads(self.request.data['entities'])
-        # name = serializer.data['name']
         new_group = Group(
             name=serializer.validated_data.get('name'),
             avatar=serializer.validated_data.get('avatar')
@@ -44,8 +43,9 @@ class ListAllOrCreateGroup(ListCreateAPIView):
                     name=entity['name'],
                     location=entity['location'],
                     legal_form=entity['legal_form'],
-                    tax_rate=float(entity['tax_rate'])
                 )
+                if entity['tax_rate']:
+                    new_entity.tax_rate = float(entity['tax_rate'])
                 new_entity.save()
                 new_group.entities.add(new_entity)
             else:
@@ -55,8 +55,9 @@ class ListAllOrCreateGroup(ListCreateAPIView):
                     name=entity['name'],
                     location=entity['location'],
                     legal_form=entity['legal_form'],
-                    tax_rate=float(entity['tax_rate'])
                 )
+                if entity['tax_rate']:
+                    new_entity.tax_rate = float(entity['tax_rate'])
                 new_entity.save()
                 new_group.entities.add(new_entity)
         users_profile.groups.add(new_group)
@@ -98,14 +99,15 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
             target_group.save()
         list_of_entities = json.loads(self.request.data['entities'])
         for entity in list_of_entities:
-            target_parent=Entity.objects.get(group=target_group, name=entity['pid'])
+            target_parent = Entity.objects.get(group=target_group, name=entity['pid'])
             new_entity = Entity(
                 pid=target_parent.id,
                 name=entity['name'],
                 location=entity['location'],
                 legal_form=entity['legal_form'],
-                tax_rate=float(entity['tax_rate'])
             )
+            if entity['tax_rate']:
+                new_entity.tax_rate = float(entity['tax_rate'])
             new_entity.save()
             target_group.entities.add(new_entity)
 

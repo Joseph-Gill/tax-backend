@@ -29,7 +29,9 @@ class Entity(models.Model):
     # Needs to store decimal tax rates ( i.e. 0.1259 = 12.59% )
     tax_rate = models.DecimalField(
         max_digits=5,
-        decimal_places=4
+        decimal_places=4,
+        blank=True,
+        null=True
     )
 
     created = models.DateTimeField(
