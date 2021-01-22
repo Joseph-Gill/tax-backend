@@ -95,12 +95,9 @@ All the following endpoints should be prefixed with /backend
 * `/api/groups/group/<int:group_id>/removeusers/` DELETE: Delete a list of users from a specified group, and all that group's projects
 * `/api/groups/project/<int:project_id>/` GET: Get the group a specified project belongs to
 
-#### Entities
-* `/api/entities/<int:group_id>/` GET, POST: Get all or create an entity for a specified group
-* `/api/entities/entity/<int:entity_id>/` GET, PATCH, DELETE: Get, update, delete a specified entity
 
 #### Projects
-* `/api/projects/<int:group_id>/?search=<str:search_string>` GET, POST: Get all projects or filter them by search string, create a new Project for specified group
+* `/api/projects/group/<int:group_id>/?search=<str:search_string>` GET, POST: Get all projects or filter them by search string, create a new Project for specified group
 * `/api/projects/project/<int:project_id>/` GET, PATCH, DELETE: Get, update, delete a specified project
 * `/api/projects/project/<int:project_id>/accessusers/` GET: List all user profiles with access to a specified project
 
