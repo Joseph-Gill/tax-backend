@@ -187,3 +187,22 @@ class RetrievePastDueNumberAndUncompletedTasksForLoggedInUserForProject(Retrieve
             'user_uncompleted_tasks': serializer.data
         }
         return Response(task_data, status=status.HTTP_200_OK)
+
+
+class GetTaskNumberOfTaskForSpecificStep(RetrieveAPIView):
+    """
+    Retrieve task number of Task for a specified Step
+    """
+    queryset = Step.objects.all()
+    lookup_url_kwarg = 'step_id'
+
+    def retrieve(self, request, *args, **kwargs):
+        target_step = self.get_object()
+        target_tasks = target_step.tasks.all().order_by('created')
+        task_number = 1
+        for task in target_tasks:
+            if task.id == kwargs['task_id']:
+                return Response(task_number, status=status.HTTP_200_OK)
+            else:
+                task_number = task_number + 1
+        return Response(status=status.HTTP_204_NO_CONTENT)

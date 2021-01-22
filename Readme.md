@@ -122,6 +122,7 @@ All the following endpoints should be prefixed with /backend
 * `/api/tasks/project/<int:project_id>/` GET: Get all tasks for a specified project
 * `/api/tasks/project/<int:project_id>/stepnumber/<int:step_number>/` GET: Get all tasks for specified step number of specified project
 * `/api/tasks/project/<int:project_id>/user/uncompleted/` GET: Retrieve all uncompleted tasks for logged-in user for a specified project and how many tasks are past due for that user.
+* `/api/tasks/task/<int:task_id>/step/<int:step_id>/tasknumber/` GET: Retrieve the task number of a specific task for a specific step
 
 #### Tax Consequences
 * `/api/taxes/step/<int:step_id>/` GET, POST: Get all or create a task consequence for a specified Step
