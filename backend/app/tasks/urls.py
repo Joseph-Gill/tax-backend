@@ -1,6 +1,6 @@
 from django.urls import path
-from app.tasks.views import ListAllTasksForSpecificStep, RetrieveUpdateDestroySpecificTask, CreateTaskForSpecificStepForSpecificUser, UpdateUserForSpecificTask, ListAllTasksForSpecifiedProject, ListAllTasksForSpecifiedStepOfProject, \
-    RetrieveProjectTasksStatusNumbers, RetrievePastDueNumberAndUncompletedTasksForLoggedInUserForProject, GetTaskNumberOfTaskForSpecificStep
+from app.tasks.views import ListAllTasksForSpecificStep, RetrieveUpdateDestroySpecificTask, CreateTaskForSpecificStepForSpecificUser, UpdateUserForSpecificTask, ListAllTasksForSpecifiedProject, \
+    ListAllTasksForSpecifiedStepOfProject, RetrieveProjectTasksStatusNumbers, RetrievePastDueNumberAndUncompletedTasksForLoggedInUserForProject, GetTaskNumberOfTaskForSpecificStep
 
 urlpatterns = [
     path('<int:step_id>/', ListAllTasksForSpecificStep.as_view(), name='list-task'),

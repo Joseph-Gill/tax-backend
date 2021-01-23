@@ -6,7 +6,7 @@ from app.groups.models import Group
 from app.notifications.signals import notify_users
 from app.registration.models import RegistrationProfile
 from app.registration.models import code_generator
-from app.registration.signals import post_user_registration_validation, post_user_password_reset_validation
+from app.registration.signals import post_user_password_reset_validation
 from app.userProfiles.models import UserProfile
 
 User = get_user_model()
