@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-# import ast
+import ast
 from datetime import timedelta
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -30,8 +30,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 ALLOWED_HOSTS = ['*']
 
-# DEBUG = ast.literal_eval(os.environ.get('DJANGO_DEBUG', None))
-DEBUG = True
+DEBUG = ast.literal_eval(os.environ.get('DJANGO_DEBUG', None))
+# DEBUG = True
 
 INSTALLED_APPS = [
     'app',
