@@ -30,8 +30,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 ALLOWED_HOSTS = ['*']
 
-DEBUG = ast.literal_eval(os.environ.get('DJANGO_DEBUG', None))
-# DEBUG = True
+# DEBUG = ast.literal_eval(os.environ.get('DJANGO_DEBUG', None))
+DEBUG = True
 
 INSTALLED_APPS = [
     'app',
@@ -183,7 +183,7 @@ AUTHENTICATION_BACKENDS = (
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
