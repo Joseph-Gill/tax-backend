@@ -97,8 +97,22 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
         if serializer.validated_data.get('avatar'):
             target_group.avatar = serializer.validated_data.get('avatar')
             target_group.save()
-        list_of_entities = json.loads(self.request.data['entities'])
-        for entity in list_of_entities:
+        list_of_existing_entities_to_check = target_group.entities.all()
+        list_of_current_entities = json.loads(self.request.data['current_entities'])
+        for existing_entity in list_of_existing_entities_to_check:
+            target_entity = Entity.objects.get(id=existing_entity.id)
+            result = next((x for x in list_of_current_entities if x['id'] == existing_entity.id), None)
+            if result:
+                target_entity.name = result['name']
+                target_entity.location = result['location']
+                target_entity.legal_form = result['legal_form']
+                if result['tax_rate']:
+                    target_entity.tax_rate = result['tax_rate']
+                target_entity.save()
+            else:
+                target_entity.delete()
+        list_of_new_entities = json.loads(self.request.data['new_entities'])
+        for entity in list_of_new_entities:
             target_parent = Entity.objects.get(group=target_group, name=entity['parent']['name'], location=entity['parent']['location'])
             new_entity = Entity(
                 pid=target_parent.id,
