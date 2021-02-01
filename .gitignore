@@ -7,3 +7,4 @@ media-files
 static-files
 /app/.coverage
 /app/htmlcov
+/backend/.env/

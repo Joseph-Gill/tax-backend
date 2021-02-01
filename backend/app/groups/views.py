@@ -49,7 +49,7 @@ class ListAllOrCreateGroup(ListCreateAPIView):
                 new_entity.save()
                 new_group.entities.add(new_entity)
             else:
-                target_parent = Entity.objects.get(group=new_group, name=entity['pid'])
+                target_parent = Entity.objects.get(group=new_group, name=entity['parent']['name'], location=entity['parent']['location'])
                 new_entity = Entity(
                     pid=target_parent.id,
                     name=entity['name'],
@@ -99,7 +99,7 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
             target_group.save()
         list_of_entities = json.loads(self.request.data['entities'])
         for entity in list_of_entities:
-            target_parent = Entity.objects.get(group=target_group, name=entity['pid'])
+            target_parent = Entity.objects.get(group=target_group, name=entity['parent']['name'], location=entity['parent']['location'])
             new_entity = Entity(
                 pid=target_parent.id,
                 name=entity['name'],
