@@ -97,33 +97,38 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
         if serializer.validated_data.get('avatar'):
             target_group.avatar = serializer.validated_data.get('avatar')
             target_group.save()
-        list_of_existing_entities_to_check = target_group.entities.all()
-        list_of_current_entities = json.loads(self.request.data['current_entities'])
-        for existing_entity in list_of_existing_entities_to_check:
-            target_entity = Entity.objects.get(id=existing_entity.id)
-            result = next((x for x in list_of_current_entities if x['id'] == existing_entity.id), None)
-            if result:
-                target_entity.name = result['name']
-                target_entity.location = result['location']
-                target_entity.legal_form = result['legal_form']
-                if result['tax_rate']:
-                    target_entity.tax_rate = result['tax_rate']
-                target_entity.save()
-            else:
-                target_entity.delete()
-        list_of_new_entities = json.loads(self.request.data['new_entities'])
+        list_of_existing_entities = target_group.entities.all()
+        list_of_new_entities = json.loads(self.request.data['entities'])
         for entity in list_of_new_entities:
-            target_parent = Entity.objects.get(group=target_group, name=entity['parent']['name'], location=entity['parent']['location'])
-            new_entity = Entity(
-                pid=target_parent.id,
-                name=entity['name'],
-                location=entity['location'],
-                legal_form=entity['legal_form'],
-            )
-            if entity['tax_rate']:
-                new_entity.tax_rate = float(entity['tax_rate'])
-            new_entity.save()
-            target_group.entities.add(new_entity)
+            if 'edited' in entity:
+                if entity['pid']:
+                    target_parent_entity = Entity.objects.get(group=target_group, name=entity['parent']['name'], location=entity['parent']['location'])
+                result = next((x for x in list_of_existing_entities if x.id == entity['id']), None)
+                if result:
+                    target_entity_to_update = Entity.objects.get(id=entity['id'])
+                    target_entity_to_update.name = entity['name']
+                    target_entity_to_update.location = entity['location']
+                    target_entity_to_update.legal_form = entity['legal_form']
+                    if entity['pid']:
+                        target_entity_to_update.pid = target_parent_entity.id
+                    if entity['tax_rate']:
+                        target_entity_to_update.tax_rate = entity['tax_rate']
+                    target_entity_to_update.save()
+                else:
+                    new_entity = Entity(
+                        pid=target_parent_entity.id,
+                        name=entity['name'],
+                        location=entity['location'],
+                        legal_form=entity['legal_form'],
+                    )
+                    if entity['tax_rate']:
+                        new_entity.tax_rate = float(entity['tax_rate'])
+                    new_entity.save()
+                    target_group.entities.add(new_entity)
+        for existing_entity in list_of_existing_entities:
+            result = next((x for x in list_of_new_entities if x['id'] == existing_entity.id), None)
+            if not result:
+                existing_entity.delete()
 
 
 class AddUserInSpecificGroup(CreateAPIView):
