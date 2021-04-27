@@ -30,4 +30,4 @@ class ProjectRoleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectRole
-        fields = ['id', 'role', 'created', 'updated', 'project', 'user']
+        fields = ['id', 'role', 'created', 'updated', 'project', 'user', 'favorite']

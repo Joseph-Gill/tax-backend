@@ -35,6 +35,10 @@ class ProjectRole(models.Model):
         null=True
     )
 
+    favorite = models.BooleanField(
+        default=False
+    )
+
     def __str__(self):
         return f'Project Role #{self.pk} for User - {self.user.user.email}'
 
