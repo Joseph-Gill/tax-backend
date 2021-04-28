@@ -21,7 +21,7 @@ class ProjectProjectRoleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ['id', 'group', 'name']
+        fields = ['id', 'group', 'name', 'status']
 
 
 class UserProfileProjectRoleSerializer(serializers.ModelSerializer):
