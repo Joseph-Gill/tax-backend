@@ -8,6 +8,13 @@ class EntityLog(models.Model):
         max_length=30
     )
 
+    # used to store the temporary id used in frontend before an entity
+    # is officially created by completing a step/project
+    temp_id = models.IntegerField(
+        blank=True,
+        null=True
+    )
+
     created = models.DateTimeField(
         auto_now_add=True
     )
@@ -19,7 +26,9 @@ class EntityLog(models.Model):
     entity = models.ForeignKey(
         to=Entity,
         on_delete=models.CASCADE,
-        related_name='entity_logs'
+        related_name='entity_logs',
+        blank=True,
+        null=True
     )
 
     chart = models.ForeignKey(

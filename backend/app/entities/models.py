@@ -51,12 +51,6 @@ class Entity(models.Model):
         blank=True
     )
 
-    charts = models.ManyToManyField(
-        to=Chart,
-        related_name='entities',
-        blank=True
-    )
-
     def __str__(self):
         return f'Entity #{self.pk} - Name: {self.name}'
         # return f'Entity #{self.pk} - Name: {self.name} for Group: {self.group.name}'
