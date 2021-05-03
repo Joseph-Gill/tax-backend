@@ -51,11 +51,9 @@ class Entity(models.Model):
         blank=True
     )
 
-    chart = models.ForeignKey(
+    charts = models.ManyToManyField(
         to=Chart,
-        on_delete=models.SET_NULL,
         related_name='entities',
-        null=True,
         blank=True
     )
 
