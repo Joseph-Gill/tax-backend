@@ -31,4 +31,4 @@ class Stakehold(models.Model):
     )
 
     def __str__(self):
-        return f'Stakehold ${self.id} between {self.parent.name} and {self.child.name}'
+        return f'Stakehold #{self.id} between {self.parent.name} and {self.child.name}'
