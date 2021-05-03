@@ -1,5 +1,6 @@
 from django.db import models
 
+from app.charts.models import Chart
 from app.groups.models import Group
 
 
@@ -45,6 +46,14 @@ class Entity(models.Model):
     group = models.ForeignKey(
         to=Group,
         on_delete=models.CASCADE,
+        related_name='entities',
+        null=True,
+        blank=True
+    )
+
+    chart = models.ForeignKey(
+        to=Chart,
+        on_delete=models.SET_NULL,
         related_name='entities',
         null=True,
         blank=True
