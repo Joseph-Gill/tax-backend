@@ -2,6 +2,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework import status
 from app.emails.signals import send_email
 from app.entities.models import Entity
+from app.entityHistories.models import EntityHistory
 from app.groups.models import Group
 from app.groups.serializers import GroupSerializer
 from rest_framework.response import Response
@@ -37,29 +38,25 @@ class ListAllOrCreateGroup(ListCreateAPIView):
         )
         new_group.save()
         for entity in list_of_entities:
+            new_entity = Entity(
+                name=entity['name'],
+                location=entity['location'],
+                legal_form=entity['legal_form'],
+            )
             if entity['pid'] == 'Ultimate':
-                new_entity = Entity(
-                    pid='',
-                    name=entity['name'],
-                    location=entity['location'],
-                    legal_form=entity['legal_form'],
-                )
-                if entity['tax_rate']:
-                    new_entity.tax_rate = float(entity['tax_rate'])
-                new_entity.save()
-                new_group.entities.add(new_entity)
+                new_entity.pid = ''
             else:
                 target_parent = Entity.objects.get(group=new_group, name=entity['parent']['name'], location=entity['parent']['location'])
-                new_entity = Entity(
-                    pid=target_parent.id,
-                    name=entity['name'],
-                    location=entity['location'],
-                    legal_form=entity['legal_form'],
-                )
-                if entity['tax_rate']:
-                    new_entity.tax_rate = float(entity['tax_rate'])
-                new_entity.save()
-                new_group.entities.add(new_entity)
+                new_entity.pid = target_parent.id
+            if entity['tax_rate']:
+                new_entity.tax_rate = float(entity['tax_rate'])
+            new_entity.save()
+            new_group.entities.add(new_entity)
+            new_entity_history = EntityHistory(
+                action='group_creation',
+                entity=new_entity
+            )
+            new_entity_history.save()
         users_profile.groups.add(new_group)
         post_user_group_creation.send(sender=Group, user_profile=users_profile, name=serializer.data['name'], new_group=new_group)
 
