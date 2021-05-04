@@ -135,3 +135,6 @@ All the following endpoints should be prefixed with /backend
 
 #### Task Documents
 * `/api/taskdocuments/<int:taskdocument_id>/` DELETE: Delete specified task document
+
+#### Entities
+* `/api/entities/group/<int:group_id>/` POST: Create a new entity for a specified group

@@ -30,11 +30,13 @@ class ListAllOrCreateEntityForGroup(ListCreateAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         new_entity = Entity(
-            **serializer.validated_data
+            **serializer.validated_data,
+            active=False
         )
         new_entity.save()
         target_group.entities.add(new_entity)
-        return Response(status=status.HTTP_201_CREATED)
+        serializer = self.get_serializer(new_entity)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class RetrieveUpdateDestroySpecificEntity(RetrieveUpdateDestroyAPIView):
