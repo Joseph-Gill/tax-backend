@@ -4,15 +4,14 @@ from app.entities.models import Entity
 
 
 class EntityHistory(models.Model):
+    # stores the key word of what action occurred to the related entity during the step
     action = models.CharField(
         max_length=30
     )
 
-    # used to store the temporary id used in frontend before an entity
-    # is officially created by completing a step/project
-    temp_id = models.IntegerField(
-        blank=True,
-        null=True
+    # This is used to store the JSON data for other entities affected by this action
+    affected_entities = models.TextField(
+        blank=True
     )
 
     created = models.DateTimeField(

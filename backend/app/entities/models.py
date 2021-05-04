@@ -1,6 +1,4 @@
 from django.db import models
-
-from app.charts.models import Chart
 from app.groups.models import Group
 
 
@@ -35,6 +33,11 @@ class Entity(models.Model):
         null=True
     )
 
+    # Stores if a Entity is currently part of a Group, inactive entities have been deleted, liquidated, or are part of an uncompleted project
+    active = models.BooleanField(
+        default=True
+    )
+
     created = models.DateTimeField(
         auto_now_add=True
     )
@@ -52,5 +55,4 @@ class Entity(models.Model):
     )
 
     def __str__(self):
-        return f'Entity #{self.pk} - Name: {self.name}'
-        # return f'Entity #{self.pk} - Name: {self.name} for Group: {self.group.name}'
+        return f'Entity #{self.pk} - Name: {self.name} for Group: {self.group.name}'

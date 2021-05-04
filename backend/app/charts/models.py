@@ -3,17 +3,17 @@ from app.steps.models import Step
 
 
 class Chart(models.Model):
-    # This needs to store an Array of Objects, possibly JSON??
+    # This is used to store the JSON data for the chart's CLinks
     clinks = models.TextField(
         blank=True
     )
 
-    # This needs to store an Array of Objects, possibly JSON??
+    # This is used to store the JSON data for the chart's SLinks
     slinks = models.TextField(
         blank=True
     )
 
-    # This needs to store an Array of Objects, possibly JSON??
+    # # This is used to store the JSON data for the chart's Nodes
     nodes = models.TextField()
 
     created = models.DateTimeField(
