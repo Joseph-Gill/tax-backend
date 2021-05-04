@@ -2,7 +2,7 @@ from django.db import models
 from app.entities.models import Entity
 
 
-class Stakehold(models.Model):
+class Sharehold(models.Model):
     percent_ownership = models.DecimalField(
         max_digits=5,
         decimal_places=4,
@@ -21,14 +21,14 @@ class Stakehold(models.Model):
     parent = models.ForeignKey(
         to=Entity,
         on_delete=models.CASCADE,
-        related_name='stakeholds_parent'
+        related_name='shareholds_parent'
     )
 
     child = models.ForeignKey(
         to=Entity,
         on_delete=models.CASCADE,
-        related_name='stakeholds_child'
+        related_name='shareholds_child'
     )
 
     def __str__(self):
-        return f'Stakehold #{self.id} between {self.parent.name} and {self.child.name}'
+        return f'Sharehold #{self.id} between {self.parent.name} and {self.child.name}'

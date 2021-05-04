@@ -68,8 +68,8 @@ INSTALLED_APPS = [
     'app.userProfiles',
     'app.projectRoles',
     'app.taskDocuments',
-    'app.stakeholds',
-    'app.entityLogs'
+    'app.shareholds',
+    'app.entityHistories'
 ]
 
 MIDDLEWARE = [

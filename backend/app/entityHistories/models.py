@@ -3,7 +3,7 @@ from app.charts.models import Chart
 from app.entities.models import Entity
 
 
-class EntityLog(models.Model):
+class EntityHistory(models.Model):
     action = models.CharField(
         max_length=30
     )
@@ -26,7 +26,7 @@ class EntityLog(models.Model):
     entity = models.ForeignKey(
         to=Entity,
         on_delete=models.CASCADE,
-        related_name='entity_logs',
+        related_name='entity_histories',
         blank=True,
         null=True
     )
@@ -34,7 +34,7 @@ class EntityLog(models.Model):
     chart = models.ForeignKey(
         to=Chart,
         on_delete=models.CASCADE,
-        related_name='chart_logs'
+        related_name='chart_histories'
     )
 
     def __str__(self):
