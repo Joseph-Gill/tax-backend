@@ -32,9 +32,11 @@ class EntityHistory(models.Model):
 
     chart = models.ForeignKey(
         to=Chart,
-        on_delete=models.CASCADE,
-        related_name='chart_histories'
+        on_delete=models.SET_NULL,
+        related_name='chart_histories',
+        blank=True,
+        null=True
     )
 
     def __str__(self):
-        return f'Entity Log #{self.id} for {self.entity.name} and Chart #{self.chart.id}'
+        return f'Entity Log #{self.id} for {self.entity.name}'
