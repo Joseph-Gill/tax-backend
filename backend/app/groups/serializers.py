@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from app.entities.models import Entity
 from app.entities.serializers import EntitySerializer
 from app.groups.models import Group
 from app.organizations.serialziers import OrganizationSerializer
@@ -25,11 +25,6 @@ class GroupSerializer(serializers.ModelSerializer):
         many=True
     )
 
-    entities = EntitySerializer(
-        required=False,
-        many=True
-    )
-
     projects = ProjectSerializer(
         required=False,
         many=True
@@ -44,6 +39,14 @@ class GroupSerializer(serializers.ModelSerializer):
         required=False,
         many=True
     )
+
+    # Sets it so that only Entities with active: true are returned in the request for display
+    entities = serializers.SerializerMethodField('get_entities')
+
+    def get_entities(self, group):
+        instance = Entity.objects.filter(active=True, group=group)
+        serializer = EntitySerializer(instance=instance, many=True)
+        return serializer.data
 
     class Meta:
         model = Group
