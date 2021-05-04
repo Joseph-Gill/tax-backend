@@ -32,31 +32,39 @@ class ListAllOrCreateGroup(ListCreateAPIView):
     def perform_create(self, serializer):
         users_profile = UserProfile.objects.get(user=self.request.user)
         list_of_entities = json.loads(self.request.data['entities'])
+        # create the new group in the database
         new_group = Group(
             name=serializer.validated_data.get('name'),
             avatar=serializer.validated_data.get('avatar')
         )
         new_group.save()
+        # loop through list of entities to create
         for entity in list_of_entities:
             new_entity = Entity(
                 name=entity['name'],
                 location=entity['location'],
                 legal_form=entity['legal_form'],
             )
+            # give the entity an empty string for pid if it is the ultimate entity in the group
             if entity['pid'] == 'Ultimate':
                 new_entity.pid = ''
+            # find the parent entity and assign the pid to be the id of the parent entity
             else:
                 target_parent = Entity.objects.get(group=new_group, name=entity['parent']['name'], location=entity['parent']['location'])
                 new_entity.pid = target_parent.id
+            # tax rate is optional
             if entity['tax_rate']:
                 new_entity.tax_rate = float(entity['tax_rate'])
             new_entity.save()
+            # add the entity to the new created group's entities
             new_group.entities.add(new_entity)
+            # create a history entry for the creation of the entity by the group being created
             new_entity_history = EntityHistory(
                 action='group_creation',
                 entity=new_entity
             )
             new_entity_history.save()
+        # add the group to the list of groups the logged in user is part of
         users_profile.groups.add(new_group)
         post_user_group_creation.send(sender=Group, user_profile=users_profile, name=serializer.data['name'], new_group=new_group)
 
@@ -91,16 +99,24 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         target_group = self.get_object()
+        # if there is a new avatar sent to update, it is updated
         if serializer.validated_data.get('avatar'):
             target_group.avatar = serializer.validated_data.get('avatar')
             target_group.save()
+        # list of the groups entities before it was edited
         list_of_existing_entities = target_group.entities.all()
+        # list of entities sent by the frontend after the group was edited
         list_of_new_entities = json.loads(self.request.data['entities'])
         for entity in list_of_new_entities:
+            # if an entity has edited: true, a change was made to it during the edit process in the frontend
             if 'edited' in entity:
+                # if an entity has a true pid, it is not the ultimate entity
                 if entity['pid']:
+                    # finds the target parent to use during the update process, name / location are unique pairings for a group
                     target_parent_entity = Entity.objects.get(group=target_group, name=entity['parent']['name'], location=entity['parent']['location'])
+                # searches the list list_of_existing_entities for the entity
                 result = next((x for x in list_of_existing_entities if x.id == entity['id']), None)
+                # if it finds the entity, it updates it
                 if result:
                     target_entity_to_update = Entity.objects.get(id=entity['id'])
                     target_entity_to_update.name = entity['name']
@@ -111,6 +127,13 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
                     if entity['tax_rate']:
                         target_entity_to_update.tax_rate = entity['tax_rate']
                     target_entity_to_update.save()
+                    # create a history entry for the change of the entity
+                    new_entity_history = EntityHistory(
+                        action='group_edit_change',
+                        entity=target_entity_to_update
+                    )
+                    new_entity_history.save()
+                # if it doesn't find it, it creates a new entity
                 else:
                     new_entity = Entity(
                         pid=target_parent_entity.id,
@@ -122,6 +145,13 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
                         new_entity.tax_rate = float(entity['tax_rate'])
                     new_entity.save()
                     target_group.entities.add(new_entity)
+                    # create a history entry for the creation of the entity by the group being edited
+                    new_entity_history = EntityHistory(
+                        action='group_edit_add',
+                        entity=new_entity
+                    )
+                    new_entity_history.save()
+        # checks the list of list_of_existing_entities if it finds an entity that was not in the list_of_new_entities it permanently removes it
         for existing_entity in list_of_existing_entities:
             result = next((x for x in list_of_new_entities if x['id'] == existing_entity.id), None)
             if not result:
