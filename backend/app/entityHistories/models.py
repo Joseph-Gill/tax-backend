@@ -10,11 +10,6 @@ class EntityHistory(models.Model):
         max_length=30
     )
 
-    # This is used to store the JSON data for other entities affected by this action
-    affected_entities = models.TextField(
-        blank=True
-    )
-
     created = models.DateTimeField(
         auto_now_add=True
     )
@@ -45,6 +40,12 @@ class EntityHistory(models.Model):
         related_name='entity_actions',
         blank=True,
         null=True
+    )
+
+    affected_entities = models.ManyToManyField(
+        to=Entity,
+        related_name='affected_histories',
+        blank=True
     )
 
     def __str__(self):

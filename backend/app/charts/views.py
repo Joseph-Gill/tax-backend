@@ -25,7 +25,8 @@ class CreateChartForSpecificProjectStep(CreateAPIView):
             step=target_step
         )
         new_chart.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return_data = self.get_serializer(new_chart)
+        return Response(return_data.data, status=status.HTTP_201_CREATED)
 
 
 class RetrieveUpdateDestroyChartForSpecificProjectStep(RetrieveUpdateDestroyAPIView):
