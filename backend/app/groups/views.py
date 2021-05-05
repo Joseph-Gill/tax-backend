@@ -4,7 +4,7 @@ from app.emails.signals import send_email
 from app.entities.models import Entity
 from app.entityHistories.models import EntityHistory
 from app.groups.models import Group
-from app.groups.serializers import GroupSerializer
+from app.groups.serializers import GroupSerializer, CreateGroupSerializer
 from rest_framework.response import Response
 from app.groups.signals import post_user_group_creation
 from app.projects.models import Project
@@ -26,7 +26,7 @@ class ListAllOrCreateGroup(ListCreateAPIView):
     Create a new Group, and all its Entities
     """
     permission_classes = []
-    serializer_class = GroupSerializer
+    serializer_class = CreateGroupSerializer
     queryset = Group.objects.all()
 
     def perform_create(self, serializer):
@@ -61,12 +61,13 @@ class ListAllOrCreateGroup(ListCreateAPIView):
             # create a history entry for the creation of the entity by the group being created
             new_entity_history = EntityHistory(
                 action='group_creation',
-                entity=new_entity
+                entity=new_entity,
+                creator=users_profile
             )
             new_entity_history.save()
         # add the group to the list of groups the logged in user is part of
         users_profile.groups.add(new_group)
-        post_user_group_creation.send(sender=Group, user_profile=users_profile, name=serializer.data['name'], new_group=new_group)
+        post_user_group_creation.send(sender=Group, user_profile=users_profile, name=serializer.validated_data.get('name'), new_group=new_group)
 
 
 class ListAllUsersGroups(ListAPIView):
@@ -98,6 +99,7 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'group_id'
 
     def perform_update(self, serializer):
+        users_profile = UserProfile.objects.get(user=self.request.user)
         target_group = self.get_object()
         # if there is a new avatar sent to update, it is updated
         if serializer.validated_data.get('avatar'):
@@ -130,7 +132,8 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
                     # create a history entry for the change of the entity
                     new_entity_history = EntityHistory(
                         action='group_edit_change',
-                        entity=target_entity_to_update
+                        entity=target_entity_to_update,
+                        creator=users_profile
                     )
                     new_entity_history.save()
                 # if it doesn't find it, it creates a new entity
@@ -148,7 +151,8 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
                     # create a history entry for the creation of the entity by the group being edited
                     new_entity_history = EntityHistory(
                         action='group_edit_add',
-                        entity=new_entity
+                        entity=new_entity,
+                        creator=users_profile
                     )
                     new_entity_history.save()
         # checks the list of list_of_existing_entities if it finds an entity that was not in the list_of_new_entities it permanently removes it

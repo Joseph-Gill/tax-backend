@@ -5,7 +5,7 @@ from django.db import migrations
 
 def populate_db(apps, schema_editor):
     # Dev Emails
-    dev_emails = ['SignalFlux@outlook.com', 'danieler@propulsionacademy.com', 'rubenv@propulsionacademy.com', 'cedricd@propulsionacademy.com', 'sebastianm@propulsionacademy.com']
+    dev_emails = ['danieler@propulsionacademy.com', 'rahjen@gmail.com', 'josephedwingill@gmail.com']
     DevEmail = apps.get_model('emails', 'DevEmails')
     for email in dev_emails:
         DevEmail(email=email).save()
@@ -24,6 +24,18 @@ def populate_db(apps, schema_editor):
             "title": "Title: Password reset",
             "template": "Click <a href='{{ base_url }}password-reset-validation?code={{code}}&email={{email_to}}'>  here</a> to reset your password."
         },
+        {
+            "key": "added_to_group",
+            "subject": "Subject: You have been added to a new Group",
+            "title": "Title: You have been added to a new Group",
+            "template": "You have been added to a new Group."
+        },
+        {
+            "key": "user_assigned_task",
+            "subject": "Subject: You have been assigned a new Task",
+            "title": "Title: You have been assigned a new Task",
+            "template": "You have been assigned a new Task."
+        }
     ]
     EmailType = apps.get_model('emails', 'EmailType')
     for email_type in email_types:

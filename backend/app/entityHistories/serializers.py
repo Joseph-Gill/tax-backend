@@ -5,4 +5,4 @@ from app.entityHistories.models import EntityHistory
 class EntityHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = EntityHistory
-        fields = ['id', 'entity', 'chart', 'action', 'affected_entities']
+        fields = ['id', 'entity', 'chart', 'action', 'affected_entities', 'creator']

@@ -51,3 +51,34 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ['id', 'name', 'avatar', 'created', 'updated', 'entities', 'projects', 'organizations', 'users', 'invited_new_users']
+
+
+class CreateGroupSerializer(serializers.ModelSerializer):
+    users = UserProfileSerializer(
+        required=False,
+        many=True
+    )
+
+    projects = ProjectSerializer(
+        required=False,
+        many=True
+    )
+
+    organizations = OrganizationSerializer(
+        required=False,
+        many=True
+    )
+
+    invited_new_users = GroupRegistrationSerializer(
+        required=False,
+        many=True
+    )
+
+    entities = EntitySerializer(
+        required=False,
+        many=True
+    )
+
+    class Meta:
+        model = Group
+        fields = ['id', 'name', 'avatar', 'created', 'updated', 'entities', 'projects', 'organizations', 'users', 'invited_new_users']

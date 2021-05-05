@@ -1,6 +1,7 @@
 from django.db import models
 from app.charts.models import Chart
 from app.entities.models import Entity
+from app.userProfiles.models import UserProfile
 
 
 class EntityHistory(models.Model):
@@ -34,6 +35,14 @@ class EntityHistory(models.Model):
         to=Chart,
         on_delete=models.SET_NULL,
         related_name='chart_histories',
+        blank=True,
+        null=True
+    )
+
+    creator = models.ForeignKey(
+        to=UserProfile,
+        on_delete=models.SET_NULL,
+        related_name='entity_actions',
         blank=True,
         null=True
     )
