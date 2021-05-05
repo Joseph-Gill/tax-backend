@@ -1,7 +1,6 @@
 from rest_framework import status
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView
 from rest_framework.response import Response
-
 from app.charts.models import Chart
 from app.charts.serializers import ChartSerializer
 from app.projects.models import Project

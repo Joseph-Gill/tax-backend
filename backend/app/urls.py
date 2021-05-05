@@ -20,8 +20,8 @@ api_patterns = [
     path('taxes/', include('app.taxConsequences.urls')),
     path('projectroles/', include('app.projectRoles.urls')),
     path('taskdocuments/', include('app.taskDocuments.urls')),
-    # path('stakeholds/', include('app.stakeholds.urls')),
-    # path('entitylogs/', include('app.entityLogs.urls')),
+    path('entityhistories/', include('app.entityHistories.urls')),
+    # path('shareholds/', include('app.shareholds.urls')),
 
     #  Documentation paths
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

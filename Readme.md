@@ -138,3 +138,6 @@ All the following endpoints should be prefixed with /backend
 
 #### Entities
 * `/api/entities/group/<int:group_id>/` POST: Create a new entity for a specified group
+
+#### Entity Histories
+* `/api/entityhistories/entity/<int:entity_id>/chart/<int:chart_id>/` POST: Create a new entity history for a specified entity and specified chart
