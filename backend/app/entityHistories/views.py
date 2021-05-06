@@ -35,9 +35,9 @@ class CreateEntityHistoryForChart(CreateAPIView):
         list_of_affected_entities = json.loads(self.request.data['affected'])
         for entity in list_of_affected_entities:
             # Gets the entity that was affected by this action
-            target_affected_entity = Entity.objects.get(id=entity)
+            target_affected_entity = Entity.objects.get(id=entity['id'])
             # Stores the second half of the action for affected entities i.e. add_entity_CHILD, distribution_PARTICIPANT, etc...
-            keyword = request.data['affected_keyword']
+            keyword = entity['keyword']
             affected_entity_history = EntityHistory(
                 action=f'{new_entity_history.action}_{keyword}',
                 entity=target_affected_entity,
