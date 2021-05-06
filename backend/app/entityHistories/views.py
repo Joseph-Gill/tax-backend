@@ -45,6 +45,8 @@ class CreateEntityHistoryForChart(CreateAPIView):
                 creator=users_profile
             )
             affected_entity_history.save()
+            # Create the relationships between the histories of the entities
+            affected_entity_history.affected_entities.add(target_entity)
             new_entity_history.affected_entities.add(target_affected_entity)
         return_data = self.get_serializer(new_entity_history)
         return Response(return_data.data, status=status.HTTP_201_CREATED)

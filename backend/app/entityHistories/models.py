@@ -7,7 +7,7 @@ from app.userProfiles.models import UserProfile
 class EntityHistory(models.Model):
     # stores the key word of what action occurred to the related entity during the step
     action = models.CharField(
-        max_length=30
+        max_length=200
     )
 
     created = models.DateTimeField(
