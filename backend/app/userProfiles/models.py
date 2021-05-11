@@ -44,6 +44,12 @@ class UserProfile(models.Model):
         blank=True
     )
 
+    favorite_groups = models.ManyToManyField(
+        to=Group,
+        related_name='favorite_users',
+        blank=True
+    )
+
     def __str__(self):
         return f'User Profile #{self.pk} for {self.user.email}'
 

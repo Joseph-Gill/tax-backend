@@ -94,7 +94,8 @@ All the following endpoints should be prefixed with /backend
 * `/api/groups/group/<int:group_id>/` GET, PATCH, DELETE: Get, update, delete a specified group
 * `/api/groups/group/<int:group_id>/removeusers/` DELETE: Delete a list of users from a specified group, and all that group's projects
 * `/api/groups/project/<int:project_id>/` GET: Get the group a specified project belongs to
-
+* `/api/groups/group/<int:group_id>/favorite/` POST: Toggle the favorite status of a specified group for the logged-in user
+* `/api/groups/allandfavorite/` GET: Get all and favorite groups for the logged-in user
 
 #### Projects
 * `/api/projects/group/<int:group_id>/?search=<str:search_string>` GET, POST: Get all projects or filter them by search string, create a new Project for specified group
@@ -127,11 +128,12 @@ All the following endpoints should be prefixed with /backend
 * `/api/taxes/tax/<int:tax_id>/reviewed/` POST: Set the reviewed status of a specified tax consequence as true, reviewing_user is set as logged-in user
 * `/api/taxes/tax/<int:tax_id>/notreviewed/` POST: Set the reviewed status of a specified tax as false
 * `/api/taxes/project/<int:project_id>/notreviewed/samecountry/` GET: List all tax consequences that are not reviewed and for the same country as the logged-in user
-* `/api/taxes/project/<int:project_id/opencomments/toreviewcomments/` GET: Get the number of "open" and "not Reviewed" tax consequences of the logged-in user's country, for a specified project
+* `/api/taxes/project/<int:project_id>/opencomments/toreviewcomments/` GET: Get the number of "open" and "not Reviewed" tax consequences of the logged-in user's country, for a specified project
 
 #### Project Roles
 * `/api/projectroles/userprofile/<int:userprofile_id>/group/<int:group_id>/` GET: Get all project roles for a specified user and group
 * `/api/projectroles/group/<int:group_id>/project/<int:project_id>/` GET: Get all user project roles for a specified group and specified project
+* `/api/projectroles/userprofile/<int:userprofile_id>/project/<int:project_id>/` POST: Toggle the favorite status of a specified project for a specified user profile
 
 #### Task Documents
 * `/api/taskdocuments/<int:taskdocument_id>/` DELETE: Delete specified task document

@@ -235,3 +235,41 @@ class RetrieveGroupForSpecificProject(RetrieveAPIView):
         target_group = Group.objects.get(id=target_project.group.id)
         serializer = self.get_serializer(target_group)
         return Response(serializer.data)
+
+
+class RetrieveAllAndFavoriteGroupsForUser(RetrieveAPIView):
+    """
+    List all the Groups, and all the favorite Groups of a the logged in User
+    """
+
+    serializer_class = GroupSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        target_user_profile = UserProfile.objects.get(user=request.user)
+        favorite_user_groups = Group.objects.filter(favorite_users=target_user_profile)
+        all_group_data = self.get_serializer(target_user_profile.groups.all(), many=True)
+        favorite_group_data = self.get_serializer(favorite_user_groups, many=True)
+        user_group_data = {
+            'all_groups': all_group_data.data,
+            'favorite_groups': favorite_group_data.data
+        }
+        return Response(user_group_data, status=status.HTTP_200_OK)
+
+
+class ToggleUserFavoriteGroupStatus(CreateAPIView):
+    """
+    Toggle favorite status for a specified Group for the logged in User
+    """
+    serializer_class = GroupSerializer
+    queryset = Group.objects.all()
+    lookup_url_kwarg = 'group_id'
+
+    def post(self, request, *args, **kwargs):
+        target_group = self.get_object()
+        target_user_profile = UserProfile.objects.get(user=request.user)
+        if target_user_profile in target_group.favorite_users.all():
+            target_group.favorite_users.remove(target_user_profile)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            target_group.favorite_users.add(target_user_profile)
+            return Response(status=status.HTTP_201_CREATED)
