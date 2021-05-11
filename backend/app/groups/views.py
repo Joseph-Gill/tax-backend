@@ -246,14 +246,12 @@ class RetrieveAllAndFavoriteGroupsForUser(RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         target_user_profile = UserProfile.objects.get(user=request.user)
-        favorite_user_groups = Group.objects.filter(favorite_users=target_user_profile)
-        all_group_data = self.get_serializer(target_user_profile.groups.all(), many=True)
-        favorite_group_data = self.get_serializer(favorite_user_groups, many=True)
-        user_group_data = {
-            'all_groups': all_group_data.data,
-            'favorite_groups': favorite_group_data.data
-        }
-        return Response(user_group_data, status=status.HTTP_200_OK)
+        user_groups = []
+        for group in target_user_profile.groups.all():
+            group_info = self.get_serializer(group).data
+            group_info['user_favorite'] = target_user_profile in group.favorite_users.all()
+            user_groups.append(group_info)
+        return Response(user_groups, status=status.HTTP_200_OK)
 
 
 class ToggleUserFavoriteGroupStatus(CreateAPIView):
@@ -269,7 +267,9 @@ class ToggleUserFavoriteGroupStatus(CreateAPIView):
         target_user_profile = UserProfile.objects.get(user=request.user)
         if target_user_profile in target_group.favorite_users.all():
             target_group.favorite_users.remove(target_user_profile)
-            return Response(status=status.HTTP_200_OK)
+            response_data = self.get_serializer(target_group)
+            return Response(response_data.data, status=status.HTTP_200_OK)
         else:
             target_group.favorite_users.add(target_user_profile)
-            return Response(status=status.HTTP_201_CREATED)
+            response_data = self.get_serializer(target_group)
+            return Response(response_data.data, status=status.HTTP_201_CREATED)

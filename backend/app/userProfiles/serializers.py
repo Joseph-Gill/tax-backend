@@ -64,9 +64,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
         many=True
     )
 
+    favorite_groups = ProfileGroupSerializer(
+        required=False,
+        many=True
+    )
+
     class Meta:
         model = UserProfile
-        fields = ['id', 'phone_number', 'country', 'user', 'created', 'updated', 'organizations', 'groups', 'assigned_project_roles', 'assigned_tasks']
+        fields = ['id', 'phone_number', 'country', 'user', 'created', 'updated', 'organizations', 'groups', 'favorite_groups', 'assigned_project_roles', 'assigned_tasks']
 
 
 class UpdateUserProfileSerializer(serializers.Serializer):
