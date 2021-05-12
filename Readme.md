@@ -143,3 +143,4 @@ All the following endpoints should be prefixed with /backend
 
 #### Entity Histories
 * `/api/entityhistories/entity/<int:entity_id>/chart/<int:chart_id>/` POST: Create a new entity history for a specified entity and specified chart
+* `/api/entityhistories/entity/<int:entity_id>/` GET: Get all histories for a specified entity that are not pending

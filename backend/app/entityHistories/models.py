@@ -18,6 +18,14 @@ class EntityHistory(models.Model):
         auto_now=True
     )
 
+    # Used to track official histories of an entity to show on the Entity History timeline.
+    # Changes made by GroupAdd / GroupEdit are pending false, changes made in a StepChart
+    # default to true. Once a step / project is completed, all the relevant histories are
+    # change to pending false, becoming official histories
+    pending = models.BooleanField(
+        default=False
+    )
+
     entity = models.ForeignKey(
         to=Entity,
         on_delete=models.CASCADE,

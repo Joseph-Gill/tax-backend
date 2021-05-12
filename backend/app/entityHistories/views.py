@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from app.charts.models import Chart
@@ -28,7 +28,8 @@ class CreateEntityHistoryForChart(CreateAPIView):
             action=serializer.validated_data.get('action'),
             entity=target_entity,
             chart=target_chart,
-            creator=users_profile
+            creator=users_profile,
+            pending=True
         )
         new_entity_history.save()
         # Provides a list of entities that were affected by this action
@@ -42,7 +43,8 @@ class CreateEntityHistoryForChart(CreateAPIView):
                 action=f'{new_entity_history.action}_{keyword}',
                 entity=target_affected_entity,
                 chart=target_chart,
-                creator=users_profile
+                creator=users_profile,
+                pending=True
             )
             affected_entity_history.save()
             # Create the relationships between the histories of the entities
@@ -50,3 +52,18 @@ class CreateEntityHistoryForChart(CreateAPIView):
             new_entity_history.affected_entities.add(target_affected_entity)
         return_data = self.get_serializer(new_entity_history)
         return Response(return_data.data, status=status.HTTP_201_CREATED)
+
+
+class RetrieveAllHistoriesForEntity(RetrieveAPIView):
+    """
+    Get all histories for a specified Entity that are not pending
+    """
+    queryset = Entity.objects.all()
+    lookup_url_kwarg = 'entity_id'
+    serializer_class = EntityHistorySerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        target_entity = self.get_object()
+        target_histories = EntityHistory.objects.filter(entity=target_entity, pending=False)
+        serializer = self.get_serializer(target_histories, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
