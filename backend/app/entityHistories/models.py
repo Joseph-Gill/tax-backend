@@ -50,10 +50,12 @@ class EntityHistory(models.Model):
         null=True
     )
 
-    affected_entities = models.ManyToManyField(
-        to=Entity,
-        related_name='affected_histories',
-        blank=True
+    creating_action = models.ForeignKey(
+        to='EntityHistory',
+        on_delete=models.CASCADE,
+        related_name='affected_entities',
+        blank=True,
+        null=True
     )
 
     def __str__(self):

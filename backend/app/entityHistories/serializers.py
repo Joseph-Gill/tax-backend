@@ -4,20 +4,34 @@ from app.entities.serializers import EntitySerializer
 from app.entityHistories.models import EntityHistory
 
 
-class EntityHistorySerializer(serializers.ModelSerializer):
+class EntityHistoryHistorySerializer(serializers.ModelSerializer):
     entity = EntitySerializer(
         required=False
     )
 
-    affected_entities = EntitySerializer(
-        required=False,
-        many=True
+    class Meta:
+        model = EntityHistory
+        fields = ['id', 'entity', 'action']
+
+
+class EntityHistorySerializer(serializers.ModelSerializer):
+    entity = EntitySerializer(
+        required=False
     )
 
     chart = ChartSerializer(
         required=False
     )
 
+    affected_entities = EntityHistoryHistorySerializer(
+        required=False,
+        many=True
+    )
+
+    creating_action = EntityHistoryHistorySerializer(
+        required=False
+    )
+
     class Meta:
         model = EntityHistory
-        fields = ['id', 'entity', 'chart', 'action', 'affected_entities', 'creator', 'pending']
+        fields = ['id', 'entity', 'chart', 'action', 'affected_entities', 'creator', 'pending', 'creating_action']

@@ -21,11 +21,9 @@ class CreateEntityHistoryForChart(CreateAPIView):
         users_profile = UserProfile.objects.get(user=self.request.user)
         target_chart = self.get_object()
         target_entity = Entity.objects.get(id=kwargs['entity_id'])
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
         # Creates the history for the entity that was the source of the action
         new_entity_history = EntityHistory(
-            action=serializer.validated_data.get('action'),
+            action=request.data['action'],
             entity=target_entity,
             chart=target_chart,
             creator=users_profile,
@@ -44,12 +42,12 @@ class CreateEntityHistoryForChart(CreateAPIView):
                 entity=target_affected_entity,
                 chart=target_chart,
                 creator=users_profile,
-                pending=True
+                pending=True,
+                creating_action=new_entity_history
             )
             affected_entity_history.save()
             # Create the relationships between the histories of the entities
-            affected_entity_history.affected_entities.add(target_entity)
-            new_entity_history.affected_entities.add(target_affected_entity)
+            new_entity_history.affected_entities.add(affected_entity_history)
         return_data = self.get_serializer(new_entity_history)
         return Response(return_data.data, status=status.HTTP_201_CREATED)
 
