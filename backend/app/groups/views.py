@@ -159,7 +159,7 @@ class RetrieveUpdateDestroySpecificGroup(RetrieveUpdateDestroyAPIView):
         for existing_entity in list_of_existing_entities:
             result = next((x for x in list_of_new_entities if x['id'] == existing_entity.id), None)
             if not result:
-                existing_entity.delete()
+                existing_entity.active = False
 
 
 class AddUserInSpecificGroup(CreateAPIView):
