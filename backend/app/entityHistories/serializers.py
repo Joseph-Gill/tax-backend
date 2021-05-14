@@ -4,7 +4,7 @@ from app.entities.serializers import EntitySerializer
 from app.entityHistories.models import EntityHistory
 
 
-class EntityHistoryHistorySerializer(serializers.ModelSerializer):
+class AffectedEntitiesSerializer(serializers.ModelSerializer):
     entity = EntitySerializer(
         required=False
     )
@@ -12,6 +12,21 @@ class EntityHistoryHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = EntityHistory
         fields = ['id', 'entity', 'action']
+
+
+class EntityHistoryHistorySerializer(serializers.ModelSerializer):
+    entity = EntitySerializer(
+        required=False
+    )
+
+    affected_entities = AffectedEntitiesSerializer(
+        required=False,
+        many=True
+    )
+
+    class Meta:
+        model = EntityHistory
+        fields = ['id', 'entity', 'action', 'affected_entities']
 
 
 class EntityHistorySerializer(serializers.ModelSerializer):
