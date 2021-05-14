@@ -13,7 +13,7 @@ class Chart(models.Model):
         blank=True
     )
 
-    # # This is used to store the JSON data for the chart's Nodes
+    # This is used to store the JSON data for the chart's Nodes
     nodes = models.TextField()
 
     created = models.DateTimeField(

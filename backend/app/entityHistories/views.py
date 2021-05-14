@@ -29,6 +29,8 @@ class CreateEntityHistoryForChart(CreateAPIView):
             creator=users_profile,
             pending=True
         )
+        if request.data['changed_legal_form']:
+            new_entity_history.changed_legal_form = request.data['changed_legal_form']
         new_entity_history.save()
         # Provides a list of entities that were affected by this action
         list_of_affected_entities = json.loads(self.request.data['affected'])

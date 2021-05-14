@@ -26,6 +26,11 @@ class EntityHistory(models.Model):
         default=False
     )
 
+    changed_legal_form = models.CharField(
+        max_length=50,
+        default=''
+    )
+
     entity = models.ForeignKey(
         to=Entity,
         on_delete=models.CASCADE,
