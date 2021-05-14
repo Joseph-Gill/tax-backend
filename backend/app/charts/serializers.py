@@ -6,7 +6,7 @@ from app.steps.models import Step
 class ChartStepSerializer(serializers.ModelSerializer):
     class Meta:
         model = Step
-        fields = ['id', 'effective_date']
+        fields = ['id', 'effective_date', 'number', 'project']
 
 
 class ChartSerializer(serializers.ModelSerializer):

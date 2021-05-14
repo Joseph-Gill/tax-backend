@@ -34,4 +34,4 @@ class EntityHistorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EntityHistory
-        fields = ['id', 'entity', 'chart', 'action', 'affected_entities', 'creator', 'pending', 'creating_action']
+        fields = ['id', 'entity', 'chart', 'action', 'affected_entities', 'creator', 'pending', 'creating_action', 'created']
