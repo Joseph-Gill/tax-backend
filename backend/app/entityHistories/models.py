@@ -28,7 +28,9 @@ class EntityHistory(models.Model):
 
     changed_legal_form = models.CharField(
         max_length=50,
-        default=''
+        default='',
+        blank=True,
+        null=True
     )
 
     entity = models.ForeignKey(

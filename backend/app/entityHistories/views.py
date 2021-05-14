@@ -21,16 +21,17 @@ class CreateEntityHistoryForChart(CreateAPIView):
         users_profile = UserProfile.objects.get(user=self.request.user)
         target_chart = self.get_object()
         target_entity = Entity.objects.get(id=kwargs['entity_id'])
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
         # Creates the history for the entity that was the source of the action
         new_entity_history = EntityHistory(
-            action=request.data['action'],
+            action=serializer.validated_data.get('action'),
+            changed_legal_form=serializer.validated_data.get('changed_legal_form'),
             entity=target_entity,
             chart=target_chart,
             creator=users_profile,
             pending=True
         )
-        if request.data['changed_legal_form']:
-            new_entity_history.changed_legal_form = request.data['changed_legal_form']
         new_entity_history.save()
         # Provides a list of entities that were affected by this action
         list_of_affected_entities = json.loads(self.request.data['affected'])
