@@ -110,33 +110,39 @@ class UpdateStepSetStepAsCompleted(UpdateAPIView):
         # Update all info of the step
         target_step = self.get_object()
         target_step.description = serializer.validated_data.get('description')
-        target_step.effective_data = serializer.validated_data.get('effective_date')
+        target_step.effective_date = serializer.validated_data.get('effective_date')
         target_step.number = serializer.validated_data.get('number')
         target_step.status = serializer.validated_data.get('status')
         target_step.save()
         # Update all Entities in the Group
-        target_chart = Chart.objects.get(step=target_step)
-        list_of_entities = json.loads(target_chart.nodes)
-        for entity in list_of_entities:
-            try:
-                # Update the entity for any info that was changed in the step
-                target_entity = Entity.objects.get(id=entity['id'])
-                target_entity.pid = entity['pid']
-                target_entity.name = entity['name']
-                target_entity.legal_form = entity['legal_form']
-                target_entity.location = entity['location']
-                if 'tax_rate' in entity:
-                    target_entity.tax_rate = entity['tax_rate']
-                # Toggle the active status of the entity so it becomes an official part of the group organization
-                if 'new' in entity:
-                    target_entity.active = True
-                target_entity.save()
-            except Entity.DoesNotExist:
-                # Handle when it is an entity only for Delete Highlighting in the front, no backend data exists
-                pass
-        # Set all Charts histories as pending = False
-        list_of_histories = EntityHistory.objects.filter(chart=target_chart)
-        for history in list_of_histories:
-            history.pending = False
-            history.save()
-        return Response(status=status.HTTP_200_OK)
+        try:
+            target_chart = Chart.objects.get(step=target_step)
+            list_of_entities = json.loads(target_chart.nodes)
+            for entity in list_of_entities:
+                try:
+                    # Update the entity for any info that was changed in the step
+                    target_entity = Entity.objects.get(id=entity['id'])
+                    target_entity.pid = entity['pid']
+                    target_entity.name = entity['name']
+                    target_entity.legal_form = entity['legal_form']
+                    target_entity.location = entity['location']
+                    if 'tax_rate' in entity:
+                        target_entity.tax_rate = entity['tax_rate']
+                    # Toggle the active status of the entity so it becomes an official part of the group organization
+                    if 'new' in entity:
+                        target_entity.active = True
+                    if 'remove' in entity:
+                        target_entity.active = False
+                    target_entity.save()
+                except Entity.DoesNotExist:
+                    # Handle when it is an entity only for Delete Highlighting in the front, no backend data exists
+                    pass
+            # Set all Charts histories as pending = False
+            list_of_histories = EntityHistory.objects.filter(chart=target_chart)
+            for history in list_of_histories:
+                history.pending = False
+                history.save()
+            return Response(status=status.HTTP_200_OK)
+        except Chart.DoesNotExist:
+            # Handle is the user is completing a step with no changes or creation of a chart
+            return Response(status=status.HTTP_200_OK)
