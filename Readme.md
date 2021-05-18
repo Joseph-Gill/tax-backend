@@ -111,6 +111,7 @@ All the following endpoints should be prefixed with /backend
 * `/api/steps/step/<int:step_id>/` GET, PATCH, DELETE: Get, update, delete a specified step
 * `/api/steps/project/<int:project_id>/statusnumbers/` GET: Get the status numbers of all steps of a specified project
 * `/api/steps/project/<int:project_id>/firstuncompleted/` GET: Get the first uncompleted step for a specified project
+* `/api/steps/step/<int:step_id>/completed/` PATCH: Updated and set a specified step as completed, updating the group entities and setting chart histories as no longer pending
 
 #### Tasks
 * `/api/tasks/<int:step_id>/` GET: Get all tasks for a specified step
