@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, UpdateAPIView
 from rest_framework.response import Response
 from app.groups.models import Group
 from app.projects.models import Project
@@ -72,3 +72,19 @@ class ListUsersWithAccessToProject(ListAPIView):
         target_user_profiles = UserProfile.objects.filter(assigned_project_roles__project=target_project)
         serializer = self.get_serializer(target_user_profiles, many=True)
         return Response(serializer.data)
+
+
+class SetProjectAsComplete(UpdateAPIView):
+    """
+    Set a specified Project status to Complete and its date_completed to the effective date of the final step
+    """
+    serializer_class = ProjectSerializer
+    queryset = Project.objects.all()
+    lookup_url_kwarg = 'project_id'
+
+    def perform_update(self, serializer):
+        target_project = self.get_object()
+        target_project.end_date = serializer.validated_data.get('end_date')
+        target_project.start_date = serializer.validated_data.get('start_date')
+        target_project.status = 'Completed'
+        target_project.save()
